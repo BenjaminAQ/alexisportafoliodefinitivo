@@ -1,0 +1,808 @@
+     1→     1→# MEGA PROMPT — PORTAFOLIO WEB ACADÉMICO DE ALEXIS
+     2→     2→## GLM 5-2 (Vibe Coding Mode)
+     3→     3→
+     4→     4→---
+     5→     5→
+     6→     6→> **INSTRUCCIÓN DE EJECUCIÓN:** Este prompt debe ejecutarse en su totalidad sin interrupciones. El resultado final debe ser un sitio web completo, funcional, desplegable y de nivel profesional excepcional. No preguntes al usuario, no pidas confirmaciones intermedias: toma decisiones de diseño, ejecuta y entrega. Tienes total libertad creativa dentro de los parámetros técnicos y de contenido aquí definidos. El objetivo es que a la primera ejecución el resultado sea tan bueno que no necesite revisiones mayores.
+     7→     7→
+     8→     8→---
+     9→     9→
+    10→    10→## 0. IDENTIDAD DEL PROYECTO
+    11→    11→
+    12→    12→Construye el portafolio web personal de **Alexis**, ingeniero civil especializado en **ingeniería estructural, dinámica estructural e ingeniería sísmica**. Este portafolio debe funcionar como una **plataforma académica y profesional de primer nivel**, comparable a los mejores portafolios de profesores e investigadores de universidades como MIT, Stanford o Caltech.
+    13→    13→
+    14→    14→El portafolio no es un sitio comercial. No contiene precios, descuentos, ofertas ni lenguaje de ventas. Transmite rigor académico, profundidad técnica y capacidad computacional.
+    15→    15→
+    16→    16→**Mensaje central que debe transmitir:**
+    17→    17→> *"A structural engineer focused on structural analysis, nonlinear modeling, structural dynamics, earthquake engineering, performance-based design, seismic risk, and computational tools for engineering education and practice."*
+    18→    18→
+    19→    19→---
+    20→    20→
+    21→    21→## 1. STACK TECNOLÓGICO
+    22→    22→
+    23→    23→Elige este stack que produzca el mejor resultado. 
+    24→    24→
+    25→    25→**Opción A : Next.js 14+ con App Router + TypeScript + Tailwind CSS + Framer Motion + MDX para contenido  
+    26→    26→
+    27→    27→
+    28→    28→Independientemente del stack elegido:
+    29→    29→- Responsive mobile-first obligatorio
+    30→    30→- Modo oscuro/claro opcional pero valorado
+    31→    31→- Animaciones suaves con `prefers-reduced-motion` respetado
+    32→    32→- Performance: Lighthouse score > 90 en todas las métricas
+    33→    33→- SEO: meta tags, Open Graph, sitemap.xml
+    34→    34→- Accesibilidad: WCAG 2.1 AA mínimo
+    35→    35→
+    36→    36→---
+    37→    37→
+    38→    38→## 2. PALETA DE COLORES — OBLIGATORIA
+    39→    39→
+    40→    40→Esta paleta es fija e inamovible. Toda la UI debe derivarse de ella:
+    41→    41→
+    42→    42→```
+    43→    43→--color-primary:     #00BBD4   /* Cyan/teal vibrante — CTA, highlights, íconos activos */
+    44→    44→--color-primary-light: #5DD6E6  /* Cyan claro — hovers, gradientes suaves, fondos de tarjetas */
+    45→    45→--color-dark:        #334E68   /* Azul-gris oscuro — fondos principales, navbars, headers */
+    46→    46→--color-surface:     #F5FAFF   /* Blanco azulado muy claro — backgrounds de secciones claras */
+    47→    47→--color-muted:       #98A6B3   /* Gris azulado — texto secundario, bordes, metadatos */
+    48→    48→--color-white:       #FFFFFF   /* Blanco puro — texto sobre fondos oscuros */
+    49→    49→```
+    50→    50→
+    51→    51→**Reglas de aplicación:**
+    52→    52→- El fondo global alterna entre `#334E68` (secciones oscuras) y `#F5FAFF` (secciones claras)
+    53→    53→- Los CTAs y elementos interactivos usan `#00BBD4`
+    54→    54→- Los gradientes usan transiciones entre `#334E68` → `#00BBD4` o `#334E68` → `#5DD6E6`
+    55→    55→- Los títulos sobre fondo oscuro son `#FFFFFF`; sobre fondo claro son `#334E68`
+    56→    56→- El texto de cuerpo sobre fondo claro es `#334E68`; sobre fondo oscuro es `#F5FAFF`
+    57→    57→- Los elementos de acento (líneas decorativas, iconos, tags) usan `#00BBD4`
+    58→    58→- Nunca usar colores fuera de esta paleta salvo blanco puro y negro para contraste de texto
+    59→    59→
+    60→    60→**Inspiración visual de las referencias:**
+    61→    61→- Hero oscuro con gradiente profundo en `#334E68` con destellos de `#00BBD4`
+    62→    62→- Cards con bordes redondeados, fondos degradados de `#334E68` a un tono más oscuro
+    63→    63→- Líneas decorativas tipo "wire mesh" o "grid lines" en `#5DD6E6` con baja opacidad
+    64→    64→- Tipografía blanca limpia sobre fondos oscuros
+    65→    65→
+    66→    66→---
+    67→    67→
+    68→    68→## 3. TIPOGRAFÍA
+    69→    69→
+    70→    70→Usa Google Fonts:
+    71→    71→
+    72→    72→- **Display / Títulos principales:** `Space Grotesk` — peso 700, usado con letter-spacing ajustado
+    73→    73→- **Cuerpo / Párrafos:** `Inter` — peso 400/500, excelente legibilidad técnica
+    74→    74→- **Código / Snippets:** `JetBrains Mono` — monospace para bloques de código
+    75→    75→
+    76→    76→Escala tipográfica:
+    77→    77→```
+    78→    78→h1: 3.5rem–5rem (clamp responsive), weight 700, Space Grotesk
+    79→    79→h2: 2.25rem–3rem, weight 700, Space Grotesk
+    80→    80→h3: 1.5rem–2rem, weight 600, Space Grotesk
+    81→    81→h4: 1.25rem, weight 600, Inter
+    82→    82→body: 1rem–1.125rem, weight 400, Inter, line-height 1.7
+    83→    83→caption/meta: 0.875rem, weight 500, Inter, color --color-muted
+    84→    84→code: 0.9rem, JetBrains Mono
+    85→    85→```
+    86→    86→
+    87→    87→---
+    88→    88→
+    89→    89→## 4. ARQUITECTURA DEL SITIO — NAVEGACIÓN PRINCIPAL
+    90→    90→
+    91→    91→La navegación debe incluir exactamente estas 13 secciones en este orden:
+    92→    92→
+    93→    93→1. **Home**
+    94→    94→2. **About**
+    95→    95→3. **Areas of Expertise**
+    96→    96→4. **Projects**
+    97→    97→5. **Computational Tools**
+    98→    98→6. **Open Academic Resources**
+    99→    99→7. **Courses and Mini-Courses**
+   100→   100→8. **Technical Library**
+   101→   101→9. **Forum**
+   102→   102→10. **Teaching Portfolio**
+   103→   103→11. **Research and Manuscripts**
+   104→   104→12. **CV**
+   105→   105→13. **Contact**
+   106→   106→
+   107→   107→El navbar debe ser:
+   108→   108→- Sticky con backdrop blur al hacer scroll
+   109→   109→- Fondo `#334E68` con borde inferior sutil en `#00BBD4` al hacer scroll
+   110→   110→- Logo / nombre "Alexis" en Space Grotesk con acento `#00BBD4`
+   111→   111→- En mobile: hamburger menu con drawer lateral
+   112→   112→- Dropdown para secciones largas si aplica
+   113→   113→
+   114→   114→---
+   115→   115→
+   116→   116→## 5. SECCIÓN POR SECCIÓN — CONTENIDO EXACTO E INAMOVIBLE
+   117→   117→
+   118→   118→### 5.1 HOME
+   119→   119→
+   120→   120→**Objetivo:** Comunicar en segundos quién es Alexis, sus áreas y qué encontrará el visitante.
+   121→   121→
+   122→   122→**Hero Section:**
+   123→   123→- Fondo: gradiente oscuro `#334E68` con elementos decorativos tipo "wire mesh" animados en `#5DD6E6` (baja opacidad, inspirado en la imagen de referencia "A diario Noticias")
+   124→   124→- Título principal (H1, texto completo obligatorio):
+   125→   125→  ```
+   126→   126→  Structural Engineering, Earthquake Engineering and Computational Tools
+   127→   127→  ```
+   128→   128→- Subtítulo (texto completo obligatorio, no cambiar ni una palabra):
+   129→   129→  ```
+   130→   130→  Civil engineer focused on matrix structural analysis, finite element modeling, nonlinear structural analysis, structural dynamics, seismic design of concrete and steel structures, performance-based earthquake engineering, and seismic risk assessment.
+   131→   131→  ```
+   132→   132→- **4 botones CTA** visibles y funcionales:
+   133→   133→  - `View Projects` → enlaza a sección Projects
+   134→   134→  - `Explore Open Resources` → enlaza a Open Academic Resources
+   135→   135→  - `Download CV` → descarga PDF de CV
+   136→   136→  - `Contact` → enlaza a Contact
+   137→   137→
+   138→   138→**Bloques destacados en Home (4 cards después del hero):**
+   139→   139→1. Structural Analysis and Computational Modeling
+   140→   140→2. Earthquake Engineering and Seismic Design
+   141→   141→3. Performance-Based Engineering and Seismic Risk
+   142→   142→4. Open Academic Resources and Engineering Education
+   143→   143→
+   144→   144→Cada bloque tiene: ícono SVG relevante, título, descripción de 2-3 líneas, enlace "Explore →"
+   145→   145→
+   146→   146→---
+   147→   147→
+   148→   148→### 5.2 ABOUT
+   149→   149→
+   150→   150→**Objetivo:** Narrativa breve, sobria y académica. Introducción profesional, no biografía extensa.
+   151→   151→
+   152→   152→**Contenido obligatorio — incluir todo:**
+   153→   153→
+   154→   154→- Formación como ingeniero civil
+   155→   155→- Experiencia en docencia y formación de estudiantes de ingeniería
+   156→   156→- Interés en análisis estructural avanzado, dinámica estructural e ingeniería sísmica
+   157→   157→- Desarrollo de herramientas computacionales, códigos, plantillas y manuales
+   158→   158→- Interés en investigación aplicada y transferencia de conocimiento técnico
+   159→   159→
+   160→   160→**Texto base (obligatorio, palabra por palabra):**
+   161→   161→
+   162→   162→> *"I am a civil engineer focused on structural engineering, earthquake engineering, and computational tools for engineering education and practice. My work integrates matrix structural analysis, finite element modeling, nonlinear structural analysis, structural dynamics, seismic design of reinforced concrete and steel structures, performance-based earthquake engineering, and seismic risk assessment.*
+   163→   163→>
+   164→   164→> *Over the last years, I have developed academic material, computational scripts, technical templates, software tools, manuals, and applied examples aimed at improving the understanding and application of advanced structural engineering concepts."*
+   165→   165→
+   166→   166→Layout sugerido: foto de perfil a la izquierda (placeholder circular con gradiente de la paleta), texto a la derecha, con stats destacados debajo (años de experiencia, cursos desarrollados, herramientas publicadas, etc. — usar números genéricos que el cliente llenará).
+   167→   167→
+   168→   168→---
+   169→   169→
+   170→   170→### 5.3 AREAS OF EXPERTISE
+   171→   171→
+   172→   172→Esta es **una de las secciones más importantes del sitio**. Organiza el conocimiento principal en 7 áreas claramente diferenciadas. Cada área tiene su propia página/subpágina (o tab expandible detallado).
+   173→   173→
+   174→   174→**ÁREA 1: Matrix Structural Analysis**
+   175→   175→
+   176→   176→Descripción: Área enfocada en la formulación matricial de estructuras, método de rigidez, ensamblaje de matrices globales, imposición de condiciones de frontera, solución de sistemas de ecuaciones y recuperación de fuerzas internas.
+   177→   177→
+   178→   178→Temas (listar todos):
+   179→   179→- Direct stiffness method
+   180→   180→- Local and global coordinate systems
+   181→   181→- Transformation matrices
+   182→   182→- Global stiffness matrix assembly
+   183→   183→- Boundary conditions
+   184→   184→- Nodal displacements and support reactions
+   185→   185→- Plane trusses
+   186→   186→- Plane frames
+   187→   187→- Grids and space frames
+   188→   188→- Influence of element releases and constraints
+   189→   189→
+   190→   190→Material disponible: Apuntes en PDF · Códigos MATLAB o Python · Ejemplos paso a paso · Plantillas de cálculo · Videos cortos explicativos · Mini curso gratuito de análisis matricial
+   191→   191→
+   192→   192→---
+   193→   193→
+   194→   194→**ÁREA 2: Finite Element Method**
+   195→   195→
+   196→   196→Descripción: Área dedicada a la formulación y aplicación del método de elementos finitos en problemas de ingeniería estructural, desde elementos unidimensionales hasta modelos más generales.
+   197→   197→
+   198→   198→Temas (listar todos):
+   199→   199→- Introduction to the finite element method
+   200→   200→- Shape functions
+   201→   201→- Element stiffness matrices
+   202→   202→- Numerical integration
+   203→   203→- Beam and frame finite elements
+   204→   204→- Plane stress and plane strain elements
+   205→   205→- Mesh generation concepts
+   206→   206→- Convergence and discretization error
+   207→   207→- Verification of finite element models
+   208→   208→- Comparison between analytical and numerical solutions
+   209→   209→
+   210→   210→Material disponible: Códigos propios · Notebooks de Python · Scripts de MATLAB · Ejemplos comparativos · Modelos explicativos · Manuales introductorios
+   211→   211→
+   212→   212→---
+   213→   213→
+   214→   214→**ÁREA 3: Nonlinear Structural Analysis**
+   215→   215→
+   216→   216→Descripción: Área enfocada en la respuesta no lineal de estructuras, considerando no linealidad material, geométrica, histéresis, plasticidad y análisis incremental.
+   217→   217→
+   218→   218→Temas (listar todos):
+   219→   219→- Material nonlinearity
+   220→   220→- Geometric nonlinearity
+   221→   221→- P-Delta effects
+   222→   222→- Plastic hinges
+   223→   223→- Fiber models
+   224→   224→- Moment-curvature analysis
+   225→   225→- Hysteretic behavior
+   226→   226→- Menegotto-Pinto steel model
+   227→   227→- Bilinear material models
+   228→   228→- Newton-Raphson method
+   229→   229→- Modified Newton-Raphson method
+   230→   230→- Incremental-iterative procedures
+   231→   231→- Nonlinear static pushover analysis
+   232→   232→- Nonlinear time-history analysis
+   233→   233→
+   234→   234→Material disponible: Scripts MATLAB · Modelos OpenSees · Comparaciones entre cálculo manual y software · Ejemplos de convergencia · Manuales de análisis no lineal · Videos explicativos de algoritmos
+   235→   235→
+   236→   236→---
+   237→   237→
+   238→   238→**ÁREA 4: Structural Dynamics**
+   239→   239→
+   240→   240→Descripción: Área dedicada al estudio de la respuesta dinámica de sistemas estructurales, desde sistemas de un grado de libertad hasta sistemas de múltiples grados de libertad.
+   241→   241→
+   242→   242→Temas (listar todos):
+   243→   243→- Single-degree-of-freedom systems
+   244→   244→- Free and forced vibration
+   245→   245→- Damping models
+   246→   246→- Response to harmonic loading
+   247→   247→- Response spectrum
+   248→   248→- Newmark method
+   249→   249→- Central difference method
+   250→   250→- Modal analysis
+   251→   251→- Modal superposition
+   252→   252→- Rayleigh damping
+   253→   253→- Multi-degree-of-freedom systems
+   254→   254→- Time-history analysis
+   255→   255→- Frequency-domain analysis
+   256→   256→- Experimental modal identification
+   257→   257→
+   258→   258→Material disponible: Códigos de integración numérica · Ejemplos de respuesta sísmica · Comparación entre respuesta modal y directa · Procesamiento de señales · Videos sobre dinámica estructural · Mini curso gratuito de dinámica estructural
+   259→   259→
+   260→   260→---
+   261→   261→
+   262→   262→**ÁREA 5: Seismic Design of Concrete and Steel Structures**
+   263→   263→
+   264→   264→Descripción: Área enfocada en el diseño sísmico de estructuras de concreto armado y acero estructural, considerando normativa, ductilidad, detallado sísmico, sistemas resistentes y criterios de desempeño.
+   265→   265→
+   266→   266→Temas en concreto armado (listar todos):
+   267→   267→- Seismic design philosophy
+   268→   268→- Reinforced concrete frames
+   269→   269→- Structural walls
+   270→   270→- Dual systems
+   271→   271→- Capacity design
+   272→   272→- Strong column–weak beam criterion
+   273→   273→- Beam-column joints
+   274→   274→- Shear design
+   275→   275→- Confinement
+   276→   276→- Drift control
+   277→   277→- Irregularities
+   278→   278→- Seismic load combinations
+   279→   279→
+   280→   280→Temas en acero estructural (listar todos):
+   281→   281→- Moment-resisting frames
+   282→   282→- Concentrically braced frames
+   283→   283→- Eccentrically braced frames
+   284→   284→- Links in EBF systems
+   285→   285→- Buckling-restrained braces
+   286→   286→- Panel zone behavior
+   287→   287→- Prequalified moment connections
+   288→   288→- Base plates
+   289→   289→- Seismic detailing
+   290→   290→- Ductility and energy dissipation
+   291→   291→
+   292→   292→Material disponible: Ejemplos de diseño · Plantillas de verificación · Manuales normativos · Memorias de cálculo · Videos de diseño por elementos · Casos de estudio
+   293→   293→
+   294→   294→---
+   295→   295→
+   296→   296→**ÁREA 6: Performance-Based Earthquake Engineering**
+   297→   297→
+   298→   298→Descripción: Área orientada a la evaluación del desempeño estructural frente a demandas sísmicas, considerando niveles de desempeño, daño esperado, análisis no lineal y toma de decisiones basada en riesgo.
+   299→   299→
+   300→   300→Temas (listar todos):
+   301→   301→- Performance objectives
+   302→   302→- Hazard levels
+   303→   303→- Serviceability, life safety and collapse prevention
+   304→   304→- Nonlinear static procedures
+   305→   305→- Nonlinear dynamic procedures
+   306→   306→- Incremental dynamic analysis
+   307→   307→- Fragility curves
+   308→   308→- Damage measures
+   309→   309→- Engineering demand parameters
+   310→   310→- Intensity measures
+   311→   311→- Collapse assessment
+   312→   312→- Loss estimation
+   313→   313→- Resilience-oriented design
+   314→   314→
+   315→   315→Material disponible: Ejemplos de análisis por desempeño · Scripts para curvas de fragilidad · Estudios de caso · Resúmenes de documentos FEMA, ASCE o PEER · Videos introductorios · Lecturas comentadas
+   316→   316→
+   317→   317→---
+   318→   318→
+   319→   319→**ÁREA 7: Seismic Risk Assessment of Buildings**
+   320→   320→
+   321→   321→Descripción: Área enfocada en la evaluación del riesgo sísmico de edificaciones, considerando amenaza, exposición, vulnerabilidad, daño esperado y pérdidas económicas.
+   322→   322→
+   323→   323→Temas (listar todos):
+   324→   324→- Probabilistic seismic hazard analysis
+   325→   325→- Seismic sources
+   326→   326→- Ground motion prediction equations
+   327→   327→- Exposure models
+   328→   328→- Building typologies
+   329→   329→- Vulnerability functions
+   330→   330→- Fragility functions
+   331→   331→- Expected annual loss
+   332→   332→- Probable maximum loss
+   333→   333→- Risk maps
+   334→   334→- Loss exceedance curves
+   335→   335→- Seismic risk mitigation
+   336→   336→
+   337→   337→Material disponible: Flujos de trabajo con CRISIS · Flujos de trabajo con CAPRA · Mapas en QGIS · Ejemplos de exposición urbana · Hojas de cálculo · Reportes técnicos · Videos paso a paso
+   338→   338→
+   339→   339→---
+   340→   340→
+   341→   341→### 5.4 PROJECTS
+   342→   342→
+   343→   343→**Objetivo:** Mostrar trabajos concretos. Cada proyecto evidencia combinación de teoría, modelación, programación, análisis y documentación técnica.
+   344→   344→
+   345→   345→**Estructura de cada proyecto (página individual con):**
+   346→   346→1. Project title
+   347→   347→2. Short abstract
+   348→   348→3. Problem statement
+   349→   349→4. Methodology
+   350→   350→5. Theoretical background
+   351→   351→6. Computational implementation
+   352→   352→7. Results
+   353→   353→8. Discussion
+   354→   354→9. Files available
+   355→   355→10. Related videos
+   356→   356→11. References
+   357→   357→
+   358→   358→**Proyectos a mostrar (todos — crear cards para cada uno):**
+   359→   359→
+   360→   360→| Proyecto | Contenido |
+   361→   361→|---|---|
+   362→   362→| Matrix Analysis Solver | Código para análisis de armaduras y pórticos usando el método de rigidez directa |
+   363→   363→| Finite Element Beam Models | Formulación de elementos de viga y pórtico, comparación con soluciones analíticas |
+   364→   364→| Nonlinear SDOF Solver | Implementación de integración paso a paso con modelos bilineales e histéricos |
+   365→   365→| Menegotto-Pinto Model | Implementación computacional de modelo de acero y comparación con OpenSees |
+   366→   366→| Structural Dynamics Toolkit | Códigos de respuesta dinámica, espectros, análisis modal y superposición modal |
+   367→   367→| Seismic Spectrum Generator | Herramienta para generación de espectros de diseño y verificación normativa |
+   368→   368→| ETABS Automation App | Aplicación para automatizar procesos repetitivos en análisis sísmico |
+   369→   369→| Steel Seismic Design Examples | Ejemplos de pórticos, conexiones, arriostres y sistemas sísmicos de acero |
+   370→   370→| Concrete Seismic Design Examples | Ejemplos de pórticos, muros estructurales, sistemas duales y criterios de capacidad |
+   371→   371→| Performance-Based Assessment | Ejemplos de evaluación por desempeño usando análisis no lineal |
+   372→   372→| Seismic Risk Workflow | Flujo de amenaza, exposición, vulnerabilidad y pérdida esperada |
+   373→   373→
+   374→   374→Layout: grid de cards con filtros por área técnica, imagen de preview (placeholder con gradiente), badges de tecnología usada (MATLAB, Python, OpenSees, etc.)
+   375→   375→
+   376→   376→---
+   377→   377→
+   378→   378→### 5.5 COMPUTATIONAL TOOLS
+   379→   379→
+   380→   380→**Objetivo:** Reunir códigos, aplicaciones, plantillas y herramientas para análisis estructural, diseño sísmico, documentación técnica y automatización.
+   381→   381→
+   382→   382→**Organización (8 categorías):**
+   383→   383→1. MATLAB scripts
+   384→   384→2. Python scripts
+   385→   385→3. OpenSees models
+   386→   386→4. ETABS API tools
+   387→   387→5. Mathcad templates
+   388→   388→6. LaTeX report templates
+   389→   389→7. Excel calculation sheets
+   390→   390→8. Interactive notebooks
+   391→   391→
+   392→   392→**Ficha técnica para cada herramienta:**
+   393→   393→- Nombre de la herramienta
+   394→   394→- Problema que resuelve
+   395→   395→- Área técnica
+   396→   396→- Lenguaje o software utilizado
+   397→   397→- Archivos disponibles
+   398→   398→- Nivel: básico / intermedio / avanzado
+   399→   399→- Video tutorial asociado
+   400→   400→- Manual o guía de uso
+   401→   401→
+   402→   402→**Herramientas a mostrar:**
+   403→   403→
+   404→   404→| Herramienta | Tecnología | Propósito |
+   405→   405→|---|---|---|
+   406→   406→| Matrix Structural Analysis Solver | MATLAB/Python | Resolver armaduras y pórticos mediante el método de rigidez |
+   407→   407→| Newmark Time Integration Tool | MATLAB | Calcular respuesta dinámica paso a paso |
+   408→   408→| Nonlinear Hysteretic SDOF Model | MATLAB/OpenSees | Evaluar respuesta no lineal ante registros sísmicos |
+   409→   409→| Seismic Spectrum Generator | Mathcad/Python | Generar espectros de diseño y memorias técnicas |
+   410→   410→| ETABS Automation Interface | Python/PyQt/API | Automatizar definición de casos sísmicos y combinaciones |
+   411→   411→| LaTeX Calculation Report Template | LaTeX | Generar memorias de cálculo profesionales |
+   412→   412→
+   413→   413→---
+   414→   414→
+   415→   415→### 5.6 OPEN ACADEMIC RESOURCES
+   416→   416→
+   417→   417→**Esta es una de las secciones más importantes.** Crear una biblioteca académica libre.
+   418→   418→
+   419→   419→**Mensaje que debe transmitir (obligatorio, palabra por palabra):**
+   420→   420→> *"This platform provides open academic resources in structural engineering, earthquake engineering, computational modeling, and seismic risk assessment, with the goal of supporting engineering education and technical capacity building."*
+   421→   421→
+   422→   422→**Tipos de contenido libre:**
+   423→   423→- Videos académicos
+   424→   424→- Mini cursos gratuitos
+   425→   425→- Apuntes de clase
+   426→   426→- Ejercicios resueltos
+   427→   427→- Códigos comentados
+   428→   428→- Plantillas básicas
+   429→   429→- Manuales introductorios
+   430→   430→- Resúmenes de libros
+   431→   431→- Resúmenes de artículos
+   432→   432→- Guías paso a paso
+   433→   433→- Casos de estudio
+   434→   434→- Modelos descargables
+   435→   435→- Foros de discusión
+   436→   436→
+   437→   437→**12 Categorías de la biblioteca libre:**
+   438→   438→1. Matrix Structural Analysis
+   439→   439→2. Finite Element Method
+   440→   440→3. Nonlinear Structural Analysis
+   441→   441→4. Structural Dynamics
+   442→   442→5. Earthquake Engineering
+   443→   443→6. Seismic Design of Concrete Structures
+   444→   444→7. Seismic Design of Steel Structures
+   445→   445→8. Performance-Based Earthquake Engineering
+   446→   446→9. Seismic Risk Assessment
+   447→   447→10. Computational Tools
+   448→   448→11. Technical Writing and LaTeX
+   449→   449→12. Engineering Software Tutorials
+   450→   450→
+   451→   451→**Estructura de cada recurso libre:**
+   452→   452→- Título
+   453→   453→- Descripción breve
+   454→   454→- Área temática
+   455→   455→- Nivel de dificultad
+   456→   456→- Duración estimada
+   457→   457→- Tipo de recurso: video / PDF / código / plantilla / manual / ejemplo
+   458→   458→- Archivos descargables
+   459→   459→- Requisitos previos
+   460→   460→- Recursos relacionados
+   461→   461→
+   462→   462→**Niveles de dificultad:**
+   463→   463→- Beginner
+   464→   464→- Intermediate
+   465→   465→- Advanced
+   466→   466→- Research-oriented
+   467→   467→
+   468→   468→**Página tipo para un recurso académico:**
+   469→   469→1. Title
+   470→   470→2. Learning objectives
+   471→   471→3. Short theoretical introduction
+   472→   472→4. Step-by-step explanation
+   473→   473→5. Worked example
+   474→   474→6. Code or template
+   475→   475→7. Download section
+   476→   476→8. Video explanation
+   477→   477→9. Discussion forum
+   478→   478→10. Related resources
+   479→   479→
+   480→   480→---
+   481→   481→
+   482→   482→### 5.7 COURSES AND MINI-COURSES
+   483→   483→
+   484→   484→**Objetivo:** Organizar contenidos académicos libres en rutas de aprendizaje pequeñas, claras y secuenciales.
+   485→   485→
+   486→   486→**12 Mini cursos a mostrar:**
+   487→   487→1. Introduction to Matrix Structural Analysis
+   488→   488→2. Fundamentals of the Finite Element Method
+   489→   489→3. Introduction to Structural Dynamics
+   490→   490→4. Newmark Method for Dynamic Response Analysis
+   491→   491→5. Introduction to Nonlinear Structural Analysis
+   492→   492→6. Seismic Design Philosophy for Concrete Structures
+   493→   493→7. Seismic Design Philosophy for Steel Structures
+   494→   494→8. Introduction to Performance-Based Earthquake Engineering
+   495→   495→9. Introduction to Seismic Risk Assessment
+   496→   496→10. MATLAB for Structural Engineering
+   497→   497→11. Python for Structural Engineering Automation
+   498→   498→12. LaTeX for Engineering Reports
+   499→   499→
+   500→   500→**Estructura de cada mini curso:**
+   501→   501→- Nombre del curso
+   502→   502→- Descripción
+   503→   503→- Objetivos de aprendizaje
+   504→   504→- Lista de lecciones
+   505→   505→- Videos
+   506→   506→- Material descargable
+   507→   507→- Ejercicios propuestos
+   508→   508→- Proyecto final pequeño
+   509→   509→- Certificado opcional (a implementar en el futuro)
+   510→   510→
+   511→   511→**Ejemplo de mini curso completo — Mini Course: Introduction to Structural Dynamics:**
+   512→   512→- Lesson 1: Single-degree-of-freedom systems
+   513→   513→- Lesson 2: Free vibration
+   514→   514→- Lesson 3: Damping
+   515→   515→- Lesson 4: Harmonic excitation
+   516→   516→- Lesson 5: Numerical integration
+   517→   517→- Lesson 6: Response spectrum
+   518→   518→- Lesson 7: MATLAB implementation
+   519→   519→- Final example: seismic response of an SDOF system
+   520→   520→
+   521→   521→---
+   522→   522→
+   523→   523→### 5.8 TECHNICAL LIBRARY
+   524→   524→
+   525→   525→**Objetivo:** Repositorio ordenado de documentos, notas y referencias.
+   526→   526→
+   527→   527→**Tipos de documentos:**
+   528→   528→- Lecture notes
+   529→   529→- Technical reports
+   530→   530→- Calculation reports
+   531→   531→- Design examples
+   532→   532→- Software manuals
+   533→   533→- Literature summaries
+   534→   534→- Code documentation
+   535→   535→- Research notes
+   536→   536→
+   537→   537→**Filtros obligatorios en la UI:**
+   538→   538→- Área técnica
+   539→   539→- Nivel
+   540→   540→- Tipo de archivo
+   541→   541→- Software asociado
+   542→   542→- Idioma
+   543→   543→- Fecha de publicación
+   544→   544→
+   545→   545→---
+   546→   546→
+   547→   547→### 5.9 FORUM
+   548→   548→
+   549→   549→**Objetivo:** Permitir que los usuarios realicen preguntas técnicas relacionadas con los recursos académicos publicados.
+   550→   550→
+   551→   551→**11 Categorías del foro:**
+   552→   552→- Matrix Structural Analysis
+   553→   553→- Finite Element Method
+   554→   554→- Nonlinear Analysis
+   555→   555→- Structural Dynamics
+   556→   556→- Concrete Seismic Design
+   557→   557→- Steel Seismic Design
+   558→   558→- Performance-Based Engineering
+   559→   559→- Seismic Risk
+   560→   560→- MATLAB/Python/OpenSees
+   561→   561→- ETABS/SAP2000
+   562→   562→- Technical Writing and LaTeX
+   563→   563→
+   564→   564→**Funciones recomendadas:**
+   565→   565→- Preguntas y respuestas
+   566→   566→- Comentarios por recurso
+   567→   567→- Votación de respuestas útiles
+   568→   568→- Etiquetas por tema
+   569→   569→- Buscador interno
+   570→   570→- Moderación
+   571→   571→- Perfil de usuario
+   572→   572→
+   573→   573→*(Implementar como UI/layout funcional; el backend puede ser mockup o integración con Supabase/Firebase/Disqus según capacidad)*
+   574→   574→
+   575→   575→---
+   576→   576→
+   577→   577→### 5.10 TEACHING PORTFOLIO
+   578→   578→
+   579→   579→**Objetivo:** Mostrar experiencia en enseñanza desde perspectiva académica, no comercial.
+   580→   580→
+   581→   581→**Contenido obligatorio:**
+   582→   582→- Cursos dictados
+   583→   583→- Temas enseñados
+   584→   584→- Material educativo desarrollado
+   585→   585→- Ejemplos de notas de clase
+   586→   586→- Ejemplos de problemas resueltos
+   587→   587→- Filosofía de enseñanza
+   588→   588→- Impacto educativo
+   589→   589→
+   590→   590→**Texto obligatorio (palabra por palabra):**
+   591→   591→> *"My teaching work focuses on making advanced structural engineering concepts accessible through rigorous explanations, step-by-step examples, computational tools, and professionally documented technical material."*
+   592→   592→
+   593→   593→---
+   594→   594→
+   595→   595→### 5.11 RESEARCH AND MANUSCRIPTS
+   596→   596→
+   597→   597→**Objetivo:** Mostrar la transición hacia investigación formal.
+   598→   598→
+   599→   599→**Categorías:**
+   600→   600→- Manuscripts in preparation
+   601→   601→- Technical reports
+   602→   602→- Research notes
+   603→   603→- Literature reviews
+   604→   604→- Data processing studies
+   605→   605→- Numerical simulation studies
+   606→   606→
+   607→   607→**Temas potenciales a listar:**
+   608→   608→- Modal identification using ambient vibration data
+   609→   609→- Nonlinear dynamic analysis of structural systems
+   610→   610→- Seismic risk assessment of building portfolios
+   611→   611→- Computational tools for seismic design
+   612→   612→- Performance-based assessment of structural systems
+   613→   613→
+   614→   614→---
+   615→   615→
+   616→   616→### 5.12 CV
+   617→   617→
+   618→   618→**Contenido:**
+   619→   619→- Botón de descarga: Academic CV (PDF)
+   620→   620→- Botón de descarga: One-page resume (PDF)
+   621→   621→
+   622→   622→**Estructura del CV académico a mostrar (online, con diseño):**
+   623→   623→1. Education
+   624→   624→2. Research interests
+   625→   625→3. Teaching experience
+   626→   626→4. Technical projects
+   627→   627→5. Computational tools
+   628→   628→6. Publications or manuscripts
+   629→   629→7. Academic training
+   630→   630→8. Software skills
+   631→   631→9. Languages
+   632→   632→10. References
+   633→   633→
+   634→   634→---
+   635→   635→
+   636→   636→### 5.13 CONTACT
+   637→   637→
+   638→   638→**Contenido:**
+   639→   639→- Email
+   640→   640→- LinkedIn
+   641→   641→- GitHub
+   642→   642→- Google Scholar (placeholder / próximamente)
+   643→   643→- ResearchGate (placeholder / próximamente)
+   644→   644→- Formulario de contacto funcional
+   645→   645→
+   646→   646→---
+   647→   647→
+   648→   648→## 6. DISEÑO VISUAL — DIRECTRICES ESPECÍFICAS
+   649→   649→
+   650→   650→### 6.1 Estilo Global
+   651→   651→- Académico, sobrio, moderno, limpio
+   652→   652→- De lectura cómoda con amplio espaciado
+   653→   653→- Compatible con dispositivos móviles (mobile-first)
+   654→   654→- No usar sombras excesivas — sombras sutiles y elegantes
+   655→   655→- Border-radius moderado: 8–16px para cards, 999px para badges/tags
+   656→   656→- Evitar decoraciones superfluas
+   657→   657→
+   658→   658→### 6.2 Hero Section
+   659→   659→Crear un hero que recuerde al background de la imagen de referencia "A diario Noticias":
+   660→   660→- Fondo oscuro `#334E68` profundo
+   661→   661→- Elementos decorativos: curvas tipo "wire mesh" o "líneas de grid esféricas" animadas en `#5DD6E6` con opacidad 10–20%, posicionadas en esquinas
+   662→   662→- Particle o SVG animation sutil en fondo
+   663→   663→- El texto del hero sobre el fondo oscuro debe ser impactante y limpio
+   664→   664→
+   665→   665→### 6.3 Cards de Áreas / Proyectos / Herramientas
+   666→   666→Inspiradas en las cards de la imagen "Conoce al Equipo":
+   667→   667→- Fondo degradado oscuro: de `#334E68` a un tono más profundo (`#1e3248`)
+   668→   668→- Border-radius 16–20px
+   669→   669→- Borde sutil en `#5DD6E6` con baja opacidad (hover: aumenta)
+   670→   670→- Sombra suave en `#00BBD4` (box-shadow con baja opacidad)
+   671→   671→- Ícono o número de área en `#00BBD4`
+   672→   672→- Hover: leve lift (transform translateY -4px) + borde más visible
+   673→   673→
+   674→   674→### 6.4 Tags / Badges de Nivel y Tecnología
+   675→   675→- Beginner: bg `#5DD6E6` + texto `#334E68`
+   676→   676→- Intermediate: bg `#00BBD4` + texto `#FFFFFF`
+   677→   677→- Advanced: bg `#334E68` + texto `#00BBD4` + borde `#00BBD4`
+   678→   678→- Research-oriented: bg transparent + borde `#00BBD4` + texto `#00BBD4`
+   679→   679→- Technology tags (MATLAB, Python, etc.): monospace font, fondo `#334E68`, texto `#5DD6E6`
+   680→   680→
+   681→   681→### 6.5 Secciones Alternadas
+   682→   682→- Secciones impares: fondo `#334E68`, texto blanco
+   683→   683→- Secciones pares: fondo `#F5FAFF`, texto `#334E68`
+   684→   684→- Transición visual suave entre secciones (wave SVG o diagonal cut)
+   685→   685→
+   686→   686→### 6.6 Línea divisora / Accents
+   687→   687→- Usar líneas horizontales en `#00BBD4` (1–2px) para separar subsecciones
+   688→   688→- Usar `#00BBD4` como color de underline en hover de links de navegación
+   689→   689→
+   690→   690→### 6.7 Animaciones
+   691→   691→- Hero: fade-in + slide-up suave al cargar (200–400ms delay por elemento)
+   692→   692→- Cards: staggered fade-in al entrar en viewport (Intersection Observer)
+   693→   693→- Botones: scale + color transition en hover (200ms ease)
+   694→   694→- Wire mesh en hero: animación continua lenta de rotación/flotación (no distractora)
+   695→   695→- NO usar animaciones agresivas, bounces exagerados ni efectos que distraigan del contenido académico
+   696→   696→
+   697→   697→---
+   698→   698→
+   699→   699→## 7. COMPONENTES UI OBLIGATORIOS
+   700→   700→
+   701→   701→### Navbar
+   702→   702→- Logo "Alexis" en Space Grotesk, con "." o acento visual en `#00BBD4`
+   703→   703→- Links de navegación con hover underline en `#00BBD4`
+   704→   704→- Botón CTA "Contact" en la navbar, estilo filled `#00BBD4`
+   705→   705→- Backdrop blur al hacer scroll
+   706→   706→- Mobile: hamburger con drawer/overlay
+   707→   707→
+   708→   708→### Footer
+   709→   709→- Fondo `#334E68` oscuro
+   710→   710→- Links a todas las secciones principales
+   711→   711→- Iconos de redes sociales (LinkedIn, GitHub, Google Scholar, ResearchGate)
+   712→   712→- Copyright: `© 2025 Alexis. All rights reserved.`
+   713→   713→- Frase final: `"Structural Engineering, Earthquake Engineering and Computational Tools"`
+   714→   714→
+   715→   715→### Sistema de filtros para biblioteca/recursos
+   716→   716→- Filtros pill-style en `#334E68` con active state en `#00BBD4`
+   717→   717→- Funcionamiento client-side con JavaScript/React state
+   718→   718→- Animación suave de filtrado (fade)
+   719→   719→
+   720→   720→### Breadcrumbs
+   721→   721→- En páginas internas de proyectos, recursos y mini cursos
+   722→   722→- Estilo sobrio, texto `#98A6B3`
+   723→   723→
+   724→   724→### Progress bar de curso
+   725→   725→- Para la sección Mini-Courses, mostrar barra de progreso decorativa
+   726→   726→- Color de relleno `#00BBD4`
+   727→   727→
+   728→   728→### Tabla de herramientas computacionales
+   729→   729→- Estilo moderno, no la tabla HTML genérica
+   730→   730→- Filas con hover en `#334E68` claro
+   731→   731→- Headers con fondo `#334E68` oscuro y texto blanco
+   732→   732→
+   733→   733→---
+   734→   734→
+   735→   735→## 8. SISTEMA DE CONTENIDO Y DATOS
+   736→   736→
+   737→   737→### Estructura de datos sugerida (JSON/MDX)
+   738→   738→Crear archivos de datos para:
+   739→   739→- `areas.json` — las 7 áreas con temas y material
+   740→   740→- `projects.json` — los 11 proyectos con estructura completa
+   741→   741→- `tools.json` — las 6+ herramientas con ficha técnica
+   742→   742→- `resources.json` — recursos de Open Academic Resources
+   743→   743→- `courses.json` — los 12 mini cursos con lecciones
+   744→   744→- `library.json` — documentos de Technical Library
+   745→   745→
+   746→   746→### Placeholders de contenido real
+   747→   747→- Imágenes: usar placeholders con gradientes de la paleta hasta que el cliente suba las reales
+   748→   748→- PDFs: botones de descarga con href="#" hasta que el cliente los suba
+   749→   749→- Videos: placeholder cards con ícono de play en `#00BBD4`
+   750→   750→- Foto de perfil: placeholder circular con iniciales "A" sobre gradiente de la paleta
+   751→   751→
+   752→   752→---
+   753→   753→
+   754→   754→## 9. FUNCIONALIDADES CLAVE A IMPLEMENTAR
+   755→   755→
+   756→   756→Todas estas funcionalidades deben estar presentes:
+   757→   757→
+   758→   758→1. ✅ Subir / enlazar videos (embed de YouTube/Vimeo)
+   759→   759→2. ✅ Subir / enlazar archivos PDF (botones de descarga)
+   760→   760→3. ✅ Subir / enlazar códigos (con syntax highlighting — usar Prism.js o highlight.js)
+   761→   761→4. ✅ Subir / enlazar plantillas
+   762→   762→5. ✅ Clasificar recursos por tema (tags y categorías)
+   763→   763→6. ✅ Filtrar por nivel (Beginner / Intermediate / Advanced / Research-oriented)
+   764→   764→7. ✅ Crear rutas de aprendizaje (sección Mini-Courses con lecciones ordenadas)
+   765→   765→8. ✅ Páginas individuales para proyectos, recursos y mini cursos
+   766→   766→9. ✅ Habilitar foro / comentarios (layout funcional, al menos UI)
+   767→   767→10. ✅ Mostrar proyectos destacados en Home
+   768→   768→11. ✅ Descargar CV (botón prominente)
+   769→   769→12. ✅ Formulario de contacto funcional (validación client-side; action: mailto o Formspree)
+   770→   770→13. ✅ Buscador interno básico (al menos en recursos y biblioteca)
+   771→   771→14. ✅ Sistema de badges de tecnología (MATLAB, Python, OpenSees, ETABS, LaTeX, etc.)
+   772→   772→
+   773→   773→---
+   774→   774→
+   775→   775→## 10. LO QUE NUNCA DEBE APARECER
+   776→   776→
+   777→   777→- ❌ Precios
+   778→   778→- ❌ Promociones o descuentos
+   779→   779→- ❌ Lenguaje de ventas: "compra ahora", "oferta", "pack exclusivo"
+   780→   780→- ❌ Frases comerciales agresivas
+   781→   781→- ❌ Testimonios de clientes en tono comercial
+   782→   782→- ❌ Pop-ups de ventas
+   783→   783→- ❌ Diseño genérico de "landing page de curso"
+   784→   784→- ❌ Colores fuera de la paleta definida
+   785→   785→- ❌ Tipografías que no sean las especificadas
+   786→   786→- ❌ Cambios de texto del contenido original definido en este documento
+   787→   787→
+   788→   788→---
+   789→   789→
+   790→   790→## 11. ENTREGA FINAL ESPERADA
+   791→   791→
+   792→   792→El resultado debe ser:
+   793→   793→
+   794→   794→1. **Proyecto completo** con estructura de carpetas limpia y organizada
+   795→   795→2. **Todas las 13 páginas/secciones** implementadas con contenido real (no lorem ipsum en secciones principales)
+   796→   796→3. **Componentes reutilizables** bien organizados
+   797→   797→4. **README.md** con instrucciones de instalación y despliegue
+   798→   798→5. **package.json** con todas las dependencias correctas
+   799→   799→6. **Responsive** en mobile (375px), tablet (768px) y desktop (1440px)
+   800→   800→7. **Compilable sin errores** desde el primer `npm install && npm run dev`
+   801→   801→
+   802→   802→---
+   803→   803→
+   804→   804→## 12. CRITERIO DE ÉXITO
+   805→   805→
+   806→   806→Este portafolio debe verse y sentirse como el sitio web de un **investigador o profesor de una universidad de primer nivel mundial**. Si un académico de MIT, Caltech o la Universidad de Chile lo ve, debe pensar: "Este es un portafolio académico serio y riguroso." Ese es el único criterio de éxito.
+   807→   807→
+   808→   808→**Comienza ahora. Construye.**

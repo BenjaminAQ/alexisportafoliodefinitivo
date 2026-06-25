@@ -1,0 +1,252 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   ALEXIS ACADEMIC PORTFOLIO — DESIGN SYSTEM
+   Palette: #00BBD4 / #5DD6E6 / #334E68 / #F5FAFF / #98A6B3 / #FFFFFF
+   Fonts:   Space Grotesk (display) · Inter (body) · JetBrains Mono (code)
+   ============================================================ */
+
+@theme inline {
+  /* Brand palette as Tailwind color tokens */
+  --color-brand: #00bbd4;
+  --color-brand-light: #5dd6e6;
+  --color-ink: #334e68;
+  --color-ink-deep: #1e3248;
+  --color-surface: #f5faff;
+  --color-muted: #98a6b3;
+
+  /* shadcn-compatible tokens (mapped to brand) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Fonts */
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Chart (kept for shadcn chart component) */
+  --color-chart-1: #00bbd4;
+  --color-chart-2: #5dd6e6;
+  --color-chart-3: #334e68;
+  --color-chart-4: #98a6b3;
+  --color-chart-5: #1e3248;
+
+  /* Sidebar tokens (kept for shadcn) */
+  --color-sidebar: var(--ink);
+  --color-sidebar-foreground: #f5faff;
+  --color-sidebar-primary: #00bbd4;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #1e3248;
+  --color-sidebar-accent-foreground: #f5faff;
+  --color-sidebar-border: rgba(93, 214, 230, 0.18);
+  --color-sidebar-ring: #00bbd4;
+}
+
+/* ============================================================
+   THEME — LIGHT (default, surface background)
+   ============================================================ */
+:root {
+  --background: #f5faff;
+  --foreground: #334e68;
+  --card: #ffffff;
+  --card-foreground: #334e68;
+  --popover: #ffffff;
+  --popover-foreground: #334e68;
+  --primary: #00bbd4;
+  --primary-foreground: #ffffff;
+  --secondary: #e7f4fb;
+  --secondary-foreground: #334e68;
+  --muted: #eef5fb;
+  --muted-foreground: #98a6b3;
+  --accent: #00bbd4;
+  --accent-foreground: #ffffff;
+  --destructive: #c0392b;
+  --border: rgba(51, 78, 104, 0.12);
+  --input: rgba(51, 78, 104, 0.16);
+  --ring: #00bbd4;
+}
+
+/* ============================================================
+   THEME — DARK (ink background)
+   ============================================================ */
+.dark {
+  --background: #1e3248;
+  --foreground: #f5faff;
+  --card: #334e68;
+  --card-foreground: #f5faff;
+  --popover: #1e3248;
+  --popover-foreground: #f5faff;
+  --primary: #00bbd4;
+  --primary-foreground: #ffffff;
+  --secondary: #3b5774;
+  --secondary-foreground: #f5faff;
+  --muted: #2a425a;
+  --muted-foreground: #98a6b3;
+  --accent: #00bbd4;
+  --accent-foreground: #ffffff;
+  --destructive: #e74c3c;
+  --border: rgba(93, 214, 230, 0.18);
+  --input: rgba(93, 214, 230, 0.22);
+  --ring: #00bbd4;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px; /* sticky navbar offset */
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.7;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  code, pre, kbd {
+    font-family: var(--font-mono), ui-monospace, monospace;
+  }
+  ::selection {
+    background: rgba(0, 187, 212, 0.28);
+    color: #1e3248;
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  .font-display { font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif; }
+  .font-mono-code { font-family: var(--font-mono), ui-monospace, monospace; }
+
+  /* Brand gradients */
+  .bg-brand-gradient {
+    background-image: linear-gradient(135deg, #334e68 0%, #1e3248 100%);
+  }
+  .bg-brand-gradient-soft {
+    background-image: linear-gradient(135deg, #334e68 0%, #00bbd4 140%);
+  }
+  .text-brand-gradient {
+    background-image: linear-gradient(120deg, #5dd6e6 0%, #00bbd4 50%, #5dd6e6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Card surface (dark) */
+  .surface-card-dark {
+    background-image: linear-gradient(160deg, #334e68 0%, #1e3248 100%);
+  }
+
+  /* Wire-mesh decorative grid */
+  .wire-mesh {
+    background-image:
+      linear-gradient(to right, rgba(93, 214, 230, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(93, 214, 230, 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .wire-mesh-fine {
+    background-image:
+      linear-gradient(to right, rgba(93, 214, 230, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(93, 214, 230, 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Glow */
+  .glow-brand {
+    box-shadow: 0 0 0 1px rgba(0, 187, 212, 0.18), 0 18px 50px -20px rgba(0, 187, 212, 0.35);
+  }
+  .glow-brand-strong {
+    box-shadow: 0 0 0 1px rgba(0, 187, 212, 0.35), 0 20px 60px -18px rgba(0, 187, 212, 0.55);
+  }
+
+  /* Subtle scrollbar */
+  .scroll-area-soft::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-area-soft::-webkit-scrollbar-track { background: transparent; }
+  .scroll-area-soft::-webkit-scrollbar-thumb {
+    background: rgba(0, 187, 212, 0.35);
+    border-radius: 999px;
+  }
+  .scroll-area-soft::-webkit-scrollbar-thumb:hover { background: rgba(0, 187, 212, 0.6); }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes meshFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(2deg); }
+}
+@keyframes slowSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes shimmerLine {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-mesh-float { animation: meshFloat 14s ease-in-out infinite; }
+.animate-slow-spin { animation: slowSpin 60s linear infinite; }
+.animate-pulse-dot { animation: pulseDot 3s ease-in-out infinite; }
+.animate-fade-up { animation: fadeUp 0.6s ease-out both; }
+
+.shimmer-line {
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 187, 212, 0.6) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmerLine 3s linear infinite;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
