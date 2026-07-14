@@ -49,8 +49,8 @@ export function Footer() {
           <div className="md:col-span-5 grid grid-cols-2 sm:grid-cols-3 gap-6">
             {[
               { title: "Explore", items: NAV_ITEMS.slice(0, 5) },
-              { title: "Learn", items: NAV_ITEMS.slice(5, 9) },
-              { title: "About", items: NAV_ITEMS.slice(9) },
+              { title: "More", items: NAV_ITEMS.slice(5, 9) },
+              { title: "Admin", items: [{ id: "admin", label: "Admin Panel" }] },
             ].map((col) => (
               <div key={col.title}>
                 <h3 className="font-mono-code text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-light/60">
@@ -60,7 +60,7 @@ export function Footer() {
                   {col.items.map((item) => (
                     <li key={item.id}>
                       <Link
-                        href={`#${item.id}`}
+                        href={item.id === "admin" ? "/admin" : `#${item.id}`}
                         className="text-sm text-brand-light/80 hover:text-white transition-colors"
                       >
                         {item.label}

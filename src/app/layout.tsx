@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/admin/auth-provider";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-display",
@@ -70,9 +71,11 @@ export default function RootLayout({
         className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased font-sans bg-surface text-ink`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
-          <Toaster />
-          <SonnerToaster position="bottom-right" richColors closeButton />
+          <AuthProvider>
+            {children}
+            <Toaster />
+            <SonnerToaster position="bottom-right" richColors closeButton />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

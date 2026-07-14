@@ -39,3 +39,38 @@ Stage Summary:
 - Palette and typography strictly follow the brief; no indigo/blue, no sales language, no prices.
 - Responsive at 375/768/1440px; sticky footer; reduced-motion respected; skip-link a11y.
 - Dev server runs on port 3000 via `node node_modules/next/dist/bin/next dev -p 3000`.
+
+---
+Task ID: 2
+Agent: orchestrator
+Task: Rebuild portfolio with Firebase backend + admin panel (content empty by default, admin-editable).
+
+Work Log:
+- Installed firebase@12.16.0 package.
+- Created lib/firebase.ts — initializes Firebase app/auth/firestore from NEXT_PUBLIC_FIREBASE_* env vars. Exports isFirebaseConfigured flag; null when not configured.
+- Created lib/store.ts — data store abstraction: uses Firestore when configured, localStorage fallback otherwise. API: getSection, setSection, subscribeToSection (live updates via onSnapshot or custom events).
+- Created lib/auth.ts — Google auth with @gmail.com restriction. Firebase popup when configured; signInWithEmail mock when not. Both store session (Firebase auth state or localStorage).
+- Created lib/content-types.ts — typed SectionData for all 8 editable sections (about, expertise, projects, resources, library, teaching, cv, contact) with DEFAULT_HEADERS and emptySectionData().
+- Created components/admin/auth-provider.tsx — React context wrapping auth state (user, loading, signIn, signInWithEmail, signOut).
+- Created components/admin/use-section-data.ts — useSectionData hook that loads + subscribes to section data.
+- Created components/admin/dynamic-header.tsx — shared DynamicSectionHeader + SectionSkeleton components.
+- Created components/admin/empty-state.tsx — "No content yet" empty state with admin CTA.
+- Created components/admin/field-schemas.ts — declarative schema for each section's editable fields (text, textarea, stringList, objectList, header types).
+- Created components/admin/field-editor.tsx — generic recursive field renderer handling all field types (inputs, textareas, string lists with add/remove, object lists with cards + reorder + delete, nested object lists for project detail sections).
+- Created components/admin/section-editor.tsx — loads section data, renders fields via schema, sticky save bar with unsaved indicator, save/reset buttons, toast feedback.
+- Created app/admin/page.tsx — full admin panel: login screen (Google popup if Firebase configured, Gmail input if preview mode), dashboard with section sidebar nav, backend status indicator, section editor.
+- Deleted 4 section files: forum.tsx, tools.tsx, courses.tsx, research.tsx.
+- Rewrote 8 section components (about, expertise, projects, resources, library, teaching, cv, contact) to read from Firestore via useSectionData hook, show header + dynamic content or EmptyState.
+- Simplified hero.tsx — kept hero text + CTAs, removed pre-created featured cards and stats.
+- Updated NAV_ITEMS (9 items), footer sitemap (3 columns + admin link), page.tsx (removed 4 sections).
+- Created .env.local.example with Firebase config template.
+- Updated next.config.ts with allowedDevOrigins for preview proxy.
+- Wrapped app in AuthProvider in layout.tsx.
+- Verified end-to-end with Agent Browser: public page shows 10 sections with 8 empty states; admin login via Gmail input works; bio edit + save shows "Section saved" toast; expertise area add + save works; public page reflects saved content (bio + area visible, empty states reduced from 8 to 6). ESLint passes with zero errors.
+
+Stage Summary:
+- Architecture: Next.js 16 + Firebase (client SDK) + Firestore (or localStorage fallback for preview).
+- Public page (/) — 9 sections, all empty by default, content loaded from store.
+- Admin panel (/admin) — Gmail-only auth, generic schema-driven editor for all 8 sections, live preview on public page after save.
+- To enable real Firebase: copy .env.local.example to .env.local, fill in credentials, deploy Firestore security rules (read: all, write: authenticated).
+- Preview mode works fully without Firebase creds (data in browser localStorage).

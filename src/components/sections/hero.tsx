@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { HOME_FEATURED } from "@/data/content";
 import { PortfolioIcon } from "../portfolio/icons";
 import { Eyebrow } from "../portfolio/primitives";
 
@@ -31,7 +30,6 @@ export function HeroSection() {
         <div className="absolute inset-0 wire-mesh opacity-60" />
         <div className="absolute inset-0 wire-mesh-fine opacity-40" />
 
-        {/* Spherical wire-mesh curves (corners) */}
         <svg
           className="absolute -right-32 -top-24 h-[640px] w-[640px] text-brand-light/20 animate-mesh-float"
           viewBox="0 0 600 600"
@@ -40,24 +38,10 @@ export function HeroSection() {
           strokeWidth="0.7"
         >
           {Array.from({ length: 14 }).map((_, i) => (
-            <ellipse
-              key={`h-${i}`}
-              cx="300"
-              cy="300"
-              rx={300 - i * 20}
-              ry={150 - i * 10}
-              opacity={0.5 - i * 0.025}
-            />
+            <ellipse key={`h-${i}`} cx="300" cy="300" rx={300 - i * 20} ry={150 - i * 10} opacity={0.5 - i * 0.025} />
           ))}
           {Array.from({ length: 14 }).map((_, i) => (
-            <ellipse
-              key={`v-${i}`}
-              cx="300"
-              cy="300"
-              rx={150 - i * 10}
-              ry={300 - i * 20}
-              opacity={0.5 - i * 0.025}
-            />
+            <ellipse key={`v-${i}`} cx="300" cy="300" rx={150 - i * 10} ry={300 - i * 20} opacity={0.5 - i * 0.025} />
           ))}
         </svg>
 
@@ -72,14 +56,7 @@ export function HeroSection() {
           {Array.from({ length: 24 }).map((_, i) => {
             const a = (i / 24) * Math.PI * 2;
             return (
-              <line
-                key={i}
-                x1="200"
-                y1="200"
-                x2={200 + Math.cos(a) * 190}
-                y2={200 + Math.sin(a) * 190}
-                opacity="0.4"
-              />
+              <line key={i} x1="200" y1="200" x2={200 + Math.cos(a) * 190} y2={200 + Math.sin(a) * 190} opacity="0.4" />
             );
           })}
           {[60, 120, 180].map((r) => (
@@ -87,11 +64,8 @@ export function HeroSection() {
           ))}
         </svg>
 
-        {/* Glow blobs */}
         <div className="absolute top-1/3 left-1/4 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
         <div className="absolute bottom-0 right-1/3 h-80 w-80 rounded-full bg-brand-light/10 blur-3xl" />
-
-        {/* Bottom gradient fade */}
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink-deep/60 to-transparent" />
       </div>
 
@@ -120,11 +94,7 @@ export function HeroSection() {
             assessment.
           </motion.p>
 
-          {/* 4 CTA buttons */}
-          <motion.div
-            {...fadeUp(0.28)}
-            className="mt-9 flex flex-wrap gap-3"
-          >
+          <motion.div {...fadeUp(0.28)} className="mt-9 flex flex-wrap gap-3">
             <button
               onClick={() => scrollTo("projects")}
               className="group inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,187,212,0.8)] hover:bg-brand-light hover:text-ink transition-all"
@@ -154,55 +124,6 @@ export function HeroSection() {
               Contact
             </button>
           </motion.div>
-
-          {/* Stat ribbon */}
-          <motion.dl
-            {...fadeUp(0.38)}
-            className="mt-14 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-xl bg-brand/10 ring-1 ring-inset ring-brand/20 sm:grid-cols-4"
-          >
-            {[
-              { k: "7", v: "Expertise areas" },
-              { k: "11", v: "Projects" },
-              { k: "12", v: "Mini-courses" },
-              { k: "8+", v: "Tools & templates" },
-            ].map((s) => (
-              <div key={s.v} className="bg-ink-deep/40 px-4 py-4">
-                <dt className="font-display text-2xl sm:text-3xl font-bold text-brand">{s.k}</dt>
-                <dd className="mt-0.5 text-xs text-brand-light/70">{s.v}</dd>
-              </div>
-            ))}
-          </motion.dl>
-        </div>
-      </div>
-
-      {/* 4 featured cards (after hero) */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 sm:pb-20">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {HOME_FEATURED.map((card, i) => (
-            <motion.button
-              key={card.title}
-              onClick={() => scrollTo(card.href.slice(1))}
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative text-left rounded-2xl bg-ink-deep/60 p-6 ring-1 ring-inset ring-brand/20 backdrop-blur-sm hover:bg-ink-deep/80 hover:ring-brand/50 hover:-translate-y-1 transition-all duration-300"
-            >
-              <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand/15 text-brand ring-1 ring-inset ring-brand/30">
-                <PortfolioIcon name={card.icon} width={20} height={20} />
-              </div>
-              <h3 className="mt-4 font-display text-base font-semibold text-white leading-snug">
-                {card.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-brand-light/70">
-                {card.description}
-              </p>
-              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-light group-hover:text-brand-light transition-colors">
-                Explore
-                <PortfolioIcon name="arrow" width={12} height={12} className="transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </motion.button>
-          ))}
         </div>
       </div>
     </section>

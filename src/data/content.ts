@@ -8,13 +8,9 @@ export const NAV_ITEMS = [
   { id: "about", label: "About" },
   { id: "expertise", label: "Areas of Expertise" },
   { id: "projects", label: "Projects" },
-  { id: "tools", label: "Computational Tools" },
   { id: "resources", label: "Open Academic Resources" },
-  { id: "courses", label: "Courses" },
   { id: "library", label: "Technical Library" },
-  { id: "forum", label: "Forum" },
   { id: "teaching", label: "Teaching Portfolio" },
-  { id: "research", label: "Research" },
   { id: "cv", label: "CV" },
   { id: "contact", label: "Contact" },
 ] as const;
