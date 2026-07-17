@@ -9,7 +9,7 @@ import {
   fetchUserRole,
   type AdminUser,
 } from "@/lib/auth";
-import { auth, db } from "@/lib/firebase";
+import { getAuthAsync, getDbAsync, onAuthStateChanged } from "@/lib/firebase";
 
 interface AuthContextValue {
   user: AdminUser | null;
@@ -26,10 +26,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    if (auth) {
-      let unsub = () => {};
-      import("firebase/auth").then(({ onAuthStateChanged }) => {
-        unsub = onAuthStateChanged(auth!, async (fbUser) => {
+    let cancelled = false;
+
+    (async () => {
+      const [auth, db] = await Promise.all([getAuthAsync(), getDbAsync()]);
+      if (cancelled) return;
+
+      if (auth) {
+        const unsub = onAuthStateChanged(auth, async (fbUser) => {
+          if (cancelled) return;
           if (!fbUser) {
             setUser(null);
             setLoading(false);
@@ -51,7 +56,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               role = "pending";
             }
           }
-          // Only set user if admin; otherwise clear so they see login screen
           if (role === "admin") {
             setUser({
               uid: fbUser.uid,
@@ -66,12 +70,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           setLoading(false);
         });
-      });
-      return () => unsub();
-    }
-    // Mock fallback
-    setUser(getCurrentAdmin());
-    setLoading(false);
+        return () => unsub();
+      }
+      // Mock fallback
+      setUser(getCurrentAdmin());
+      setLoading(false);
+    })();
+
+    return () => { cancelled = true; };
   }, []);
 
   const signIn = React.useCallback(async () => {

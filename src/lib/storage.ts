@@ -2,7 +2,7 @@
 // In preview mode (no Firebase), converts files to data URLs (base64) so
 // uploads still work locally.
 
-import { storage, db } from "./firebase";
+import { getStorageInstance } from "./firebase";
 
 export interface UploadedFile {
   url: string;       // download URL or data URL
@@ -14,7 +14,7 @@ export interface UploadedFile {
 
 /**
  * Upload an image/file. Returns a download URL that can be stored in Firestore.
- * - Firebase configured: uploads to gs://bucket/uploads/{uid}/{timestamp}-{name}
+ * - Firebase configured: uploads to gs://bucket/{folder}/{uid}/{timestamp}-{name}
  * - Preview mode: returns a data URL (base64) — stored in localStorage.
  */
 export async function uploadFile(
@@ -22,20 +22,26 @@ export async function uploadFile(
   uid: string,
   folder: string = "uploads"
 ): Promise<UploadedFile> {
-  if (storage && db) {
-    const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `${folder}/${uid}/${Date.now()}-${safeName}`;
-    const storageRef = ref(storage, path);
-    const snap = await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(snap.ref);
-    return {
-      url,
-      path,
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    };
+  const storage = getStorageInstance();
+  if (storage) {
+    try {
+      const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${folder}/${uid}/${Date.now()}-${safeName}`;
+      const storageRef = ref(storage, path);
+      const snap = await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(snap.ref);
+      return {
+        url,
+        path,
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      };
+    } catch (err) {
+      console.warn("[storage] uploadFile failed, using data URL fallback:", err);
+      // fall through to data URL
+    }
   }
   // Preview fallback: data URL
   const dataUrl = await fileToDataUrl(file);
@@ -61,6 +67,7 @@ function fileToDataUrl(file: File): Promise<string> {
  * Delete a file from storage (by path). No-op for data URLs.
  */
 export async function deleteFile(path: string): Promise<void> {
+  const storage = getStorageInstance();
   if (storage && path && path !== "data-url") {
     const { ref, deleteObject } = await import("firebase/storage");
     try {

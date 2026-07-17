@@ -107,3 +107,23 @@ Stage Summary:
 - Home section now has a circular profile image (editable in admin → Home → Profile image).
 - Security rules provided in firestore.rules and storage.rules (copy-paste ready).
 - To make yourself admin: sign in once (creates pending doc), then in Firebase Console → Firestore → users/{your-uid} → change role from "pending" to "admin".
+
+---
+Task ID: 4
+Agent: orchestrator
+Task: Fix Next.js errors + blank page (sections stuck loading forever).
+
+Work Log:
+- Root cause: Firestore calls (getDoc/onSnapshot) were throwing "permission-denied" errors because the security rules weren't published yet in Firebase Console. These errors were unhandled, so the loading promises never resolved and sections stayed on the skeleton state forever.
+- Secondary cause: "Component auth has not been registered yet" — the firebase/auth module wasn't properly initialized when getAuth() was called via require() (Turbopack doesn't support require for ESM Firebase SDK).
+- Fix 1: Rewrote lib/firebase.ts to use static imports (import { getAuth } etc.) instead of require(), so components register properly. Lazy singleton init on client only; null on server.
+- Fix 2: Rewrote lib/store.ts with comprehensive error handling — every Firestore call (getDoc, setDoc, onSnapshot) is wrapped in try/catch. On error, falls back to localStorage (or empty data) so the page always renders.
+- Fix 3: Rewrote components/admin/use-section-data.ts with an 8-second timeout via Promise.race. If Firestore doesn't respond (network/rules), resolves with empty data instead of staying on loading=true forever. Also catches all errors and falls back to emptySectionData.
+- Fix 4: Updated lib/auth.ts, lib/storage.ts, components/admin/auth-provider.tsx to use getAuthInstance()/getDb()/getStorageInstance() getters (and async variants) instead of static exports, so Firebase services initialize correctly on the client.
+- Verified with Agent Browser: public page renders hero with H1 + circular image + 10 sections + 8 empty states + 0 stuck skeletons; admin page shows "Sign in with Google" + "Connected to Firebase"; 0 fresh console errors after clearing; ESLint passes (0 errors).
+
+Stage Summary:
+- Page now renders reliably even when Firestore rules aren't published or Firebase is unreachable.
+- All Firestore errors are caught and logged as warnings (console.warn), never crashing the UI.
+- The remaining "permission-denied" warnings in console will disappear once the Firestore security rules (provided in firestore.rules) are published in Firebase Console.
+- To fully fix: copy firestore.rules content into Firebase Console → Firestore → Rules → Publish.

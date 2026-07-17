@@ -11,7 +11,7 @@
 // In preview mode (no Firebase), a mock @gmail.com sign-in is used and the
 // user is treated as an admin (data stays in localStorage).
 
-import { auth, db } from "./firebase";
+import { getAuthInstance, getDb } from "./firebase";
 
 export type UserRole = "admin" | "usuario" | "pending";
 
@@ -32,25 +32,37 @@ function isGmail(email: string): boolean {
 
 // ---------- Firestore user document ----------
 export async function fetchUserRole(uid: string): Promise<UserRole | null> {
+  const db = getDb();
   if (!db) return null;
-  const { doc, getDoc } = await import("firebase/firestore");
-  const ref = doc(db, "users", uid);
-  const snap = await getDoc(ref);
-  if (!snap.exists()) return null;
-  return (snap.data().role as UserRole) ?? "pending";
+  try {
+    const { doc, getDoc } = await import("firebase/firestore");
+    const ref = doc(db, "users", uid);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return (snap.data().role as UserRole) ?? "pending";
+  } catch (err) {
+    console.warn("[auth] fetchUserRole failed:", err);
+    return null;
+  }
 }
 
 async function createUserDoc(uid: string, email: string, displayName: string | null): Promise<void> {
+  const db = getDb();
   if (!db) return;
-  const { doc, setDoc, serverTimestamp } = await import("firebase/firestore");
-  const ref = doc(db, "users", uid);
-  await setDoc(ref, {
-    uid,
-    email,
-    displayName: displayName ?? email.split("@")[0],
-    role: "pending",
-    createdAt: serverTimestamp(),
-  }, { merge: false });
+  try {
+    const { doc, setDoc, serverTimestamp } = await import("firebase/firestore");
+    const ref = doc(db, "users", uid);
+    await setDoc(ref, {
+      uid,
+      email,
+      displayName: displayName ?? email.split("@")[0],
+      role: "pending",
+      createdAt: serverTimestamp(),
+    }, { merge: false });
+  } catch (err) {
+    console.warn("[auth] createUserDoc failed:", err);
+    throw err;
+  }
 }
 
 // ---------- Mock auth (preview mode without Firebase) ----------
@@ -95,6 +107,7 @@ export class AccessDeniedError extends Error {
 
 // ---------- Public API ----------
 export async function signInWithGoogle(): Promise<AdminUser> {
+  const auth = getAuthInstance();
   if (auth) {
     const { GoogleAuthProvider, signInWithPopup } = await import("firebase/auth");
     const provider = new GoogleAuthProvider();
@@ -148,6 +161,7 @@ export async function signInWithEmail(email: string): Promise<AdminUser> {
 }
 
 export async function signOutAdmin(): Promise<void> {
+  const auth = getAuthInstance();
   if (auth) {
     const { signOut } = await import("firebase/auth");
     await signOut(auth);
@@ -157,11 +171,10 @@ export async function signOutAdmin(): Promise<void> {
 }
 
 export function getCurrentAdmin(): AdminUser | null {
+  const auth = getAuthInstance();
   if (auth && auth.currentUser) {
     const email = auth.currentUser.email ?? "";
     if (!isGmail(email)) return null;
-    // Note: role is fetched asynchronously by auth-provider via onAuthStateChanged
-    // For the initial sync read, we assume admin (the provider will re-check)
     return {
       uid: auth.currentUser.uid,
       email,
