@@ -3,6 +3,7 @@
 // and edited via the /admin panel.
 
 export type SectionId =
+  | "home"
   | "about"
   | "expertise"
   | "projects"
@@ -17,6 +18,18 @@ export interface SectionHeader {
   eyebrow: string;
   title: string;
   description: string;
+}
+
+// ---- Home (hero) ----
+export interface HomeData {
+  eyebrow: string;
+  title: string;          // can contain markup like "{accent}word{/accent}"
+  subtitle: string;
+  profileImage: string;   // URL (Storage download URL or data URL) — circular image
+  profileImagePath: string; // storage path for deletion
+  profileName: string;    // e.g. "Alexis"
+  profileRole: string;    // e.g. "Civil Engineer"
+  ctaButtons: { id: string; label: string; target: string; primary: boolean }[];
 }
 
 // ---- About ----
@@ -135,6 +148,7 @@ export interface ContactData {
 
 // ---- Union ----
 export type SectionData =
+  | HomeData
   | AboutData
   | ExpertiseData
   | ProjectsData
@@ -146,6 +160,11 @@ export type SectionData =
 
 // ---- Default headers (shown until admin edits them) ----
 export const DEFAULT_HEADERS: Record<SectionId, SectionHeader> = {
+  home: {
+    eyebrow: "Academic Portfolio · Civil Engineer",
+    title: "Structural Engineering, {accent}Earthquake Engineering{/accent} and {accent}Computational Tools{/accent}",
+    description: "",
+  },
   about: {
     eyebrow: "About",
     title: "Civil engineer building bridges between theory, computation and practice",
@@ -197,6 +216,22 @@ export const DEFAULT_HEADERS: Record<SectionId, SectionHeader> = {
 export function emptySectionData(id: SectionId): SectionData {
   const header = DEFAULT_HEADERS[id];
   switch (id) {
+    case "home":
+      return {
+        eyebrow: header.eyebrow,
+        title: header.title,
+        subtitle: "Civil engineer focused on matrix structural analysis, finite element modeling, nonlinear structural analysis, structural dynamics, seismic design of concrete and steel structures, performance-based earthquake engineering, and seismic risk assessment.",
+        profileImage: "",
+        profileImagePath: "",
+        profileName: "Alexis",
+        profileRole: "Civil Engineer",
+        ctaButtons: [
+          { id: "b1", label: "View Projects", target: "#projects", primary: true },
+          { id: "b2", label: "Explore Open Resources", target: "#resources", primary: false },
+          { id: "b3", label: "Download CV", target: "#cv", primary: false },
+          { id: "b4", label: "Contact", target: "#contact", primary: false },
+        ],
+      };
     case "about":
       return { header, bio: "", highlights: [], stats: [] };
     case "expertise":

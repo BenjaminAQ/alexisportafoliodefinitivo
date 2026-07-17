@@ -6,9 +6,10 @@ import {
   signInWithGoogle,
   signInWithEmail,
   signOutAdmin,
+  fetchUserRole,
   type AdminUser,
 } from "@/lib/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 
 interface AuthContextValue {
   user: AdminUser | null;
@@ -28,8 +29,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (auth) {
       let unsub = () => {};
       import("firebase/auth").then(({ onAuthStateChanged }) => {
-        unsub = onAuthStateChanged(auth!, () => {
-          setUser(getCurrentAdmin());
+        unsub = onAuthStateChanged(auth!, async (fbUser) => {
+          if (!fbUser) {
+            setUser(null);
+            setLoading(false);
+            return;
+          }
+          const email = fbUser.email ?? "";
+          if (!/^[^@\s]+@gmail\.com$/i.test(email.trim())) {
+            setUser(null);
+            setLoading(false);
+            return;
+          }
+          // Check role in Firestore
+          let role: "admin" | "usuario" | "pending" = "pending";
+          if (db) {
+            try {
+              const r = await fetchUserRole(fbUser.uid);
+              if (r) role = r;
+            } catch {
+              role = "pending";
+            }
+          }
+          // Only set user if admin; otherwise clear so they see login screen
+          if (role === "admin") {
+            setUser({
+              uid: fbUser.uid,
+              email,
+              displayName: fbUser.displayName,
+              photoURL: fbUser.photoURL,
+              role,
+              provider: "firebase",
+            });
+          } else {
+            setUser(null);
+          }
           setLoading(false);
         });
       });

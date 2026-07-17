@@ -74,3 +74,36 @@ Stage Summary:
 - Admin panel (/admin) — Gmail-only auth, generic schema-driven editor for all 8 sections, live preview on public page after save.
 - To enable real Firebase: copy .env.local.example to .env.local, fill in credentials, deploy Firestore security rules (read: all, write: authenticated).
 - Preview mode works fully without Firebase creds (data in browser localStorage).
+
+---
+Task ID: 3
+Agent: orchestrator
+Task: Configure real Firebase + whitelist auth + Storage uploads + circular profile image on Home.
+
+Work Log:
+- Created .env.local with real Firebase credentials (project: alexisportafolio-8d4a7).
+- Updated lib/firebase.ts to also initialize Firebase Storage.
+- Rewrote lib/auth.ts with Firestore-based whitelist:
+  - After Google sign-in, reads users/{uid} document for role.
+  - If doc doesn't exist, auto-creates with role "pending" (so admin can promote later).
+  - Only role "admin" granted access; "usuario" and "pending" denied with clear message.
+  - Added AccessDeniedError class for clean error handling.
+- Updated components/admin/auth-provider.tsx to async-check role via onAuthStateChanged + fetchUserRole; clears user if not admin.
+- Created lib/storage.ts with uploadFile() helper: uploads to Firebase Storage (images/ or files/ folder) when configured, data-URL fallback for preview. Includes deleteFile().
+- Added "image" and "file" field types to field-schemas.ts.
+- Added "home" section to content-types.ts (HomeData: eyebrow, title with {accent} markup, subtitle, profileImage, profileName, profileRole, ctaButtons) + emptySectionData + DEFAULT_HEADERS.
+- Added "home" section schema to field-schemas.ts with image field for circular profile photo.
+- Updated field-editor.tsx with ImageField (circular preview, upload to Storage, progress bar, replace/remove) and FileField (file upload, link preview, remove). Both pass uid for storage path. Updated ObjectListField and FieldRenderer to thread uid through.
+- Updated section-editor.tsx to pass user.uid to FieldRenderer (needed for storage upload paths).
+- Rewrote hero.tsx to load HomeData from Firestore: 2-column layout (text + circular profile image), {accent} markup parsing for gradient highlights, CTA buttons from data, circular image with glow ring + name badge. Falls back to letter "A" placeholder when no image.
+- Created firestore.rules: users collection (read for authenticated, self-create pending, admin-only update), sections collection (public read, admin-only write), isAdmin() helper.
+- Created storage.rules: images/ and files/ folders (public read, admin-only write via Firestore role lookup), isAdmin() helper using firestore.get().
+- Verified with Agent Browser: hero shows circular image placeholder with "A" + "Alexis" + "CIVIL ENGINEER" badge; admin login shows "Sign in with Google" + green "Connected to Firebase" indicator. ESLint passes (0 errors).
+
+Stage Summary:
+- Firebase fully configured with real credentials (auth + firestore + storage).
+- Whitelist system: first Google login creates "pending" user doc; only "admin" role can access panel; "usuario"/"pending" denied.
+- Admin can upload images (5MB) and files (25MB) to Firebase Storage via the field editor.
+- Home section now has a circular profile image (editable in admin → Home → Profile image).
+- Security rules provided in firestore.rules and storage.rules (copy-paste ready).
+- To make yourself admin: sign in once (creates pending doc), then in Firebase Console → Firestore → users/{your-uid} → change role from "pending" to "admin".

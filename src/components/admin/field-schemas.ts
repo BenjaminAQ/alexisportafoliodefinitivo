@@ -3,7 +3,7 @@
 
 import type { SectionId } from "@/lib/content-types";
 
-export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header";
+export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file";
 
 export interface FieldSchema {
   key: string;
@@ -11,9 +11,23 @@ export interface FieldSchema {
   label: string;
   placeholder?: string;
   itemSchema?: FieldSchema[]; // for objectList
+  hint?: string;
 }
 
 export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
+  home: [
+    { key: "eyebrow", type: "text", label: "Eyebrow", placeholder: "Academic Portfolio · Civil Engineer" },
+    { key: "title", type: "textarea", label: "Hero title", hint: "Use {accent}word{/accent} to highlight text in the brand color." },
+    { key: "subtitle", type: "textarea", label: "Subtitle / description" },
+    { key: "profileImage", type: "image", label: "Profile image (circular)" },
+    { key: "profileName", type: "text", label: "Profile name", placeholder: "Alexis" },
+    { key: "profileRole", type: "text", label: "Profile role", placeholder: "Civil Engineer" },
+    { key: "ctaButtons", type: "objectList", label: "CTA buttons", itemSchema: [
+      { key: "label", type: "text", label: "Label", placeholder: "View Projects" },
+      { key: "target", type: "text", label: "Target (anchor or URL)", placeholder: "#projects" },
+      { key: "primary", type: "text", label: "Primary (true/false)", placeholder: "true" },
+    ]},
+  ],
   about: [
     { key: "header", type: "header", label: "Section header" },
     { key: "bio", type: "textarea", label: "Bio", placeholder: "Your professional biography..." },
@@ -102,6 +116,7 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
 };
 
 export const SECTION_LABELS: Record<SectionId, string> = {
+  home: "Home",
   about: "About",
   expertise: "Areas of Expertise",
   projects: "Projects",

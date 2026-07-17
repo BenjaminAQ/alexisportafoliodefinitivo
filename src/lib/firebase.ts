@@ -1,11 +1,11 @@
 // Firebase initialization.
-// Reads config from env vars. If not configured, exports null and the app
-// falls back to a localStorage-backed store (so the preview works without
-// real Firebase credentials).
+// Reads config from env vars. When all required keys are present, initializes
+// app + auth + firestore + storage. Otherwise exports null (preview mode).
 
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -23,11 +23,13 @@ export const isFirebaseConfigured = Boolean(
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
 let db: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
-if (isFirebaseConfigured && typeof window !== "undefined") {
+if (isFirebaseConfigured) {
   app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
+  storage = getStorage(app);
 }
 
-export { app, auth, db };
+export { app, auth, db, storage };

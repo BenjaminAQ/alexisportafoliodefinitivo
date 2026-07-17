@@ -1,0 +1,72 @@
+rules_version = '2';
+
+// ============================================================
+// FIRESTORE SECURITY RULES — Alexis Portfolio
+// ============================================================
+// Collections:
+//   - users/{uid}     : { uid, email, displayName, role, createdAt }
+//                       role = "admin" | "usuario" | "pending"
+//   - sections/{id}    : section content (home, about, projects, ...)
+//
+// Access policy:
+//   - users:    anyone authenticated can read their OWN doc;
+//               only authenticated users can read the users collection
+//               (so the admin panel can show the whitelist);
+//               only existing admins can create/modify user docs
+//               (the app auto-creates a "pending" doc on first login,
+//                but that's enforced client-side — for strict security
+//                enable the isAdmin() write check below).
+//   - sections: read = public (anyone, including anonymous);
+//               write = only admins.
+// ============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: is the current user an admin?
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Helper: is the current user authenticated AND in the users collection?
+    function isRegistered() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    // ---- users collection ----
+    // A user can read all user docs (so admin panel can list the whitelist),
+    // but non-admins can only READ, never write.
+    // An admin can read/write all user docs (promote/demote users).
+    match /users/{uid} {
+      // Anyone authenticated can read user documents (role lookup + whitelist display)
+      allow read: if request.auth != null;
+
+      // Allow a user to CREATE their own doc on first login (role = "pending")
+      // This is needed so the auto-signup flow works.
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.role == 'pending'
+        && request.resource.data.uid == uid
+        && request.resource.data.email == request.auth.token.email;
+
+      // Only admins can update or delete user docs (change roles, etc.)
+      allow update, delete: if isAdmin();
+    }
+
+    // ---- sections collection (page content) ----
+    // Public can read all section content (the website must render for everyone).
+    // Only admins can create / update / delete section content.
+    match /sections/{sectionId} {
+      allow read: if true;            // public read
+      allow write: if isAdmin();       // admin-only write (create/update/delete)
+    }
+
+    // Default deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

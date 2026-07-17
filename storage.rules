@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// ============================================================
+// FIREBASE STORAGE SECURITY RULES — Alexis Portfolio
+// ============================================================
+// Structure:
+//   - images/{uid}/{timestamp}-{filename}   : profile/section images
+//   - files/{uid}/{timestamp}-{filename}    : PDFs, documents, code, etc.
+//
+// Access policy:
+//   - read:   public (anyone, including anonymous) — the website must
+//             display images and serve file downloads to all visitors.
+//   - write:  only authenticated admins (matches Firestore whitelist).
+//
+// Size limits are enforced client-side in the admin uploader
+// (5 MB for images, 25 MB for files). These rules focus on auth.
+// ============================================================
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper: is the current user an admin in Firestore?
+    // Reads the Firestore users/{uid} document and checks role == "admin".
+    function isAdmin() {
+      return request.auth != null
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ---- images (profile + section images) ----
+    match /images/{uid}/{fileName} {
+      allow read: if true;            // public read
+      allow write: if isAdmin();      // admin-only upload/overwrite/delete
+    }
+
+    // ---- files (PDFs, documents, code) ----
+    match /files/{uid}/{fileName} {
+      allow read: if true;            // public read
+      allow write: if isAdmin();      // admin-only upload/overwrite/delete
+    }
+
+    // ---- uploads (legacy/fallback folder) ----
+    match /uploads/{uid}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Default deny everything else
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

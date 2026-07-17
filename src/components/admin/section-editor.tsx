@@ -8,9 +8,12 @@ import { emptySectionData } from "@/lib/content-types";
 import { SECTION_SCHEMAS } from "./field-schemas";
 import { FieldRenderer } from "./field-editor";
 import { PortfolioIcon } from "../portfolio/icons";
+import { useAuth } from "./auth-provider";
 
 export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
   const schema = SECTION_SCHEMAS[sectionId];
+  const { user } = useAuth();
+  const uid = user?.uid ?? "anonymous";
   const [data, setData] = React.useState<SectionData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
@@ -115,6 +118,7 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             value={(data as Record<string, unknown>)[field.key]}
             onChange={(v) => update(field.key, v)}
             placeholder={field.placeholder}
+            uid={uid}
           />
         ))}
       </div>
