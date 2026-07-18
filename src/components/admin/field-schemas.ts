@@ -1,5 +1,5 @@
-// Editable field schemas for each section.
-// Drives the generic admin editor — no hand-written forms per section.
+// Esquemas de campos editables para cada sección.
+// Controlan el editor genérico del admin — sin formularios escritos a mano.
 
 import type { SectionId } from "@/lib/content-types";
 
@@ -10,119 +10,132 @@ export interface FieldSchema {
   type: FieldType;
   label: string;
   placeholder?: string;
-  itemSchema?: FieldSchema[]; // for objectList
+  itemSchema?: FieldSchema[]; // para objectList
   hint?: string;
 }
 
 export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
   home: [
-    { key: "eyebrow", type: "text", label: "Eyebrow", placeholder: "Academic Portfolio · Civil Engineer" },
-    { key: "title", type: "textarea", label: "Hero title", hint: "Use {accent}word{/accent} to highlight text in the brand color." },
-    { key: "subtitle", type: "textarea", label: "Subtitle / description" },
-    { key: "profileImage", type: "image", label: "Profile image (circular)" },
-    { key: "profileName", type: "text", label: "Profile name", placeholder: "Alexis" },
-    { key: "profileRole", type: "text", label: "Profile role", placeholder: "Civil Engineer" },
-    { key: "ctaButtons", type: "objectList", label: "CTA buttons", itemSchema: [
-      { key: "label", type: "text", label: "Label", placeholder: "View Projects" },
-      { key: "target", type: "text", label: "Target (anchor or URL)", placeholder: "#projects" },
-      { key: "primary", type: "text", label: "Primary (true/false)", placeholder: "true" },
+    { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
+    { key: "title", type: "textarea", label: "Título principal", hint: "Usa {accent}palabra{/accent} para resaltar texto con el color de marca." },
+    { key: "subtitle", type: "textarea", label: "Subtítulo / descripción" },
+    { key: "profileImage", type: "image", label: "Imagen de perfil (circular)" },
+    { key: "profileName", type: "text", label: "Nombre", placeholder: "Alexis" },
+    { key: "profileRole", type: "text", label: "Cargo / profesión", placeholder: "Ingeniero Civil" },
+    { key: "ctaButtons", type: "objectList", label: "Botones de acción", itemSchema: [
+      { key: "label", type: "text", label: "Texto del botón", placeholder: "Ver proyectos" },
+      { key: "target", type: "text", label: "Destino (ancla o URL)", placeholder: "#projects" },
+      { key: "primary", type: "text", label: "Principal (true/false)", placeholder: "true" },
     ]},
   ],
   about: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "bio", type: "textarea", label: "Bio", placeholder: "Your professional biography..." },
-    { key: "highlights", type: "stringList", label: "Highlights", placeholder: "Add a highlight..." },
-    { key: "stats", type: "objectList", label: "Stats", itemSchema: [
-      { key: "value", type: "text", label: "Value", placeholder: "8+" },
-      { key: "label", type: "text", label: "Label", placeholder: "Years of experience" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "bio", type: "textarea", label: "Biografía", placeholder: "Tu biografía profesional..." },
+    { key: "highlights", type: "stringList", label: "Puntos destacados", placeholder: "Añadir un punto destacado..." },
+    { key: "stats", type: "objectList", label: "Estadísticas", itemSchema: [
+      { key: "value", type: "text", label: "Valor", placeholder: "8+" },
+      { key: "label", type: "text", label: "Etiqueta", placeholder: "Años de experiencia" },
     ]},
   ],
   expertise: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "areas", type: "objectList", label: "Areas", itemSchema: [
-      { key: "number", type: "text", label: "Number", placeholder: "01" },
-      { key: "title", type: "text", label: "Title", placeholder: "Matrix Structural Analysis" },
-      { key: "icon", type: "text", label: "Icon name", placeholder: "matrix | mesh | curve | wave | building | target | globe" },
-      { key: "description", type: "textarea", label: "Description" },
-      { key: "topics", type: "stringList", label: "Topics", placeholder: "Add a topic..." },
-      { key: "materials", type: "textarea", label: "Available material" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "areas", type: "objectList", label: "Áreas", itemSchema: [
+      { key: "number", type: "text", label: "Número", placeholder: "01" },
+      { key: "title", type: "text", label: "Título", placeholder: "Análisis Matricial Estructural" },
+      { key: "icon", type: "text", label: "Nombre del ícono", placeholder: "matrix | mesh | curve | wave | building | target | globe" },
+      { key: "description", type: "textarea", label: "Descripción" },
+      { key: "topics", type: "stringList", label: "Temas", placeholder: "Añadir un tema..." },
+      { key: "materials", type: "textarea", label: "Material disponible" },
     ]},
   ],
   projects: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "projects", type: "objectList", label: "Projects", itemSchema: [
-      { key: "title", type: "text", label: "Title", placeholder: "Matrix Analysis Solver" },
-      { key: "area", type: "text", label: "Area", placeholder: "Matrix Structural Analysis" },
-      { key: "level", type: "text", label: "Level", placeholder: "Beginner | Intermediate | Advanced | Research-oriented" },
-      { key: "abstract", type: "textarea", label: "Abstract" },
-      { key: "tech", type: "stringList", label: "Technologies", placeholder: "MATLAB, Python..." },
-      { key: "sections", type: "objectList", label: "Detail sections", itemSchema: [
-        { key: "heading", type: "text", label: "Heading", placeholder: "Problem statement" },
-        { key: "body", type: "textarea", label: "Body" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "projects", type: "objectList", label: "Proyectos", itemSchema: [
+      { key: "title", type: "text", label: "Título", placeholder: "Solver de análisis matricial" },
+      { key: "area", type: "text", label: "Área", placeholder: "Análisis Matricial Estructural" },
+      { key: "level", type: "text", label: "Nivel", placeholder: "Principiante | Intermedio | Avanzado | Investigación" },
+      { key: "abstract", type: "textarea", label: "Resumen" },
+      { key: "tech", type: "stringList", label: "Tecnologías", placeholder: "MATLAB, Python..." },
+      { key: "sections", type: "objectList", label: "Secciones de detalle", itemSchema: [
+        { key: "heading", type: "text", label: "Encabezado", placeholder: "Planteamiento del problema" },
+        { key: "body", type: "textarea", label: "Contenido" },
       ]},
-      { key: "files", type: "stringList", label: "Files", placeholder: "solver.py..." },
-      { key: "references", type: "stringList", label: "References", placeholder: "Author, Title..." },
+      { key: "files", type: "objectList", label: "Archivos descargables", itemSchema: [
+        { key: "name", type: "text", label: "Nombre visible", placeholder: "solver.py" },
+        { key: "url", type: "file", label: "Archivo (subir)" },
+        { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, el archivo no mostrará botón de descarga en la web." },
+      ]},
+      { key: "references", type: "stringList", label: "Referencias", placeholder: "Autor, Título..." },
     ]},
   ],
   resources: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "resources", type: "objectList", label: "Resources", itemSchema: [
-      { key: "title", type: "text", label: "Title" },
-      { key: "category", type: "text", label: "Category" },
-      { key: "level", type: "text", label: "Level", placeholder: "Beginner | Intermediate | Advanced | Research-oriented" },
-      { key: "type", type: "text", label: "Type", placeholder: "video | PDF | code | template | manual | example" },
-      { key: "duration", type: "text", label: "Duration", placeholder: "1.5 h" },
-      { key: "description", type: "textarea", label: "Description" },
-      { key: "prerequisites", type: "text", label: "Prerequisites" },
-      { key: "objectives", type: "textarea", label: "Objectives" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "resources", type: "objectList", label: "Recursos", itemSchema: [
+      { key: "title", type: "text", label: "Título" },
+      { key: "category", type: "text", label: "Categoría" },
+      { key: "level", type: "text", label: "Nivel", placeholder: "Principiante | Intermedio | Avanzado | Investigación" },
+      { key: "type", type: "text", label: "Tipo", placeholder: "video | PDF | código | plantilla | manual | ejemplo" },
+      { key: "duration", type: "text", label: "Duración", placeholder: "1.5 h" },
+      { key: "description", type: "textarea", label: "Descripción" },
+      { key: "prerequisites", type: "text", label: "Requisitos previos" },
+      { key: "objectives", type: "textarea", label: "Objetivos" },
+      { key: "file", type: "file", label: "Archivo descargable (opcional)" },
+      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true" },
     ]},
   ],
   library: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "items", type: "objectList", label: "Documents", itemSchema: [
-      { key: "title", type: "text", label: "Title" },
-      { key: "type", type: "text", label: "Type", placeholder: "Lecture notes | Technical reports | ..." },
-      { key: "area", type: "text", label: "Area" },
-      { key: "level", type: "text", label: "Level" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "items", type: "objectList", label: "Documentos", itemSchema: [
+      { key: "title", type: "text", label: "Título" },
+      { key: "type", type: "text", label: "Tipo", placeholder: "Apuntes | Informes técnicos | ..." },
+      { key: "area", type: "text", label: "Área" },
+      { key: "level", type: "text", label: "Nivel" },
       { key: "software", type: "text", label: "Software" },
-      { key: "language", type: "text", label: "Language" },
-      { key: "date", type: "text", label: "Date", placeholder: "2024-03-12" },
+      { key: "language", type: "text", label: "Idioma" },
+      { key: "date", type: "text", label: "Fecha", placeholder: "2024-03-12" },
+      { key: "file", type: "file", label: "Archivo PDF (subir)" },
+      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, el documento no mostrará botón de descarga en la web." },
     ]},
   ],
   teaching: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "items", type: "objectList", label: "Teaching items", itemSchema: [
-      { key: "title", type: "text", label: "Title" },
-      { key: "icon", type: "text", label: "Icon name", placeholder: "book | layers | code | users | target" },
-      { key: "body", type: "textarea", label: "Body" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "items", type: "objectList", label: "Elementos de enseñanza", itemSchema: [
+      { key: "title", type: "text", label: "Título" },
+      { key: "icon", type: "text", label: "Nombre del ícono", placeholder: "book | layers | code | users | target" },
+      { key: "body", type: "textarea", label: "Contenido" },
     ]},
   ],
   cv: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "sections", type: "objectList", label: "CV sections", itemSchema: [
-      { key: "title", type: "text", label: "Section title", placeholder: "Education" },
-      { key: "items", type: "stringList", label: "Items", placeholder: "Add an item..." },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "downloads", type: "objectList", label: "Documentos descargables", itemSchema: [
+      { key: "label", type: "text", label: "Etiqueta del botón", placeholder: "CV Académico (PDF)" },
+      { key: "file", type: "file", label: "Archivo PDF (subir)" },
+      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, no se mostrará el botón de descarga en la web." },
+    ]},
+    { key: "sections", type: "objectList", label: "Secciones del CV", itemSchema: [
+      { key: "title", type: "text", label: "Título de la sección", placeholder: "Educación" },
+      { key: "items", type: "stringList", label: "Elementos", placeholder: "Añadir un elemento..." },
     ]},
   ],
   contact: [
-    { key: "header", type: "header", label: "Section header" },
-    { key: "links", type: "objectList", label: "Contact links", itemSchema: [
-      { key: "label", type: "text", label: "Label", placeholder: "Email" },
-      { key: "value", type: "text", label: "Value", placeholder: "alexis@example.com" },
-      { key: "href", type: "text", label: "Link URL", placeholder: "mailto:..." },
-      { key: "icon", type: "text", label: "Icon name", placeholder: "mail | linkedin | github | scholar | research" },
+    { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "links", type: "objectList", label: "Enlaces de contacto", itemSchema: [
+      { key: "label", type: "text", label: "Etiqueta", placeholder: "Correo" },
+      { key: "value", type: "text", label: "Valor", placeholder: "alexis@example.com" },
+      { key: "href", type: "text", label: "URL del enlace", placeholder: "mailto:..." },
+      { key: "icon", type: "text", label: "Nombre del ícono", placeholder: "mail | linkedin | github | scholar | research" },
     ]},
   ],
 };
 
 export const SECTION_LABELS: Record<SectionId, string> = {
-  home: "Home",
-  about: "About",
-  expertise: "Areas of Expertise",
-  projects: "Projects",
-  resources: "Open Academic Resources",
-  library: "Technical Library",
-  teaching: "Teaching Portfolio",
+  home: "Inicio",
+  about: "Acerca de",
+  expertise: "Áreas de Experiencia",
+  projects: "Proyectos",
+  resources: "Recursos Académicos",
+  library: "Biblioteca Técnica",
+  teaching: "Portafolio Docente",
   cv: "CV",
-  contact: "Contact",
+  contact: "Contacto",
 };

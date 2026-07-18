@@ -20,31 +20,37 @@ export function CvSection() {
         <>
           <DynamicSectionHeader header={data.header} />
 
-          {/* Download buttons (static) */}
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-10%" }}
-            transition={{ duration: 0.5 }}
-            className="mt-8 flex flex-wrap gap-3"
-          >
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="group inline-flex items-center gap-2.5 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,187,212,0.7)] hover:bg-brand-light hover:text-ink transition-all"
+          {/* Download buttons (dynamic from admin) */}
+          {data.downloads && data.downloads.length > 0 && (
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-10%" }}
+              transition={{ duration: 0.5 }}
+              className="mt-8 flex flex-wrap gap-3"
             >
-              <PortfolioIcon name="download" width={16} height={16} />
-              Academic CV (PDF)
-            </a>
-            <a
-              href="#"
-              onClick={(e) => e.preventDefault()}
-              className="inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
-            >
-              <PortfolioIcon name="download" width={16} height={16} />
-              One-page resume (PDF)
-            </a>
-          </motion.div>
+              {data.downloads.map((dl, i) => {
+                const canDownload = dl.downloadable !== "false" && dl.file;
+                if (!canDownload) return null;
+                return (
+                  <a
+                    key={dl.id}
+                    href={dl.file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className={i === 0
+                      ? "group inline-flex items-center gap-2.5 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,187,212,0.7)] hover:bg-brand-light hover:text-ink transition-all"
+                      : "inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
+                    }
+                  >
+                    <PortfolioIcon name="download" width={16} height={16} />
+                    {dl.label || "Descargar"}
+                  </a>
+                );
+              })}
+            </motion.div>
+          )}
 
           {data.sections.length > 0 ? (
             <motion.div

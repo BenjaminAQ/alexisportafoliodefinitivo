@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { getSection, setSection } from "@/lib/store";
 import type { SectionData, SectionId } from "@/lib/content-types";
 import { emptySectionData } from "@/lib/content-types";
-import { SECTION_SCHEMAS } from "./field-schemas";
+import { SECTION_SCHEMAS, SECTION_LABELS } from "./field-schemas";
 import { FieldRenderer } from "./field-editor";
 import { PortfolioIcon } from "../portfolio/icons";
 import { useAuth } from "./auth-provider";
@@ -46,20 +46,20 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
     try {
       await setSection(sectionId, data);
       setDirty(false);
-      toast.success("Section saved successfully.");
+      toast.success("Sección guardada correctamente.");
     } catch (err) {
-      toast.error("Failed to save: " + (err instanceof Error ? err.message : "unknown error"));
+      toast.error("Error al guardar: " + (err instanceof Error ? err.message : "error desconocido"));
     } finally {
       setSaving(false);
     }
   };
 
   const reset = async () => {
-    if (!confirm("Reset this section to empty? This cannot be undone.")) return;
+    if (!confirm("¿Vaciar esta sección? Esta acción no se puede deshacer.")) return;
     const empty = emptySectionData(sectionId);
     setData(empty);
     setDirty(true);
-    toast.info("Section reset to empty. Click Save to persist.");
+    toast.info("Sección vaciada. Pulsa Guardar para conservar los cambios.");
   };
 
   if (loading || !data) {
@@ -78,13 +78,13 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
       <div className="sticky top-16 z-20 flex items-center justify-between rounded-xl bg-brand-gradient px-4 py-3 ring-1 ring-inset ring-brand/30 shadow-lg">
         <div className="flex items-center gap-2">
           <span className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand-light/70">
-            Editing
+            Editando
           </span>
-          <span className="font-display text-sm font-semibold text-white capitalize">{sectionId}</span>
+          <span className="font-display text-sm font-semibold text-white capitalize">{SECTION_LABELS[sectionId]}</span>
           {dirty && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/20 px-2 py-0.5 text-[10px] font-semibold text-amber-200 ring-1 ring-inset ring-amber-300/40">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-300 animate-pulse-dot" />
-              Unsaved changes
+              Cambios sin guardar
             </span>
           )}
         </div>
@@ -93,7 +93,7 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             onClick={reset}
             className="inline-flex items-center gap-1 rounded-md bg-white/5 px-3 py-1.5 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"
           >
-            Reset
+            Restablecer
           </button>
           <button
             onClick={save}
@@ -101,9 +101,9 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
-              <><span className="h-3 w-3 rounded-full border-2 border-white/40 border-t-white animate-spin" />Saving...</>
+              <><span className="h-3 w-3 rounded-full border-2 border-white/40 border-t-white animate-spin" />Guardando...</>
             ) : (
-              <><PortfolioIcon name="check" width={12} height={12} />Save changes</>
+              <><PortfolioIcon name="check" width={12} height={12} />Guardar cambios</>
             )}
           </button>
         </div>

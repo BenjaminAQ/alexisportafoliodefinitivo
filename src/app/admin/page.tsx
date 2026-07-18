@@ -77,7 +77,7 @@ export default function AdminPage() {
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-white">
-                  Admin Panel <span className="text-brand">·</span> Alexis
+                  Panel de Administración <span className="text-brand">·</span> Alexis
                 </p>
                 <p className="text-[11px] text-brand-light/60">{user.email}</p>
               </div>
@@ -88,14 +88,14 @@ export default function AdminPage() {
                 className="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-3 py-2 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"
               >
                 <PortfolioIcon name="arrow" width={12} height={12} className="rotate-180" />
-                View site
+                Ver sitio
               </Link>
               <button
                 onClick={signOut}
                 className="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-3 py-2 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-red-500/20 hover:text-red-300 transition-all"
               >
                 <PortfolioIcon name="close" width={12} height={12} />
-                Sign out
+                Cerrar sesión
               </button>
             </div>
           </div>
@@ -108,7 +108,7 @@ export default function AdminPage() {
           <aside className="lg:col-span-3">
             <div className="lg:sticky lg:top-24 rounded-2xl bg-white p-3 ring-1 ring-inset ring-ink/10">
               <p className="px-2 py-1.5 font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted">
-                Sections
+                Secciones
               </p>
               <nav className="space-y-0.5">
                 {SECTION_IDS.map((id) => (
@@ -137,7 +137,7 @@ export default function AdminPage() {
             {/* Backend status */}
             <div className="mt-3 rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10">
               <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted mb-2">
-                Backend status
+                Estado del backend
               </p>
               <div className="flex items-center gap-2">
                 <span
@@ -147,12 +147,12 @@ export default function AdminPage() {
                   )}
                 />
                 <span className="text-xs text-ink/80">
-                  {isFirebaseConfigured ? "Firebase Firestore" : "Local storage (preview mode)"}
+                  {isFirebaseConfigured ? "Firebase Firestore" : "Almacenamiento local (modo preview)"}
                 </span>
               </div>
               {!isFirebaseConfigured && (
                 <p className="mt-2 text-[11px] text-muted leading-relaxed">
-                  Add Firebase env vars to enable cloud persistence. Data is currently saved in your browser.
+                  Añade las variables de entorno de Firebase para activar la persistencia en la nube. Los datos se guardan actualmente en tu navegador.
                 </p>
               )}
             </div>
@@ -214,15 +214,15 @@ function LoginScreen({
               <p className="font-display text-lg font-bold text-white">
                 Alexis<span className="text-brand">.</span>
               </p>
-              <p className="text-xs text-brand-light/60">Admin Panel</p>
+              <p className="text-xs text-brand-light/60">Panel de Administración</p>
             </div>
           </div>
 
           <h1 className="mt-8 font-display text-2xl font-bold text-white">
-            Sign in to manage content
+            Inicia sesión para gestionar el contenido
           </h1>
           <p className="mt-2 text-sm text-brand-light/70 leading-relaxed">
-            This admin panel is restricted. Sign in with a <span className="font-semibold text-brand-light">@gmail.com</span> Google account to edit all sections of the portfolio.
+            Este panel es restringido. Inicia sesión con una cuenta de Google <span className="font-semibold text-brand-light">@gmail.com</span> para editar todas las secciones del portafolio.
           </p>
 
           {firebaseConfigured ? (
@@ -233,9 +233,9 @@ function LoginScreen({
               className="mt-6 w-full inline-flex items-center justify-center gap-3 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink hover:bg-brand-light transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {signingIn ? (
-                <><span className="h-4 w-4 rounded-full border-2 border-ink/30 border-t-ink animate-spin" />Connecting...</>
+                <><span className="h-4 w-4 rounded-full border-2 border-ink/30 border-t-ink animate-spin" />Conectando...</>
               ) : (
-                <><GoogleIcon />Sign in with Google</>
+                <><GoogleIcon />Iniciar sesión con Google</>
               )}
             </button>
           ) : (
@@ -243,7 +243,7 @@ function LoginScreen({
             <div className="mt-6 space-y-3">
               <label className="block">
                 <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-brand-light/60 mb-1.5">
-                  Gmail address
+                  Correo Gmail
                 </span>
                 <input
                   type="email"
@@ -260,9 +260,9 @@ function LoginScreen({
                 className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white hover:bg-brand-light hover:text-ink transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {signingIn ? (
-                  <><span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />Signing in...</>
+                  <><span className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin" />Iniciando sesión...</>
                 ) : (
-                  <><GoogleIcon />Sign in as admin</>
+                  <><GoogleIcon />Iniciar sesión como admin</>
                 )}
               </button>
             </div>
@@ -278,8 +278,8 @@ function LoginScreen({
             <span className={`h-2 w-2 shrink-0 rounded-full ${firebaseConfigured ? "bg-green-400" : "bg-amber-400"}`} />
             <p className="text-[11px] text-brand-light/70 leading-relaxed">
               {firebaseConfigured
-                ? "Connected to Firebase. Data persists to Firestore."
-                : "Preview mode: data saves to this browser. Add Firebase env vars for cloud persistence."}
+                ? "Conectado a Firebase. Los datos se guardan en Firestore."
+                : "Modo preview: los datos se guardan en este navegador. Añade las variables de entorno de Firebase para persistencia en la nube."}
             </p>
           </div>
 
@@ -288,7 +288,7 @@ function LoginScreen({
             className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold text-brand-light/70 hover:text-white transition-colors"
           >
             <PortfolioIcon name="arrow" width={12} height={12} className="rotate-180" />
-            Back to site
+            Volver al sitio
           </Link>
         </div>
       </div>

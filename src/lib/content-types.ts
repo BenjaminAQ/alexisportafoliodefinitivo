@@ -128,8 +128,15 @@ export interface CvSection {
   title: string;
   items: string[];
 }
+export interface CvDownload {
+  id: string;
+  label: string;
+  file: string;      // URL del archivo en Storage
+  downloadable: string; // "true" | "false"
+}
 export interface CvData {
   header: SectionHeader;
+  downloads: CvDownload[];
   sections: CvSection[];
 }
 
@@ -245,7 +252,7 @@ export function emptySectionData(id: SectionId): SectionData {
     case "teaching":
       return { header, items: [] };
     case "cv":
-      return { header, sections: [] };
+      return { header, downloads: [], sections: [] };
     case "contact":
       return { header, links: [] };
   }

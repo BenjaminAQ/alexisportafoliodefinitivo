@@ -145,3 +145,29 @@ Stage Summary:
 - After sign-in, the user's role is checked in Firestore (users/{uid}). Only "admin" role can access the panel.
 - First-time login creates a "pending" user doc — the user must then promote themselves to "admin" in Firebase Console → Firestore → users → {uid} → change role to "admin".
 - The Firestore security rules (firestore.rules) must be published in Firebase Console for the reads/writes to succeed.
+
+---
+Task ID: 6
+Agent: orchestrator
+Task: Remove "No content yet" empty state, translate admin panel to Spanish, add file uploads with downloadable toggle.
+
+Work Log:
+- Changed components/admin/empty-state.tsx to return null — empty sections now render clean (no card, no "No content yet" message, no "Editing as" email).
+- Translated field-schemas.ts fully to Spanish: all labels, placeholders, hints, and SECTION_LABELS (Inicio, Acerca de, Áreas de Experiencia, Proyectos, Recursos Académicos, Biblioteca Técnica, Portafolio Docente, CV, Contacto).
+- Translated field-editor.tsx UI strings to Spanish: HeaderField ("Encabezado de la sección", "Texto superior", "Título", "Descripción"), StringListField ("Añadir", "Eliminar"), ObjectListField ("Añadir", "No hay X todavía", "Subir", "Bajar", "Eliminar"), ImageField ("Selecciona un archivo de imagen", "La imagen debe ser menor a 5 MB", "Error al subir", "Vista previa", "Reemplazar", "Eliminar"), FileField ("El archivo debe ser menor a 25 MB", "Ver archivo", "Eliminar archivo").
+- Translated section-editor.tsx: "Editando", "Cambios sin guardar", "Restablecer", "Guardar cambios", "Guardando...", toast messages ("Sección guardada correctamente", "Error al guardar", "¿Vaciar esta sección?", "Sección vaciada").
+- Translated app/admin/page.tsx: "Panel de Administración", "Ver sitio", "Cerrar sesión", "Secciones", "Estado del backend", "Almacenamiento local (modo preview)", login screen ("Inicia sesión para gestionar el contenido", "Este panel es restringido", "Iniciar sesión con Google", "Conectando...", "Correo Gmail", "Iniciar sesión como admin", "Iniciando sesión...", "Conectado a Firebase. Los datos se guardan en Firestore.", "Volver al sitio").
+- Added file upload fields with downloadable toggle to schemas:
+  - Projects: "files" changed from stringList to objectList with {name, url (file upload), downloadable (true/false)}.
+  - Resources: added "file" (file upload) + "downloadable" (true/false) fields.
+  - Library: added "file" (PDF upload) + "downloadable" (true/false) fields.
+  - CV: added "downloads" objectList with {label, file (PDF upload), downloadable (true/false)} — replaces the static download buttons. If downloadable is "false", the button won't show on the public site.
+- Updated content-types.ts: added CvDownload interface and downloads field to CvData; updated emptySectionData for cv to include downloads: [].
+- Updated sections/cv.tsx: download buttons now render dynamically from data.downloads, only showing buttons where downloadable !== "false" and file is present.
+- Verified with Agent Browser: public page has 0 "No content yet" messages and 0 "Editing as"; admin login page fully in Spanish; 0 console errors; ESLint passes (0 errors).
+
+Stage Summary:
+- Empty sections render clean (just the header, no empty-state card).
+- Entire admin panel UI is in Spanish.
+- File uploads (PDFs, documents) available in Projects, Resources, Library, and CV sections.
+- Each uploaded file has a "downloadable" toggle (true/false) — when false, the download button is hidden on the public site.

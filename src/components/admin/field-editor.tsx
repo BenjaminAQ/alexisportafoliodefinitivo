@@ -20,24 +20,24 @@ function HeaderField({
 }) {
   return (
     <div className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10 space-y-3">
-      <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand">Section header</p>
+      <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand">Encabezado de la sección</p>
       <Input
-        label="Eyebrow"
+        label="Texto superior (eyebrow)"
         value={value.eyebrow}
         onChange={(v) => onChange({ ...value, eyebrow: v })}
-        placeholder="PROJECTS"
+        placeholder="PROYECTOS"
       />
       <Input
-        label="Title"
+        label="Título"
         value={value.title}
         onChange={(v) => onChange({ ...value, title: v })}
-        placeholder="Documented work bridging theory, modeling and code"
+        placeholder="Trabajo documentado que une teoría, modelado y código"
       />
       <TextArea
-        label="Description"
+        label="Descripción"
         value={value.description}
         onChange={(v) => onChange({ ...value, description: v })}
-        placeholder="Each project combines a clear problem statement..."
+        placeholder="Cada proyecto combina un planteamiento claro del problema..."
       />
     </div>
   );
@@ -143,7 +143,7 @@ function StringListField({
           className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
-          Add
+          Añadir
         </button>
       </div>
       {value.length > 0 && (
@@ -155,7 +155,7 @@ function StringListField({
                 type="button"
                 onClick={() => onChange(value.filter((_, j) => j !== i))}
                 className="text-muted hover:text-red-500 transition-colors"
-                aria-label="Remove"
+                aria-label="Eliminar"
               >
                 <PortfolioIcon name="close" width={14} height={14} />
               </button>
@@ -215,12 +215,12 @@ function ObjectListField({
           className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
-          Add {label.replace(/s$/, "").toLowerCase()}
+          Añadir {label.replace(/s$/, "").toLowerCase()}
         </button>
       </div>
       {value.length === 0 ? (
         <p className="rounded-md bg-white/50 px-3 py-4 text-center text-xs text-muted ring-1 ring-inset ring-dashed ring-ink/15">
-          No {label.toLowerCase()} yet. Click "Add" to create one.
+          No hay {label.toLowerCase()} todavía. Pulsa "Añadir" para crear uno.
         </p>
       ) : (
         <ul className="space-y-3">
@@ -232,15 +232,15 @@ function ObjectListField({
                 </span>
                 <div className="flex items-center gap-1">
                   <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
-                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Move up">
+                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Subir">
                     <PortfolioIcon name="chevron" width={14} height={14} className="rotate-180" />
                   </button>
                   <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1}
-                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Move down">
+                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Bajar">
                     <PortfolioIcon name="chevron" width={14} height={14} />
                   </button>
                   <button type="button" onClick={() => remove(i)}
-                    className="p-1 text-muted hover:text-red-500" aria-label="Remove">
+                    className="p-1 text-muted hover:text-red-500" aria-label="Eliminar">
                     <PortfolioIcon name="close" width={14} height={14} />
                   </button>
                 </div>
@@ -286,11 +286,11 @@ function ImageField({
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("Please select an image file.");
+      setError("Selecciona un archivo de imagen.");
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setError("Image must be smaller than 5 MB.");
+      setError("La imagen debe ser menor a 5 MB.");
       return;
     }
     setError(null);
@@ -363,7 +363,7 @@ function ImageField({
                 className="inline-flex items-center gap-1 rounded-md bg-white px-2.5 py-1 text-[11px] font-semibold text-ink ring-1 ring-inset ring-ink/15 hover:ring-brand hover:text-brand transition-all"
               >
                 <PortfolioIcon name="arrow" width={11} height={11} className="rotate-[-45deg]" />
-                Replace
+                Reemplazar
               </button>
               <button
                 type="button"
@@ -371,7 +371,7 @@ function ImageField({
                 className="inline-flex items-center gap-1 rounded-md bg-white px-2.5 py-1 text-[11px] font-semibold text-red-500 ring-1 ring-inset ring-red-200 hover:bg-red-50 transition-all"
               >
                 <PortfolioIcon name="close" width={11} height={11} />
-                Remove
+                Eliminar
               </button>
             </div>
           )}
@@ -404,7 +404,7 @@ function FileField({
 
   const handleFile = async (file: File) => {
     if (file.size > 25 * 1024 * 1024) {
-      setError("File must be smaller than 25 MB.");
+      setError("El archivo debe ser menor a 25 MB.");
       return;
     }
     setError(null);
@@ -421,7 +421,7 @@ function FileField({
       setProgress(100);
       onChange(result.url, result.path);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed.");
+      setError(err instanceof Error ? err.message : "Error al subir.");
     } finally {
       setUploading(false);
       setTimeout(() => setProgress(0), 500);
@@ -437,13 +437,13 @@ function FileField({
           <div className="flex items-center gap-2 rounded-md bg-white px-3 py-2 ring-1 ring-inset ring-ink/10">
             <PortfolioIcon name="pdf" width={14} height={14} className="text-brand shrink-0" />
             <a href={value} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-xs text-brand hover:underline">
-              {fileName || "View file"}
+              {fileName || "Ver archivo"}
             </a>
             <button
               type="button"
               onClick={() => { onChange("", ""); setFileName(""); }}
               className="text-muted hover:text-red-500 transition-colors"
-              aria-label="Remove file"
+              aria-label="Eliminar archivo"
             >
               <PortfolioIcon name="close" width={13} height={13} />
             </button>
