@@ -6,7 +6,7 @@ import type { FieldSchema } from "./field-schemas";
 import { cn } from "@/lib/utils";
 
 // Generates a unique id for new array items
-function uid() {
+function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 }
 
@@ -195,7 +195,7 @@ function ObjectListField({
     onChange(next);
   };
   const add = () => {
-    const item: Record<string, unknown> = { id: uid() };
+    const item: Record<string, unknown> = { id: generateId() };
     itemSchema.forEach((f) => {
       if (f.type === "stringList") item[f.key] = [];
       else if (f.type === "objectList") item[f.key] = [];
