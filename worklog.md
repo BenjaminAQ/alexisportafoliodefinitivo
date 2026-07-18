@@ -127,3 +127,21 @@ Stage Summary:
 - All Firestore errors are caught and logged as warnings (console.warn), never crashing the UI.
 - The remaining "permission-denied" warnings in console will disappear once the Firestore security rules (provided in firestore.rules) are published in Firebase Console.
 - To fully fix: copy firestore.rules content into Firebase Console → Firestore → Rules → Publish.
+
+---
+Task ID: 5
+Agent: orchestrator
+Task: Fix admin login blocked + can't add content (Firebase env vars missing).
+
+Work Log:
+- Root cause: The .env.local file (containing the real Firebase credentials) was missing/deleted. Without it, isFirebaseConfigured returned false, so the admin page fell back to "preview mode" showing the Gmail input field instead of the real Google sign-in button. This is why the user couldn't sign in properly.
+- Fix: Recreated /home/z/my-project/.env.local with the real Firebase credentials (project: alexisportafolio-8d4a7, API key AIzaSyBeB5tLApYfA5-3xV8-ahnAeCyr40XPmq8, etc.).
+- Restarted the dev server so it loads the env vars.
+- Verified with Agent Browser: admin page now shows "Sign in with Google" button (real Google popup), "Connected to Firebase" green indicator, NO preview mode, NO Gmail input field. 0 console errors.
+
+Stage Summary:
+- Firebase is now properly configured and detected.
+- The admin login uses real Google sign-in (popup) restricted to @gmail.com accounts.
+- After sign-in, the user's role is checked in Firestore (users/{uid}). Only "admin" role can access the panel.
+- First-time login creates a "pending" user doc — the user must then promote themselves to "admin" in Firebase Console → Firestore → users → {uid} → change role to "admin".
+- The Firestore security rules (firestore.rules) must be published in Firebase Console for the reads/writes to succeed.
