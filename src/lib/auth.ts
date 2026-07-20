@@ -117,7 +117,7 @@ export async function signInWithGoogle(): Promise<AdminUser> {
     if (!isGmail(email)) {
       const { signOut } = await import("firebase/auth");
       await signOut(auth);
-      throw new Error("Only @gmail.com accounts are allowed. Please sign in with a Gmail account.");
+      throw new Error("Solo se permiten cuentas @gmail.com. Inicia sesión con una cuenta de Gmail.");
     }
 
     // Check whitelist in Firestore
@@ -134,8 +134,8 @@ export async function signInWithGoogle(): Promise<AdminUser> {
       await signOut(auth);
       const msg =
         role === "pending"
-          ? "Your account is pending approval. An administrator must grant you access. Ask the site owner to set your role to 'admin' in Firebase."
-          : "Your account does not have admin access. Only administrators can edit the portfolio.";
+          ? "Tu cuenta está pendiente de aprobación. Un administrador debe otorgarte acceso. Pide al propietario del sitio que cambie tu rol a 'admin' en Firebase Console → Firestore → users → tu-uid."
+          : "Tu cuenta no tiene acceso de administrador. Solo los administradores pueden editar el portafolio.";
       throw new AccessDeniedError(role, msg);
     }
 

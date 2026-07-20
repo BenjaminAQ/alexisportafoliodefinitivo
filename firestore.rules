@@ -1,70 +1,61 @@
 rules_version = '2';
 
 // ============================================================
-// FIRESTORE SECURITY RULES — Alexis Portfolio
+// REGLAS DE SEGURIDAD FIRESTORE — Portafolio de Alexis
 // ============================================================
-// Collections:
+// Colecciones:
 //   - users/{uid}     : { uid, email, displayName, role, createdAt }
 //                       role = "admin" | "usuario" | "pending"
-//   - sections/{id}    : section content (home, about, projects, ...)
+//   - sections/{id}   : contenido de cada sección (home, about, projects, ...)
 //
-// Access policy:
-//   - users:    anyone authenticated can read their OWN doc;
-//               only authenticated users can read the users collection
-//               (so the admin panel can show the whitelist);
-//               only existing admins can create/modify user docs
-//               (the app auto-creates a "pending" doc on first login,
-//                but that's enforced client-side — for strict security
-//                enable the isAdmin() write check below).
-//   - sections: read = public (anyone, including anonymous);
-//               write = only admins.
+// Política de acceso:
+//   - sections: LECTURA PÚBLICA para todos (incluyendo anónimos) —
+//                esto permite que cualquier visitante vea el contenido
+//                EN TIEMPO REAL vía onSnapshot. ESCRITURA solo admins.
+//   - users:    Lectura solo autenticada (para verificar roles).
+//               Creación automática de doc "pending" en primer login.
+//               Modificación solo por admins (promover/desgraduar).
 // ============================================================
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper: is the current user an admin?
+    // Helper: ¿el usuario actual es admin?
     function isAdmin() {
       return request.auth != null
         && exists(/databases/$(database)/documents/users/$(request.auth.uid))
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // Helper: is the current user authenticated AND in the users collection?
-    function isRegistered() {
-      return request.auth != null
-        && exists(/databases/$(database)/documents/users/$(request.auth.uid));
-    }
-
-    // ---- users collection ----
-    // A user can read all user docs (so admin panel can list the whitelist),
-    // but non-admins can only READ, never write.
-    // An admin can read/write all user docs (promote/demote users).
+    // ---- Colección users ----
     match /users/{uid} {
-      // Anyone authenticated can read user documents (role lookup + whitelist display)
+      // Cualquier usuario autenticado puede leer (para verificar roles)
       allow read: if request.auth != null;
 
-      // Allow a user to CREATE their own doc on first login (role = "pending")
-      // This is needed so the auto-signup flow works.
+      // Un usuario puede CREAR su propio doc en el primer login (role = "pending")
+      // Esto permite el flujo de auto-registro.
       allow create: if request.auth != null
         && request.auth.uid == uid
         && request.resource.data.role == 'pending'
         && request.resource.data.uid == uid
         && request.resource.data.email == request.auth.token.email;
 
-      // Only admins can update or delete user docs (change roles, etc.)
+      // Solo los admins pueden actualizar o eliminar docs de usuarios
+      // (cambiar roles de pending a admin, etc.)
       allow update, delete: if isAdmin();
     }
 
-    // ---- sections collection (page content) ----
-    // Public can read all section content (the website must render for everyone).
-    // Only admins can create / update / delete section content.
+    // ---- Colección sections (contenido de la web) ----
+    // LECTURA PÚBLICA: cualquiera (incluyendo anónimos) puede leer.
+    // Esto es CRÍTICO para que todos los visitantes vean los cambios
+    // del admin EN TIEMPO REAL a través de onSnapshot listeners.
+    // ESCRITURA: solo administradores.
     match /sections/{sectionId} {
-      allow read: if true;            // public read
-      allow write: if isAdmin();       // admin-only write (create/update/delete)
+      allow read: if true;            // lectura pública — tiempo real para todos
+      allow write: if isAdmin();       // solo admins pueden editar
     }
 
-    // Default deny everything else
+    // Negar todo lo demás por defecto
     match /{document=**} {
       allow read, write: if false;
     }

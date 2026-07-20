@@ -46,11 +46,10 @@ export function Footer() {
           </div>
 
           {/* Sitemap columns */}
-          <div className="md:col-span-5 grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div className="md:col-span-5 grid grid-cols-2 gap-6">
             {[
-              { title: "Explore", items: NAV_ITEMS.slice(0, 5) },
-              { title: "More", items: NAV_ITEMS.slice(5, 9) },
-              { title: "Admin", items: [{ id: "admin", label: "Admin Panel" }] },
+              { title: "Secciones", items: NAV_ITEMS.slice(0, 5) },
+              { title: "Más", items: NAV_ITEMS.slice(5, 9) },
             ].map((col) => (
               <div key={col.title}>
                 <h3 className="font-mono-code text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-light/60">
@@ -60,7 +59,7 @@ export function Footer() {
                   {col.items.map((item) => (
                     <li key={item.id}>
                       <Link
-                        href={item.id === "admin" ? "/admin" : `#${item.id}`}
+                        href={`#${item.id}`}
                         className="text-sm text-brand-light/80 hover:text-white transition-colors"
                       >
                         {item.label}

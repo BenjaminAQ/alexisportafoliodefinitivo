@@ -1,50 +1,47 @@
 rules_version = '2';
 
 // ============================================================
-// FIREBASE STORAGE SECURITY RULES — Alexis Portfolio
+// REGLAS DE SEGURIDAD FIREBASE STORAGE — Portafolio de Alexis
 // ============================================================
-// Structure:
-//   - images/{uid}/{timestamp}-{filename}   : profile/section images
-//   - files/{uid}/{timestamp}-{filename}    : PDFs, documents, code, etc.
+// Estructura:
+//   - images/{uid}/{timestamp}-{filename}   : imágenes de perfil/secciones
+//   - files/{uid}/{timestamp}-{filename}    : PDFs, documentos, código, etc.
 //
-// Access policy:
-//   - read:   public (anyone, including anonymous) — the website must
-//             display images and serve file downloads to all visitors.
-//   - write:  only authenticated admins (matches Firestore whitelist).
-//
-// Size limits are enforced client-side in the admin uploader
-// (5 MB for images, 25 MB for files). These rules focus on auth.
+// Política de acceso:
+//   - LECTURA PÚBLICA: cualquiera (incluyendo anónimos) puede leer.
+//     Esto permite que TODOS los visitantes vean las imágenes y
+//     descarguen/previsualicen archivos en la web.
+//   - ESCRITURA: solo administradores (verifica rol en Firestore).
 // ============================================================
 
 service firebase.storage {
   match /b/{bucket}/o {
 
-    // Helper: is the current user an admin in Firestore?
-    // Reads the Firestore users/{uid} document and checks role == "admin".
+    // Helper: ¿el usuario actual es admin en Firestore?
     function isAdmin() {
       return request.auth != null
         && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
-    // ---- images (profile + section images) ----
+    // ---- Imágenes (perfil + secciones) ----
     match /images/{uid}/{fileName} {
-      allow read: if true;            // public read
-      allow write: if isAdmin();      // admin-only upload/overwrite/delete
+      allow read: if true;            // lectura pública — todos ven las imágenes
+      allow write: if isAdmin();      // solo admins suben/eliminan
     }
 
-    // ---- files (PDFs, documents, code) ----
+    // ---- Archivos (PDFs, documentos, código) ----
     match /files/{uid}/{fileName} {
-      allow read: if true;            // public read
-      allow write: if isAdmin();      // admin-only upload/overwrite/delete
+      allow read: if true;            // lectura pública — todos ven/descargan archivos
+      allow write: if isAdmin();      // solo admins suben/eliminan
     }
 
-    // ---- uploads (legacy/fallback folder) ----
+    // ---- Carpeta uploads (legacy/fallback) ----
     match /uploads/{uid}/{fileName} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Default deny everything else
+    // Negar todo lo demás por defecto
     match /{allPaths=**} {
       allow read, write: if false;
     }

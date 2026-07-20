@@ -247,3 +247,26 @@ Work Log:
 Stage Summary:
 - File preview now works for PDFs (via <object>), Office docs (via Microsoft Office Online viewer), images, and videos. Chrome iframe restrictions handled with fallbacks.
 - All 9 sections now alternate backgrounds: dark navy → light → dark navy → light → ... → dark navy (footer). No more consecutive same-tone sections.
+
+---
+Task ID: 10
+Agent: orchestrator
+Task: Real-time sync for all users + Google popup login + pending/admin system + remove footer Admin section + updated rules.
+
+Work Log:
+- Recreated .env.local (was deleted again) with real Firebase credentials.
+- Confirmed signInWithGoogle() uses signInWithPopup (real Google popup, NOT Gmail input). Verified: no email input visible, no preview mode, Firebase connected.
+- Confirmed pending/admin system: first login creates users/{uid} doc with role="pending". Only role="admin" can access panel. Non-admins get AccessDeniedError with Spanish message explaining they need admin to promote them in Firebase Console.
+- Translated auth error messages to Spanish: "Solo se permiten cuentas @gmail.com", "Tu cuenta está pendiente de aprobación...", "Tu cuenta no tiene acceso de administrador...".
+- Confirmed real-time sync: store.ts uses Firestore onSnapshot listeners. When admin saves changes, Firestore updates the doc, onSnapshot fires for ALL connected clients (any visitor with page open), React state updates automatically. No refresh needed.
+- Removed "Admin" column from footer sitemap. Footer now has 2 columns: "Secciones" (Home, About, Areas of Expertise, Projects, Resources) and "Más" (Library, Teaching, CV, Contact). No Admin link anywhere on public site.
+- Updated firestore.rules with Spanish comments: sections read=true (public, enables real-time onSnapshot for all visitors), write=isAdmin() only. users read=authenticated, create=own doc with pending role, update/delete=isAdmin().
+- Updated storage.rules with Spanish comments: images/files read=true (public, all visitors see/download), write=isAdmin() only.
+- Verified with Agent Browser: admin login shows Google button (no Gmail input, no preview mode), footer has no Admin link (columns: SECCIONES | MÁS | STATEMENT), 0 console errors, ESLint passes.
+
+Stage Summary:
+- Real-time: all visitors see admin changes instantly via Firestore onSnapshot (no refresh needed).
+- Login: real Google popup (signInWithPopup), restricted to @gmail.com.
+- New users: auto-created as "pending" in Firestore users collection. Must be promoted to "admin" in Firebase Console to access panel.
+- Footer: Admin section removed (access only via /admin URL directly).
+- Rules updated in firestore.rules and storage.rules (copy-paste ready, Spanish comments).
