@@ -5,16 +5,11 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/data/content";
 import { PortfolioIcon } from "./icons";
-import { useTheme } from "next-themes";
 
 export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState<string>("home");
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => setMounted(true), []);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -106,21 +101,6 @@ export function Navbar() {
 
           {/* Right cluster */}
           <div className="flex items-center gap-2">
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                aria-label="Toggle theme"
-                className="hidden sm:flex h-9 w-9 items-center justify-center rounded-md text-brand-light/80 hover:text-white hover:bg-white/10 transition-colors"
-              >
-                <PortfolioIcon name={theme === "dark" ? "sun" : "moon"} className="h-4.5 w-4.5" width={18} height={18} />
-              </button>
-            )}
-            <button
-              onClick={() => handleNav("contact")}
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_-12px_rgba(0,187,212,0.7)] hover:bg-brand-light hover:text-ink transition-all"
-            >
-              Contact
-            </button>
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
@@ -177,15 +157,6 @@ export function Navbar() {
                 <PortfolioIcon name="arrow" width={14} height={14} className="opacity-50" />
               </button>
             ))}
-            {mounted && (
-              <button
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="mt-2 flex items-center gap-2 rounded-lg px-4 py-3 text-left text-sm font-medium text-brand-light/80 hover:bg-white/5 hover:text-white"
-              >
-                <PortfolioIcon name={theme === "dark" ? "sun" : "moon"} width={16} height={16} />
-                Toggle {theme === "dark" ? "light" : "dark"} mode
-              </button>
-            )}
           </nav>
         </div>
       </div>

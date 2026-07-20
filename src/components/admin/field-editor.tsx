@@ -126,6 +126,38 @@ function ColorField({
   );
 }
 
+// ---------- Select field (dropdown) ----------
+function SelectField({
+  label,
+  value,
+  onChange,
+  hint,
+  options = [],
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  hint?: string;
+  options?: { value: string; label: string }[];
+}) {
+  return (
+    <label className="block">
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 focus:outline-none focus:ring-2 focus:ring-brand/60 cursor-pointer"
+      >
+        <option value="">— Seleccionar —</option>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 // ---------- Header field (eyebrow / title / description + colors) ----------
 function HeaderField({
   value,
@@ -663,6 +695,16 @@ export function FieldRenderer({
           value={(value as string) ?? ""}
           onChange={onChange}
           hint={schema.hint}
+        />
+      );
+    case "select":
+      return (
+        <SelectField
+          label={schema.label}
+          value={(value as string) ?? ""}
+          onChange={onChange}
+          hint={schema.hint}
+          options={schema.options}
         />
       );
     default:

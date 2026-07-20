@@ -200,3 +200,27 @@ Stage Summary:
 - Colors are stored in Firestore and applied via inline styles on the public site.
 - "Auto" state (empty color) inherits from the theme, so the admin can reset any color.
 - Home section supports image upload (profile photo) and the admin can set custom colors for every text element.
+
+---
+Task ID: 8
+Agent: orchestrator
+Task: Remove duplicate Contact + theme toggle, add file viewMode (view/download/none), neon purple/cyan backgrounds.
+
+Work Log:
+- Removed duplicate "Contact" button from navbar (was both in NAV_ITEMS and as a standalone button). Now Contact appears only once as a nav item.
+- Removed theme toggle (sun/moon button) from both desktop navbar and mobile drawer. Also removed useTheme import and mounted state from navbar.tsx.
+- Added "select" field type to FieldType union with options property in FieldSchema.
+- Created SelectField component in field-editor.tsx (dropdown with options).
+- Replaced "downloadable" (true/false text) with "viewMode" (select) in all file-bearing schemas: Projects files, Resources, Library, CV downloads. Three options: "Oculto (no mostrar)", "Solo ver", "Ver y descargar".
+- Updated content-types.ts: ProjectFile interface (id, name, url, viewMode), ResourceItem.file + viewMode, LibraryItem.file + viewMode, CvDownload.viewMode (replacing downloadable).
+- Created file-viewer.tsx with FileBadge component (inline file chip with "Ver" + "Descargar" buttons based on viewMode) and FilePreviewModal (full-screen preview modal).
+- FilePreviewModal renders: images via <img>, PDFs via <iframe>, videos via <video>, other docs via Google Docs viewer, with download button if viewMode includes download.
+- Updated CV section to use viewMode: "view" shows "Ver documento" button, "download" shows both "Ver" and "Descargar" buttons, "none" hides entirely. Added FilePreviewModal integration.
+- Enhanced backgrounds in globals.css with brochure-inspired neon: radial gradients with purple rgba(124,58,237,0.15) and cyan rgba(0,180,216,0.12) glows on .bg-brand-gradient, .surface-card-dark, wire-mesh (dual cyan+purple tint), and glow utilities (.glow-brand now includes purple neon shadow).
+- Updated text-brand-gradient to flow cyan → blue → purple → green.
+- Verified with Agent Browser: navbar has 9 items (no duplicate Contact), theme toggle removed, body bg = navy rgb(10,14,39), hero gradient includes purple rgba(124,58,237). VLM confirmed: "deep navy with subtle purple/violet and cyan neon glow accents, sophisticated and tech-forward". ESLint 0 errors.
+
+Stage Summary:
+- Navbar: single Contact (nav item only), no theme toggle.
+- File system: every uploaded file (PDF, image, Word, video) can be previewed inline AND downloaded, controlled by viewMode select in admin (Oculto / Solo ver / Ver y descargar).
+- Backgrounds: enhanced with neon purple (#7C3AED), cyan (#00B4D8), and deep navy (#0A0E27) radial gradients matching the brochure aesthetic.

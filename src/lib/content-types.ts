@@ -69,6 +69,12 @@ export interface ExpertiseData {
 }
 
 // ---- Projects ----
+export interface ProjectFile {
+  id: string;
+  name: string;
+  url: string;
+  viewMode?: string; // "none" | "view" | "download"
+}
 export interface ProjectItem {
   id: string;
   title: string;
@@ -77,7 +83,7 @@ export interface ProjectItem {
   tech: string[];
   level: string;
   sections: { heading: string; body: string }[];
-  files: string[];
+  files: ProjectFile[];
   references: string[];
 }
 export interface ProjectsData {
@@ -96,6 +102,8 @@ export interface ResourceItem {
   type: string;
   prerequisites: string;
   objectives: string;
+  file?: string;
+  viewMode?: string; // "none" | "view" | "download"
 }
 export interface ResourcesData {
   header: SectionHeader;
@@ -112,6 +120,8 @@ export interface LibraryItem {
   software: string;
   language: string;
   date: string;
+  file?: string;
+  viewMode?: string; // "none" | "view" | "download"
 }
 export interface LibraryData {
   header: SectionHeader;
@@ -140,7 +150,7 @@ export interface CvDownload {
   id: string;
   label: string;
   file: string;      // URL del archivo en Storage
-  downloadable: string; // "true" | "false"
+  viewMode?: string; // "none" | "view" | "download"
 }
 export interface CvData {
   header: SectionHeader;

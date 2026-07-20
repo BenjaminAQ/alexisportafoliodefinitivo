@@ -164,45 +164,54 @@
   .font-display { font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif; }
   .font-mono-code { font-family: var(--font-mono), ui-monospace, monospace; }
 
-  /* Brand gradients */
+  /* Brand gradients — inspired by engineering brochure with neon purple/blue/cyan */
   .bg-brand-gradient {
-    background-image: linear-gradient(135deg, #0a0e27 0%, #1a1f4e 100%);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(0, 180, 216, 0.12) 0%, transparent 50%),
+      linear-gradient(135deg, #0a0e27 0%, #1a1f4e 50%, #0f1135 100%);
   }
   .bg-brand-gradient-soft {
-    background-image: linear-gradient(135deg, #0a0e27 0%, #00b4d8 140%);
+    background-image:
+      radial-gradient(ellipse at 30% 20%, rgba(0, 180, 216, 0.18) 0%, transparent 60%),
+      linear-gradient(135deg, #0a0e27 0%, #1a1f4e 100%);
   }
   .text-brand-gradient {
-    background-image: linear-gradient(120deg, #4dc9e8 0%, #00b4d8 50%, #2a9d8f 100%);
+    background-image: linear-gradient(120deg, #4dc9e8 0%, #00b4d8 40%, #7c3aed 80%, #2a9d8f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Card surface (dark) */
+  /* Card surface (dark) with neon glow */
   .surface-card-dark {
-    background-image: linear-gradient(160deg, #1a1f4e 0%, #0a0e27 100%);
+    background-image:
+      radial-gradient(ellipse at top right, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at bottom left, rgba(0, 180, 216, 0.06) 0%, transparent 40%),
+      linear-gradient(160deg, #1a1f4e 0%, #0a0e27 100%);
   }
 
-  /* Wire-mesh decorative grid */
+  /* Wire-mesh decorative grid with cyan + purple tint */
   .wire-mesh {
     background-image:
-      linear-gradient(to right, rgba(0, 180, 216, 0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 180, 216, 0.08) 1px, transparent 1px);
-    background-size: 48px 48px;
+      linear-gradient(to right, rgba(0, 180, 216, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 180, 216, 0.07) 1px, transparent 1px),
+      linear-gradient(to right, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px, 48px 48px, 96px 96px;
   }
   .wire-mesh-fine {
     background-image:
-      linear-gradient(to right, rgba(0, 180, 216, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 180, 216, 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgba(0, 180, 216, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 180, 216, 0.05) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
-  /* Glow */
+  /* Glow with neon cyan/purple */
   .glow-brand {
-    box-shadow: 0 0 0 1px rgba(0, 187, 212, 0.18), 0 18px 50px -20px rgba(0, 187, 212, 0.35);
+    box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.2), 0 18px 50px -20px rgba(0, 180, 216, 0.4), 0 0 80px -30px rgba(124, 58, 237, 0.3);
   }
   .glow-brand-strong {
-    box-shadow: 0 0 0 1px rgba(0, 187, 212, 0.35), 0 20px 60px -18px rgba(0, 187, 212, 0.55);
+    box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.4), 0 20px 60px -18px rgba(0, 180, 216, 0.6), 0 0 100px -20px rgba(124, 58, 237, 0.4);
   }
 
   /* Subtle scrollbar */

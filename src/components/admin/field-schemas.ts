@@ -3,7 +3,7 @@
 
 import type { SectionId } from "@/lib/content-types";
 
-export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file" | "color";
+export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file" | "color" | "select";
 
 export interface FieldSchema {
   key: string;
@@ -12,6 +12,7 @@ export interface FieldSchema {
   placeholder?: string;
   itemSchema?: FieldSchema[]; // para objectList
   hint?: string;
+  options?: { value: string; label: string }[]; // para select
 }
 
 export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
@@ -65,10 +66,14 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
         { key: "heading", type: "text", label: "Encabezado", placeholder: "Planteamiento del problema" },
         { key: "body", type: "textarea", label: "Contenido" },
       ]},
-      { key: "files", type: "objectList", label: "Archivos descargables", itemSchema: [
+      { key: "files", type: "objectList", label: "Archivos", itemSchema: [
         { key: "name", type: "text", label: "Nombre visible", placeholder: "solver.py" },
         { key: "url", type: "file", label: "Archivo (subir)" },
-        { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, el archivo no mostrará botón de descarga en la web." },
+        { key: "viewMode", type: "select", label: "Modo de visualización", hint: "Controla cómo se muestra el archivo en la web pública.", options: [
+          { value: "none", label: "Oculto (no mostrar)" },
+          { value: "view", label: "Solo ver (previsualizar sin descarga)" },
+          { value: "download", label: "Ver y descargar" },
+        ]},
       ]},
       { key: "references", type: "stringList", label: "Referencias", placeholder: "Autor, Título..." },
     ]},
@@ -85,7 +90,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "prerequisites", type: "text", label: "Requisitos previos" },
       { key: "objectives", type: "textarea", label: "Objetivos" },
       { key: "file", type: "file", label: "Archivo descargable (opcional)" },
-      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true" },
+      { key: "viewMode", type: "select", label: "Modo de visualización", options: [
+        { value: "none", label: "Oculto (no mostrar)" },
+        { value: "view", label: "Solo ver" },
+        { value: "download", label: "Ver y descargar" },
+      ]},
     ]},
   ],
   library: [
@@ -99,7 +108,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "language", type: "text", label: "Idioma" },
       { key: "date", type: "text", label: "Fecha", placeholder: "2024-03-12" },
       { key: "file", type: "file", label: "Archivo PDF (subir)" },
-      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, el documento no mostrará botón de descarga en la web." },
+      { key: "viewMode", type: "select", label: "Modo de visualización", hint: "Controla cómo se muestra el documento en la web.", options: [
+        { value: "none", label: "Oculto (no mostrar)" },
+        { value: "view", label: "Solo ver (previsualizar sin descarga)" },
+        { value: "download", label: "Ver y descargar" },
+      ]},
     ]},
   ],
   teaching: [
@@ -115,7 +128,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "downloads", type: "objectList", label: "Documentos descargables", itemSchema: [
       { key: "label", type: "text", label: "Etiqueta del botón", placeholder: "CV Académico (PDF)" },
       { key: "file", type: "file", label: "Archivo PDF (subir)" },
-      { key: "downloadable", type: "text", label: "Descargable (true/false)", placeholder: "true", hint: "Si es false, no se mostrará el botón de descarga en la web." },
+      { key: "viewMode", type: "select", label: "Modo de visualización", hint: "Controla cómo se muestra el documento en la web.", options: [
+        { value: "none", label: "Oculto (no mostrar)" },
+        { value: "view", label: "Solo ver (previsualizar sin descarga)" },
+        { value: "download", label: "Ver y descargar" },
+      ]},
     ]},
     { key: "sections", type: "objectList", label: "Secciones del CV", itemSchema: [
       { key: "title", type: "text", label: "Título de la sección", placeholder: "Educación" },

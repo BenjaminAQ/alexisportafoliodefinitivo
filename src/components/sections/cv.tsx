@@ -1,16 +1,19 @@
 "use client";
 
+import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Section } from "../portfolio/section";
 import { PortfolioIcon } from "../portfolio/icons";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { FilePreviewModal } from "@/components/admin/file-viewer";
 import type { CvData } from "@/lib/content-types";
 
 export function CvSection() {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<CvData>("cv");
+  const [preview, setPreview] = React.useState<{ url: string; name: string } | null>(null);
 
   return (
     <Section id="cv" tone="light">
@@ -29,24 +32,42 @@ export function CvSection() {
               transition={{ duration: 0.5 }}
               className="mt-8 flex flex-wrap gap-3"
             >
-              {data.downloads.map((dl, i) => {
-                const canDownload = dl.downloadable !== "false" && dl.file;
-                if (!canDownload) return null;
+              {data.downloads.map((dl) => {
+                const mode = dl.viewMode || "download";
+                if (mode === "none" || !dl.file) return null;
                 return (
-                  <a
-                    key={dl.id}
-                    href={dl.file}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className={i === 0
-                      ? "group inline-flex items-center gap-2.5 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,187,212,0.7)] hover:bg-brand-light hover:text-ink transition-all"
-                      : "inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
-                    }
-                  >
-                    <PortfolioIcon name="download" width={16} height={16} />
-                    {dl.label || "Descargar"}
-                  </a>
+                  <div key={dl.id} className="flex items-center gap-2">
+                    {mode === "view" && (
+                      <button
+                        onClick={() => setPreview({ url: dl.file!, name: dl.label || "Documento" })}
+                        className="inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
+                      >
+                        <PortfolioIcon name="play" width={16} height={16} />
+                        {dl.label || "Ver documento"}
+                      </button>
+                    )}
+                    {mode === "download" && (
+                      <>
+                        <button
+                          onClick={() => setPreview({ url: dl.file!, name: dl.label || "Documento" })}
+                          className="inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
+                        >
+                          <PortfolioIcon name="play" width={16} height={16} />
+                          Ver
+                        </button>
+                        <a
+                          href={dl.file}
+                          download={dl.label || "documento"}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group inline-flex items-center gap-2.5 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,180,216,0.7)] hover:bg-brand-light hover:text-ink transition-all"
+                        >
+                          <PortfolioIcon name="download" width={16} height={16} />
+                          {dl.label || "Descargar"}
+                        </a>
+                      </>
+                    )}
+                  </div>
                 );
               })}
             </motion.div>
@@ -92,6 +113,7 @@ export function CvSection() {
           )}
         </>
       )}
+      <FilePreviewModal preview={preview} onClose={() => setPreview(null)} />
     </Section>
   );
 }
