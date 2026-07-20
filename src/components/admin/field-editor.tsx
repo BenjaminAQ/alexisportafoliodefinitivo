@@ -10,13 +10,129 @@ function generateId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 }
 
-// ---------- Header field (eyebrow / title / description) ----------
+// ---------- Color picker field (Canva/Word style) ----------
+const PRESET_COLORS = [
+  "#FFFFFF", "#E0E0E0", "#8B94A8", "#0A0E27", "#000000",
+  "#00B4D8", "#4DC9E8", "#2A9D8F", "#4CB8AB", "#0066CC",
+  "#FFD60A", "#FF4D88", "#FF3A3A", "#4CAF50", "#9C27B0",
+  "#FF9800", "#795548", "#607D8B", "#E91E63", "#3F51B5",
+];
+
+function ColorField({
+  label,
+  value,
+  onChange,
+  hint,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  hint?: string;
+}) {
+  const [showPicker, setShowPicker] = React.useState(false);
+  const popRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!showPicker) return;
+    const handler = (e: MouseEvent) => {
+      if (popRef.current && !popRef.current.contains(e.target as Node)) {
+        setShowPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showPicker]);
+
+  return (
+    <div className="relative">
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <div className="flex items-center gap-2">
+        {/* Color swatch button */}
+        <button
+          type="button"
+          onClick={() => setShowPicker((v) => !v)}
+          className="relative h-9 w-9 shrink-0 rounded-md ring-1 ring-inset ring-ink/20 overflow-hidden hover:ring-brand transition-all"
+          aria-label="Abrir selector de color"
+          style={{ backgroundColor: value || "transparent" }}
+        >
+          {!value && (
+            <span className="absolute inset-0 flex items-center justify-center text-[9px] text-muted">Auto</span>
+          )}
+        </button>
+        {/* Hex input */}
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Automático (hereda del tema)"
+          className="flex-1 rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/60 font-mono-code"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="text-muted hover:text-red-500 transition-colors p-1"
+            aria-label="Quitar color"
+          >
+            <PortfolioIcon name="close" width={14} height={14} />
+          </button>
+        )}
+      </div>
+
+      {/* Popover color picker */}
+      {showPicker && (
+        <div
+          ref={popRef}
+          className="absolute z-50 mt-1 w-64 rounded-xl bg-white p-3 shadow-xl ring-1 ring-inset ring-ink/15"
+        >
+          {/* Preset palette grid */}
+          <p className="mb-2 text-[10px] font-mono-code uppercase tracking-[0.12em] text-muted">Paleta</p>
+          <div className="grid grid-cols-10 gap-1.5 mb-3">
+            {PRESET_COLORS.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => { onChange(c); }}
+                className="h-6 w-6 rounded ring-1 ring-inset ring-ink/15 hover:scale-110 hover:ring-brand transition-all"
+                style={{ backgroundColor: c }}
+                aria-label={c}
+                title={c}
+              />
+            ))}
+          </div>
+
+          {/* Native color picker for custom colors */}
+          <p className="mb-2 text-[10px] font-mono-code uppercase tracking-[0.12em] text-muted">Color personalizado</p>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={value && /^#[0-9a-fA-F]{6}$/.test(value) ? value : "#00b4d8"}
+              onChange={(e) => onChange(e.target.value.toUpperCase())}
+              className="h-9 w-12 cursor-pointer rounded border-0 bg-transparent p-0"
+              aria-label="Selector de color personalizado"
+            />
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="#00B4D8"
+              className="flex-1 rounded-md bg-surface px-3 py-2 text-sm font-mono-code text-ink ring-1 ring-inset ring-ink/15 focus:outline-none focus:ring-2 focus:ring-brand/60"
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------- Header field (eyebrow / title / description + colors) ----------
 function HeaderField({
   value,
   onChange,
 }: {
-  value: { eyebrow: string; title: string; description: string };
-  onChange: (v: { eyebrow: string; title: string; description: string }) => void;
+  value: { eyebrow: string; title: string; description: string; eyebrowColor?: string; titleColor?: string; descriptionColor?: string };
+  onChange: (v: { eyebrow: string; title: string; description: string; eyebrowColor?: string; titleColor?: string; descriptionColor?: string }) => void;
 }) {
   return (
     <div className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10 space-y-3">
@@ -27,17 +143,32 @@ function HeaderField({
         onChange={(v) => onChange({ ...value, eyebrow: v })}
         placeholder="PROYECTOS"
       />
+      <ColorField
+        label="Color del texto superior (eyebrow)"
+        value={value.eyebrowColor ?? ""}
+        onChange={(v) => onChange({ ...value, eyebrowColor: v })}
+      />
       <Input
         label="Título"
         value={value.title}
         onChange={(v) => onChange({ ...value, title: v })}
         placeholder="Trabajo documentado que une teoría, modelado y código"
       />
+      <ColorField
+        label="Color del título"
+        value={value.titleColor ?? ""}
+        onChange={(v) => onChange({ ...value, titleColor: v })}
+      />
       <TextArea
         label="Descripción"
         value={value.description}
         onChange={(v) => onChange({ ...value, description: v })}
         placeholder="Cada proyecto combina un planteamiento claro del problema..."
+      />
+      <ColorField
+        label="Color de la descripción"
+        value={value.descriptionColor ?? ""}
+        onChange={(v) => onChange({ ...value, descriptionColor: v })}
       />
     </div>
   );
@@ -523,6 +654,15 @@ export function FieldRenderer({
           onChange={(url, path) => onChange(url)}
           hint={schema.hint}
           uid={uid}
+        />
+      );
+    case "color":
+      return (
+        <ColorField
+          label={schema.label}
+          value={(value as string) ?? ""}
+          onChange={onChange}
+          hint={schema.hint}
         />
       );
     default:

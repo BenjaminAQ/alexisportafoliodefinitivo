@@ -171,3 +171,32 @@ Stage Summary:
 - Entire admin panel UI is in Spanish.
 - File uploads (PDFs, documents) available in Projects, Resources, Library, and CV sections.
 - Each uploaded file has a "downloadable" toggle (true/false) — when false, the download button is hidden on the public site.
+
+---
+Task ID: 7
+Agent: orchestrator
+Task: New color palette from brochure + color picker in admin + confirm Home image/file uploads.
+
+Work Log:
+- Extracted palette from brochure image via VLM: navy #0A0E27 (bg), cyan #00B4D8 (primary), green #2A9D8F (secondary), light gray #E0E0E0 (body text on dark), white #FFFFFF (headers).
+- Rewrote globals.css with new palette: --color-brand #00b4d8, --color-accent-green #2a9d8f, --color-ink #0a0e27 (navy), --color-ink-deep #060a1d, --color-ink-soft #1a1f4e, --color-text-light #e0e0e0. Updated light theme (bg #f4f6fb, fg #0a0e27) and dark theme (bg #0a0e27 navy, fg #e0e0e0 gray). Updated gradients, wire-mesh, selection, chart tokens.
+- Changed default theme to "dark" (navy) in layout.tsx to match brochure look. Changed body classes from bg-surface text-ink to bg-background text-foreground (theme-aware).
+- Created ColorField component in field-editor.tsx: Canva/Word-style color picker with 20 preset swatches (palette grid), native HTML color input for custom colors, hex text input, "Auto" state (clears color to inherit theme). Popover with click-outside-to-close.
+- Added "color" field type to FieldType union and FieldRenderer switch case.
+- Updated SectionHeader type to include optional eyebrowColor, titleColor, descriptionColor.
+- Updated HeaderField in field-editor to render ColorField for each header text (eyebrow, title, description) — applies to ALL sections since they all use HeaderField.
+- Updated DynamicSectionHeader to apply inline style colors when set (style={{ color: header.eyebrowColor }}).
+- Updated HomeData type with optional color fields: eyebrowColor, titleColor, subtitleColor, profileNameColor, profileRoleColor.
+- Updated home schema in field-schemas.ts to include color fields for all hero texts.
+- Updated hero.tsx to apply inline color styles to eyebrow, h1, subtitle, profile name, profile role. Removed unused Eyebrow import.
+- Confirmed Home already has profileImage (image upload) field + ctaButtons — file/image uploads work as before.
+- Verified with Agent Browser: body bg = rgb(10,14,39) = #0A0E27 (navy), h1 color = white, hero renders with new palette, admin login shows "Iniciar sesión con Google" + "Conectado a Firebase". VLM confirmed: deep navy background, cyan/teal + green accents, polished professional layout. ESLint 0 errors.
+- Recreated .env.local (was deleted again) with Firebase credentials.
+
+Stage Summary:
+- Entire site now uses the brochure-inspired navy + cyan + green palette.
+- Default theme is dark (navy background) matching the reference brochure.
+- Admin panel includes a Canva-style color picker for ALL section headers (eyebrow, title, description) and ALL hero texts (title, subtitle, name, role).
+- Colors are stored in Firestore and applied via inline styles on the public site.
+- "Auto" state (empty color) inherits from the theme, so the admin can reset any color.
+- Home section supports image upload (profile photo) and the admin can set custom colors for every text element.

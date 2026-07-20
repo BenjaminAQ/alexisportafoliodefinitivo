@@ -13,11 +13,14 @@ export type SectionId =
   | "cv"
   | "contact";
 
-// ---- Generic section header (eyebrow + title + description) ----
+// ---- Generic section header (eyebrow + title + description + colors) ----
 export interface SectionHeader {
   eyebrow: string;
   title: string;
   description: string;
+  eyebrowColor?: string;
+  titleColor?: string;
+  descriptionColor?: string;
 }
 
 // ---- Home (hero) ----
@@ -30,6 +33,11 @@ export interface HomeData {
   profileName: string;    // e.g. "Alexis"
   profileRole: string;    // e.g. "Civil Engineer"
   ctaButtons: { id: string; label: string; target: string; primary: boolean }[];
+  eyebrowColor?: string;
+  titleColor?: string;
+  subtitleColor?: string;
+  profileNameColor?: string;
+  profileRoleColor?: string;
 }
 
 // ---- About ----

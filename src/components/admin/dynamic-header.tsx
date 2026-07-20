@@ -30,6 +30,7 @@ export function DynamicSectionHeader({
               "font-mono-code text-xs font-semibold uppercase tracking-[0.2em]",
               tone === "dark" ? "text-brand-light" : "text-brand"
             )}
+            style={header.eyebrowColor ? { color: header.eyebrowColor } : undefined}
           >
             {header.eyebrow}
           </span>
@@ -44,6 +45,7 @@ export function DynamicSectionHeader({
           "mt-4 font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-bold tracking-tight text-balance",
           tone === "dark" ? "text-white" : "text-ink"
         )}
+        style={header.titleColor ? { color: header.titleColor } : undefined}
       >
         {header.title}
       </motion.h2>
@@ -57,6 +59,7 @@ export function DynamicSectionHeader({
             "mt-4 text-base sm:text-lg leading-relaxed text-pretty",
             tone === "dark" ? "text-brand-light/75" : "text-muted"
           )}
+          style={header.descriptionColor ? { color: header.descriptionColor } : undefined}
         >
           {header.description}
         </motion.p>

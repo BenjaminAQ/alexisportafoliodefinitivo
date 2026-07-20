@@ -3,7 +3,6 @@
 import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { PortfolioIcon } from "../portfolio/icons";
-import { Eyebrow } from "../portfolio/primitives";
 import { useSectionData } from "@/components/admin/use-section-data";
 import type { HomeData } from "@/lib/content-types";
 
@@ -50,6 +49,11 @@ export function HeroSection() {
   const profileImage = data?.profileImage ?? "";
   const profileName = data?.profileName ?? "Alexis";
   const profileRole = data?.profileRole ?? "Civil Engineer";
+  const eyebrowColor = data?.eyebrowColor ?? "";
+  const titleColor = data?.titleColor ?? "";
+  const subtitleColor = data?.subtitleColor ?? "";
+  const profileNameColor = data?.profileNameColor ?? "";
+  const profileRoleColor = data?.profileRoleColor ?? "";
   const ctaButtons = data?.ctaButtons ?? [
     { id: "b1", label: "View Projects", target: "#projects", primary: true },
     { id: "b2", label: "Explore Open Resources", target: "#resources", primary: false },
@@ -105,12 +109,21 @@ export function HeroSection() {
           {/* Text column */}
           <div className="lg:col-span-8 max-w-4xl">
             <motion.div {...fadeUp(0)}>
-              <Eyebrow dark>{eyebrow}</Eyebrow>
+              <div className="flex items-center gap-2.5">
+                <span className="h-px w-8 bg-brand" />
+                <span
+                  className="font-mono-code text-xs font-semibold uppercase tracking-[0.2em] text-brand-light"
+                  style={eyebrowColor ? { color: eyebrowColor } : undefined}
+                >
+                  {eyebrow}
+                </span>
+              </div>
             </motion.div>
 
             <motion.h1
               {...fadeUp(0.08)}
-              className="mt-6 font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.05]"
+              className="mt-6 font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.05] text-white"
+              style={titleColor ? { color: titleColor } : undefined}
             >
               {renderTitle(title)}
             </motion.h1>
@@ -118,6 +131,7 @@ export function HeroSection() {
             <motion.p
               {...fadeUp(0.18)}
               className="mt-7 max-w-2xl text-base sm:text-lg lg:text-xl leading-relaxed text-brand-light/80 text-pretty"
+              style={subtitleColor ? { color: subtitleColor } : undefined}
             >
               {subtitle}
             </motion.p>
@@ -174,8 +188,16 @@ export function HeroSection() {
 
               {/* Floating name badge */}
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-ink-deep/90 backdrop-blur-md px-5 py-2 ring-1 ring-inset ring-brand/40 shadow-lg whitespace-nowrap">
-                <p className="font-display text-sm font-bold text-white">{profileName}</p>
-                <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand-light/70 text-center">
+                <p
+                  className="font-display text-sm font-bold text-white"
+                  style={profileNameColor ? { color: profileNameColor } : undefined}
+                >
+                  {profileName}
+                </p>
+                <p
+                  className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand-light/70 text-center"
+                  style={profileRoleColor ? { color: profileRoleColor } : undefined}
+                >
                   {profileRole}
                 </p>
               </div>

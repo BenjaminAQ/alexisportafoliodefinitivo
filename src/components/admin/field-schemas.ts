@@ -3,7 +3,7 @@
 
 import type { SectionId } from "@/lib/content-types";
 
-export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file";
+export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file" | "color";
 
 export interface FieldSchema {
   key: string;
@@ -17,11 +17,16 @@ export interface FieldSchema {
 export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
   home: [
     { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
+    { key: "eyebrowColor", type: "color", label: "Color del texto superior" },
     { key: "title", type: "textarea", label: "Título principal", hint: "Usa {accent}palabra{/accent} para resaltar texto con el color de marca." },
+    { key: "titleColor", type: "color", label: "Color del título" },
     { key: "subtitle", type: "textarea", label: "Subtítulo / descripción" },
+    { key: "subtitleColor", type: "color", label: "Color del subtítulo" },
     { key: "profileImage", type: "image", label: "Imagen de perfil (circular)" },
     { key: "profileName", type: "text", label: "Nombre", placeholder: "Alexis" },
+    { key: "profileNameColor", type: "color", label: "Color del nombre" },
     { key: "profileRole", type: "text", label: "Cargo / profesión", placeholder: "Ingeniero Civil" },
+    { key: "profileRoleColor", type: "color", label: "Color del cargo" },
     { key: "ctaButtons", type: "objectList", label: "Botones de acción", itemSchema: [
       { key: "label", type: "text", label: "Texto del botón", placeholder: "Ver proyectos" },
       { key: "target", type: "text", label: "Destino (ancla o URL)", placeholder: "#projects" },

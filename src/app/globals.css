@@ -5,18 +5,27 @@
 
 /* ============================================================
    ALEXIS ACADEMIC PORTFOLIO — DESIGN SYSTEM
-   Palette: #00BBD4 / #5DD6E6 / #334E68 / #F5FAFF / #98A6B3 / #FFFFFF
-   Fonts:   Space Grotesk (display) · Inter (body) · JetBrains Mono (code)
+   Palette inspired by engineering brochure:
+     Navy background #0A0E27 → #1A1F4E (gradient)
+     Cyan accent    #00B4D8  (primary, tech)
+     Green accent    #2A9D8F  (secondary, emerald)
+     Light gray text #E0E0E0  (body on dark)
+     White text      #FFFFFF  (headers on dark)
+   Fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono (code)
    ============================================================ */
 
 @theme inline {
   /* Brand palette as Tailwind color tokens */
-  --color-brand: #00bbd4;
-  --color-brand-light: #5dd6e6;
-  --color-ink: #334e68;
-  --color-ink-deep: #1e3248;
-  --color-surface: #f5faff;
-  --color-muted: #98a6b3;
+  --color-brand: #00b4d8;
+  --color-brand-light: #4dc9e8;
+  --color-accent-green: #2a9d8f;
+  --color-accent-green-light: #4cb8ab;
+  --color-ink: #0a0e27;
+  --color-ink-deep: #060a1d;
+  --color-ink-soft: #1a1f4e;
+  --color-surface: #f4f6fb;
+  --color-muted: #8b94a8;
+  --color-text-light: #e0e0e0;
 
   /* shadcn-compatible tokens (mapped to brand) */
   --color-background: var(--background);
@@ -49,69 +58,69 @@
   --radius-xl: 20px;
 
   /* Chart (kept for shadcn chart component) */
-  --color-chart-1: #00bbd4;
-  --color-chart-2: #5dd6e6;
-  --color-chart-3: #334e68;
-  --color-chart-4: #98a6b3;
-  --color-chart-5: #1e3248;
+  --color-chart-1: #00b4d8;
+  --color-chart-2: #2a9d8f;
+  --color-chart-3: #0a0e27;
+  --color-chart-4: #8b94a8;
+  --color-chart-5: #1a1f4e;
 
   /* Sidebar tokens (kept for shadcn) */
   --color-sidebar: var(--ink);
-  --color-sidebar-foreground: #f5faff;
-  --color-sidebar-primary: #00bbd4;
+  --color-sidebar-foreground: #e0e0e0;
+  --color-sidebar-primary: #00b4d8;
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-accent: #1e3248;
-  --color-sidebar-accent-foreground: #f5faff;
-  --color-sidebar-border: rgba(93, 214, 230, 0.18);
-  --color-sidebar-ring: #00bbd4;
+  --color-sidebar-accent: #1a1f4e;
+  --color-sidebar-accent-foreground: #e0e0e0;
+  --color-sidebar-border: rgba(0, 180, 216, 0.18);
+  --color-sidebar-ring: #00b4d8;
 }
 
 /* ============================================================
-   THEME — LIGHT (default, surface background)
+   THEME — LIGHT (default, light surface background)
    ============================================================ */
 :root {
-  --background: #f5faff;
-  --foreground: #334e68;
+  --background: #f4f6fb;
+  --foreground: #0a0e27;
   --card: #ffffff;
-  --card-foreground: #334e68;
+  --card-foreground: #0a0e27;
   --popover: #ffffff;
-  --popover-foreground: #334e68;
-  --primary: #00bbd4;
+  --popover-foreground: #0a0e27;
+  --primary: #00b4d8;
   --primary-foreground: #ffffff;
-  --secondary: #e7f4fb;
-  --secondary-foreground: #334e68;
-  --muted: #eef5fb;
-  --muted-foreground: #98a6b3;
-  --accent: #00bbd4;
+  --secondary: #e3edf7;
+  --secondary-foreground: #0a0e27;
+  --muted: #eef2f8;
+  --muted-foreground: #8b94a8;
+  --accent: #2a9d8f;
   --accent-foreground: #ffffff;
   --destructive: #c0392b;
-  --border: rgba(51, 78, 104, 0.12);
-  --input: rgba(51, 78, 104, 0.16);
-  --ring: #00bbd4;
+  --border: rgba(10, 14, 39, 0.12);
+  --input: rgba(10, 14, 39, 0.16);
+  --ring: #00b4d8;
 }
 
 /* ============================================================
-   THEME — DARK (ink background)
+   THEME — DARK (navy background — the brochure look)
    ============================================================ */
 .dark {
-  --background: #1e3248;
-  --foreground: #f5faff;
-  --card: #334e68;
-  --card-foreground: #f5faff;
-  --popover: #1e3248;
-  --popover-foreground: #f5faff;
-  --primary: #00bbd4;
+  --background: #0a0e27;
+  --foreground: #e0e0e0;
+  --card: #1a1f4e;
+  --card-foreground: #e0e0e0;
+  --popover: #0a0e27;
+  --popover-foreground: #e0e0e0;
+  --primary: #00b4d8;
   --primary-foreground: #ffffff;
-  --secondary: #3b5774;
-  --secondary-foreground: #f5faff;
-  --muted: #2a425a;
-  --muted-foreground: #98a6b3;
-  --accent: #00bbd4;
+  --secondary: #1f2557;
+  --secondary-foreground: #e0e0e0;
+  --muted: #141a3d;
+  --muted-foreground: #8b94a8;
+  --accent: #2a9d8f;
   --accent-foreground: #ffffff;
   --destructive: #e74c3c;
-  --border: rgba(93, 214, 230, 0.18);
-  --input: rgba(93, 214, 230, 0.22);
-  --ring: #00bbd4;
+  --border: rgba(0, 180, 216, 0.18);
+  --input: rgba(0, 180, 216, 0.22);
+  --ring: #00b4d8;
 }
 
 @layer base {
@@ -140,8 +149,8 @@
     font-family: var(--font-mono), ui-monospace, monospace;
   }
   ::selection {
-    background: rgba(0, 187, 212, 0.28);
-    color: #1e3248;
+    background: rgba(0, 180, 216, 0.28);
+    color: #0a0e27;
   }
 }
 
@@ -157,13 +166,13 @@
 
   /* Brand gradients */
   .bg-brand-gradient {
-    background-image: linear-gradient(135deg, #334e68 0%, #1e3248 100%);
+    background-image: linear-gradient(135deg, #0a0e27 0%, #1a1f4e 100%);
   }
   .bg-brand-gradient-soft {
-    background-image: linear-gradient(135deg, #334e68 0%, #00bbd4 140%);
+    background-image: linear-gradient(135deg, #0a0e27 0%, #00b4d8 140%);
   }
   .text-brand-gradient {
-    background-image: linear-gradient(120deg, #5dd6e6 0%, #00bbd4 50%, #5dd6e6 100%);
+    background-image: linear-gradient(120deg, #4dc9e8 0%, #00b4d8 50%, #2a9d8f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -171,20 +180,20 @@
 
   /* Card surface (dark) */
   .surface-card-dark {
-    background-image: linear-gradient(160deg, #334e68 0%, #1e3248 100%);
+    background-image: linear-gradient(160deg, #1a1f4e 0%, #0a0e27 100%);
   }
 
   /* Wire-mesh decorative grid */
   .wire-mesh {
     background-image:
-      linear-gradient(to right, rgba(93, 214, 230, 0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(93, 214, 230, 0.08) 1px, transparent 1px);
+      linear-gradient(to right, rgba(0, 180, 216, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 180, 216, 0.08) 1px, transparent 1px);
     background-size: 48px 48px;
   }
   .wire-mesh-fine {
     background-image:
-      linear-gradient(to right, rgba(93, 214, 230, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(93, 214, 230, 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgba(0, 180, 216, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0, 180, 216, 0.06) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
