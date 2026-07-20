@@ -270,3 +270,20 @@ Stage Summary:
 - New users: auto-created as "pending" in Firestore users collection. Must be promoted to "admin" in Firebase Console to access panel.
 - Footer: Admin section removed (access only via /admin URL directly).
 - Rules updated in firestore.rules and storage.rules (copy-paste ready, Spanish comments).
+
+---
+Task ID: 11
+Agent: orchestrator
+Task: Fix Hostinger deployment — Firebase config hardcoded as fallback so it works on any hosting without env vars.
+
+Work Log:
+- Root cause: .env.local is in .gitignore, so when the user generated the ZIP for Hostinger, the Firebase credentials weren't included. On Hostinger, process.env.NEXT_PUBLIC_FIREBASE_* returned undefined → isFirebaseConfigured=false → fell back to "preview mode" (Gmail input instead of Google popup, localStorage instead of Firestore).
+- Fix: Added FALLBACK_CONFIG with hardcoded Firebase credentials in src/lib/firebase.ts. Config priority: env vars → hardcoded fallback. This is safe because Firebase web API keys are public by design (embedded in client bundles). Security comes from Firestore/Storage rules, not from hiding keys.
+- Added alexispompilla.com to allowedDevOrigins in next.config.ts.
+- Confirmed .env file (not .env.local) now contains the Firebase credentials and will be included in the ZIP.
+- Verified locally: server compiles, HTTP 200, 0 lint errors.
+
+Stage Summary:
+- Firebase config is now hardcoded in the source code as fallback, so it works on ANY hosting (Hostinger, Vercel, Netlify, etc.) without needing .env files.
+- On Hostinger, the user needs to: (1) re-generate the ZIP with the updated src/lib/firebase.ts, (2) upload and rebuild, (3) add alexispompilla.com to Firebase Console → Authentication → Settings → Authorized domains.
+- Real-time sync works via Firestore onSnapshot listeners for all visitors.

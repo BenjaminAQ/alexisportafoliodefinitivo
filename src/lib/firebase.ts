@@ -2,19 +2,35 @@
 // Uses static imports for the modular Firebase SDK. Initializes app + auth +
 // firestore + storage. Services are lazy-initialized on first client access
 // via an async init function; null on the server.
+//
+// Config priority: env vars (NEXT_PUBLIC_FIREBASE_*) → hardcoded fallback.
+// The fallback is safe because Firebase web API keys are public by design
+// (they're embedded in client bundles anyway). Security is provided by
+// Firestore/Storage rules, not by hiding these keys.
 
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 
+// Hardcoded fallback config (used when env vars aren't available, e.g. some
+// hosting providers where the build doesn't have access to .env files).
+const FALLBACK_CONFIG = {
+  apiKey: "AIzaSyBeB5tLApYfA5-3xV8-ahnAeCyr40XPmq8",
+  authDomain: "alexisportafolio-8d4a7.firebaseapp.com",
+  projectId: "alexisportafolio-8d4a7",
+  storageBucket: "alexisportafolio-8d4a7.firebasestorage.app",
+  messagingSenderId: "830645139026",
+  appId: "1:830645139026:web:ab98e1eda089df311ed18b",
+};
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || FALLBACK_CONFIG.apiKey,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || FALLBACK_CONFIG.authDomain,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || FALLBACK_CONFIG.projectId,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || FALLBACK_CONFIG.storageBucket,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || FALLBACK_CONFIG.messagingSenderId,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || FALLBACK_CONFIG.appId,
 };
 
 export const isFirebaseConfigured = Boolean(

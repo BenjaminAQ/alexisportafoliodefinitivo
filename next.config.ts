@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
     "*.space-z.ai",
     "*.z.ai",
     "0.0.0.0",
+    "alexispompilla.com",
+    "*.alexispompilla.com",
   ],
 };
 
