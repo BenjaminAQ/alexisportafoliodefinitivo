@@ -13,12 +13,12 @@ export function TeachingSection() {
   const { data, loading } = useSectionData<TeachingData>("teaching");
 
   return (
-    <Section id="teaching" tone="light">
+    <Section id="teaching" tone="dark" className="overflow-hidden">
       {loading || !data ? (
-        <SectionSkeleton />
+        <SectionSkeleton tone="dark" />
       ) : (
         <>
-          <DynamicSectionHeader header={data.header} />
+          <DynamicSectionHeader header={data.header} tone="dark" />
 
           {data.items.length > 0 ? (
             <motion.div
@@ -35,13 +35,13 @@ export function TeachingSection() {
                     hidden: { opacity: 0, y: 18 },
                     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                   }}
-                  className="group rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10 hover:ring-brand/40 hover:shadow-[0_18px_40px_-20px_rgba(0,187,212,0.35)] hover:-translate-y-1 transition-all duration-300"
+                  className="group rounded-2xl bg-ink-soft/60 p-6 ring-1 ring-inset ring-brand/20 hover:ring-brand/50 hover:shadow-[0_18px_40px_-20px_rgba(0,180,216,0.35)] hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand/10 text-brand ring-1 ring-inset ring-brand/25">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-brand/15 text-brand-light ring-1 ring-inset ring-brand/30">
                     <PortfolioIcon name={item.icon || "book"} width={20} height={20} />
                   </div>
-                  <h3 className="mt-4 font-display text-base font-semibold text-ink leading-snug">{item.title}</h3>
-                  <p className="mt-2 text-sm text-muted leading-relaxed">{item.body}</p>
+                  <h3 className="mt-4 font-display text-base font-semibold text-white leading-snug">{item.title}</h3>
+                  <p className="mt-2 text-sm text-brand-light/70 leading-relaxed">{item.body}</p>
                 </motion.div>
               ))}
             </motion.div>

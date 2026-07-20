@@ -25,12 +25,12 @@ export function ResourcesSection() {
   const { data, loading } = useSectionData<ResourcesData>("resources");
 
   return (
-    <Section id="resources" tone="light">
+    <Section id="resources" tone="dark" className="overflow-hidden">
       {loading || !data ? (
-        <SectionSkeleton />
+        <SectionSkeleton tone="dark" />
       ) : (
         <>
-          <DynamicSectionHeader header={data.header} />
+          <DynamicSectionHeader header={data.header} tone="dark" />
 
           {data.resources.length > 0 ? (
             <motion.div
@@ -49,28 +49,28 @@ export function ResourcesSection() {
                       hidden: { opacity: 0, y: 18 },
                       visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                     }}
-                    className="group relative flex flex-col rounded-2xl bg-white p-5 ring-1 ring-inset ring-ink/10 hover:ring-brand/40 hover:shadow-[0_18px_40px_-20px_rgba(0,187,212,0.4)] hover:-translate-y-1 transition-all duration-300"
+                    className="group relative flex flex-col rounded-2xl bg-ink-soft/60 p-5 ring-1 ring-inset ring-brand/20 hover:ring-brand/50 hover:shadow-[0_18px_40px_-20px_rgba(0,180,216,0.4)] hover:-translate-y-1 transition-all duration-300 backdrop-blur-sm"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 rounded-md bg-brand/10 px-2 py-1 text-[11px] font-semibold text-brand ring-1 ring-inset ring-brand/20">
+                      <span className="inline-flex items-center gap-1.5 rounded-md bg-brand/15 px-2 py-1 text-[11px] font-semibold text-brand-light ring-1 ring-inset ring-brand/30">
                         <PortfolioIcon name={typeIcon(r.type)} width={12} height={12} />
                         {r.type}
                       </span>
                       {r.level && <LevelBadge level={r.level as any} />}
                     </div>
-                    <h3 className="mt-4 font-display text-base font-semibold text-ink leading-snug">{r.title}</h3>
-                    <p className="mt-2 text-sm text-muted leading-relaxed flex-1">{r.description}</p>
-                    <div className="mt-4 space-y-1.5 border-t border-ink/10 pt-3">
+                    <h3 className="mt-4 font-display text-base font-semibold text-white leading-snug">{r.title}</h3>
+                    <p className="mt-2 text-sm text-brand-light/70 leading-relaxed flex-1">{r.description}</p>
+                    <div className="mt-4 space-y-1.5 border-t border-brand/15 pt-3">
                       {r.category && (
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono-code uppercase tracking-wider text-muted">Category</span>
-                          <span className="text-ink/80 text-right max-w-[60%]">{r.category}</span>
+                          <span className="font-mono-code uppercase tracking-wider text-brand-light/50">Categoría</span>
+                          <span className="text-brand-light/90 text-right max-w-[60%]">{r.category}</span>
                         </div>
                       )}
                       {r.duration && (
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono-code uppercase tracking-wider text-muted">Duration</span>
-                          <span className="text-ink/80 inline-flex items-center gap-1">
+                          <span className="font-mono-code uppercase tracking-wider text-brand-light/50">Duración</span>
+                          <span className="text-brand-light/90 inline-flex items-center gap-1">
                             <PortfolioIcon name="clock" width={11} height={11} className="text-brand" />
                             {r.duration}
                           </span>
@@ -78,8 +78,8 @@ export function ResourcesSection() {
                       )}
                       {r.prerequisites && (
                         <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-mono-code uppercase tracking-wider text-muted">Prerequisites</span>
-                          <span className="text-ink/80 text-right max-w-[60%]">{r.prerequisites}</span>
+                          <span className="font-mono-code uppercase tracking-wider text-brand-light/50">Requisitos</span>
+                          <span className="text-brand-light/90 text-right max-w-[60%]">{r.prerequisites}</span>
                         </div>
                       )}
                     </div>

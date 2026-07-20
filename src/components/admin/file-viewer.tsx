@@ -115,6 +115,13 @@ export function FileBadge({
 
 // Previsualización del archivo según su tipo
 function FilePreview({ url, name }: { url: string; name: string }) {
+  const [pdfFailed, setPdfFailed] = React.useState(false);
+  const [officeFailed, setOfficeFailed] = React.useState(false);
+
+  // Detectar tipos de Office
+  const isOfficeDoc = /\.(docx?|xlsx?|pptx?|odt|ods|odp)(\?|$)/i.test(url);
+
+  // 1. Imágenes — siempre funcionan
   if (isImageUrl(url)) {
     return (
       <div className="flex h-full w-full items-center justify-center p-4">
@@ -123,16 +130,8 @@ function FilePreview({ url, name }: { url: string; name: string }) {
       </div>
     );
   }
-  if (isPdfUrl(url)) {
-    return (
-      <iframe
-        src={url}
-        title={name}
-        className="h-full w-full border-0"
-        allow="fullscreen"
-      />
-    );
-  }
+
+  // 2. Videos — siempre funcionan
   if (isVideoUrl(url)) {
     return (
       <div className="flex h-full w-full items-center justify-center p-4">
@@ -142,25 +141,63 @@ function FilePreview({ url, name }: { url: string; name: string }) {
       </div>
     );
   }
-  // Para otros tipos (Word, Excel, etc.) usamos el visor de Google Docs si es una URL pública
-  if (!url.startsWith("data:")) {
+
+  // 3. PDFs — usar <object> con fallback a <embed>, luego a Google Viewer
+  if (isPdfUrl(url) && !pdfFailed) {
+    return (
+      <object
+        data={url}
+        type="application/pdf"
+        className="h-full w-full"
+        title={name}
+      >
+        <iframe
+          src={url}
+          title={name}
+          className="h-full w-full border-0"
+          onError={() => setPdfFailed(true)}
+        />
+      </object>
+    );
+  }
+
+  // 3b. Si el PDF falló en iframe, intentar con Google Docs Viewer como fallback
+  if (isPdfUrl(url) && pdfFailed && !url.startsWith("data:")) {
     return (
       <iframe
         src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
         title={name}
         className="h-full w-full border-0"
         allow="fullscreen"
+        onError={() => setPdfFailed(true)}
       />
     );
   }
-  // Fallback: enlace de descarga
+
+  // 4. Documentos de Office (Word, Excel, PowerPoint) — Microsoft Office Online viewer
+  if (isOfficeDoc && !url.startsWith("data:") && !officeFailed) {
+    return (
+      <iframe
+        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
+        title={name}
+        className="h-full w-full border-0"
+        allow="fullscreen"
+      />
+    );
+  }
+
+  // 5. Fallback final — si todo falla, mostrar opción de descargar
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
       <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
-      <p className="text-sm text-brand-light/70">No se puede previsualizar este archivo.</p>
+      <p className="text-sm text-brand-light/70 max-w-md">
+        No se pudo previsualizar este archivo en el navegador. Puedes descargarlo para verlo.
+      </p>
       <a
         href={url}
         download={name}
+        target="_blank"
+        rel="noopener noreferrer"
         className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
       >
         <PortfolioIcon name="download" width={16} height={16} />

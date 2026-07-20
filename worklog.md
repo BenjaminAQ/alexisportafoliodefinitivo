@@ -224,3 +224,26 @@ Stage Summary:
 - Navbar: single Contact (nav item only), no theme toggle.
 - File system: every uploaded file (PDF, image, Word, video) can be previewed inline AND downloaded, controlled by viewMode select in admin (Oculto / Solo ver / Ver y descargar).
 - Backgrounds: enhanced with neon purple (#7C3AED), cyan (#00B4D8), and deep navy (#0A0E27) radial gradients matching the brochure aesthetic.
+
+---
+Task ID: 9
+Agent: orchestrator
+Task: Fix file preview (Chrome blocks iframes) + alternate section backgrounds dark/light.
+
+Work Log:
+- Rewrote FilePreview in file-viewer.tsx to handle Chrome's iframe restrictions:
+  - Images: <img> (always works)
+  - Videos: <video> (always works)
+  - PDFs: <object type="application/pdf"> with <iframe> fallback inside, then Google Docs Viewer as last resort
+  - Office docs (Word/Excel/PowerPoint): Microsoft Office Online viewer (view.officeapps.live.com/op/embed.aspx?src=)
+  - Fallback: download link if all preview methods fail
+  - Added pdfFailed/officeFailed state for graceful degradation
+- Fixed section background alternation. Previous pattern was: dark, light, dark, light, light, light, light, light, dark (broken).
+- Changed Resources section from tone="light" to tone="dark" + updated cards to dark theme (bg-ink-soft/60, text-white, brand-light text, translated labels to Spanish).
+- Changed Teaching section from tone="light" to tone="dark" + updated cards to dark theme.
+- New pattern: Home(dark) → About(light) → Expertise(dark) → Projects(light) → Resources(dark) → Library(light) → Teaching(dark) → CV(light) → Contact(dark) — perfectly alternating.
+- Verified with Agent Browser: backgrounds alternate correctly (rgb(10,14,39) dark / rgb(244,246,251) light). VLM confirmed proper dark-light-dark-light alternating pattern. ESLint 0 errors.
+
+Stage Summary:
+- File preview now works for PDFs (via <object>), Office docs (via Microsoft Office Online viewer), images, and videos. Chrome iframe restrictions handled with fallbacks.
+- All 9 sections now alternate backgrounds: dark navy → light → dark navy → light → ... → dark navy (footer). No more consecutive same-tone sections.
