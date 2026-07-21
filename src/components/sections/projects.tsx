@@ -66,7 +66,7 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
   const visibleFiles = project.files.filter((f) => f.url && f.viewMode && f.viewMode !== "none");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[92vh] p-0 gap-0 overflow-hidden bg-surface">
+      <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-surface">
         <div className="relative bg-brand-gradient px-6 py-8 sm:px-10">
           <div className="absolute inset-0 wire-mesh opacity-30" />
           <div className="relative">
@@ -79,11 +79,11 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
               {project.level && <LevelBadge level={project.level as any} />}
             </div>
             <DialogHeader className="mt-2">
-              <DialogTitle className="font-display text-3xl sm:text-4xl font-bold text-white text-left">
+              <DialogTitle className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white text-left">
                 {project.title}
               </DialogTitle>
             </DialogHeader>
-            <DialogDescription className="mt-3 text-sm sm:text-base text-brand-light/80 text-left max-w-3xl">
+            <DialogDescription className="mt-3 text-sm sm:text-base lg:text-lg text-brand-light/80 text-left max-w-4xl">
               {project.abstract}
             </DialogDescription>
             {project.tech.length > 0 && (
@@ -96,15 +96,15 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
           </div>
         </div>
 
-        <ScrollArea className="max-h-[65vh]">
+        <ScrollArea className="max-h-[75vh]">
           <div className="px-6 py-6 sm:px-10 space-y-6">
             {project.sections.map((s, i) => (
               <div key={i}>
-                <h3 className="font-display text-lg font-semibold text-ink flex items-center gap-2">
+                <h3 className="font-display text-xl font-semibold text-ink flex items-center gap-2">
                   <span className="h-1 w-5 rounded-full bg-brand" />
                   {s.heading}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/80">{s.body}</p>
+                <p className="mt-2 text-base leading-relaxed text-ink/80">{s.body}</p>
               </div>
             ))}
 

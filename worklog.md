@@ -315,3 +315,31 @@ Stage Summary:
 - Library and Resources sections now show file preview/download buttons based on admin's viewMode setting.
 - Admin can upload ANY file type (ZIP, folders as ZIP, images, documents, videos, code) up to 100 MB.
 - All file previews work: images via <img>, PDFs via <object>, Office via Microsoft viewer, videos via <video>, others via download.
+
+---
+Task ID: 13
+Agent: orchestrator
+Task: Show image thumbnails (not links) + make all modals much bigger.
+
+Work Log:
+- Rewrote FileBadge in file-viewer.tsx:
+  - If file is an image: shows a 48x48 thumbnail (<img>) instead of just an icon.
+  - If file is video/PDF/other: shows appropriate icon (video/pdf/code) in a branded box.
+  - NEVER shows the raw URL/link — only the display name + buttons.
+  - Larger padding, better visual hierarchy.
+- Made FileBadge preview modal MUCH bigger: max-w-[95vw] max-h-[95vh], content height 88vh (was 75vh). Now fills almost the entire screen.
+- Made FilePreviewModal (used by CV) equally big: max-w-[95vw] max-h-[95vh], height 88vh.
+- Made ProjectDetailDialog MUCH bigger:
+  - max-w-[95vw] max-h-[95vh] (was max-w-5xl max-h-92vh)
+  - Title: text-5xl on large screens (was text-3xl)
+  - Abstract: text-lg (was text-base)
+  - Section headings: text-xl (was text-lg)
+  - Body text: text-base (was text-sm)
+  - ScrollArea: max-h-75vh (was 65vh)
+  - More padding (px-10)
+- Verified with Agent Browser: 0 console errors, 10 sections render. ESLint 0 errors.
+
+Stage Summary:
+- Images now show as thumbnails inline (not as links).
+- All modals (project detail, file preview) are now near-fullscreen (95vw x 95vh) for maximum content visibility.
+- File badges show thumbnail + name + Ver/Descargar buttons — never the raw URL.

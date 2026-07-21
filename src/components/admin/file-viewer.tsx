@@ -50,45 +50,75 @@ export function FileBadge({
   if (viewMode === "none" || !url) return null;
 
   const displayName = name || fileNameFromUrl(url, "Archivo");
+  const isImg = isImageUrl(url);
+  const isVid = isVideoUrl(url);
+  const isPdf = isPdfUrl(url);
 
   return (
     <>
-      <div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 ring-1 ring-inset ring-brand/20">
-        <PortfolioIcon name={isImageUrl(url) ? "book" : "pdf"} width={14} height={14} className="text-brand shrink-0" />
-        <span className="flex-1 truncate text-xs text-ink/80 dark:text-brand-light/80 font-mono-code">
+      <div className="flex items-center gap-3 rounded-lg bg-white/5 p-2.5 ring-1 ring-inset ring-brand/20">
+        {/* Miniatura: imagen real si es imagen, sino ícono */}
+        {isImg ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={url}
+            alt={displayName}
+            className="h-12 w-12 shrink-0 rounded-md object-cover ring-1 ring-inset ring-brand/30"
+          />
+        ) : (
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand/15 text-brand-light ring-1 ring-inset ring-brand/30">
+            <PortfolioIcon
+              name={isVid ? "video" : isPdf ? "pdf" : "code"}
+              width={20}
+              height={20}
+            />
+          </div>
+        )}
+
+        {/* Nombre del archivo (NO el link) */}
+        <span className="flex-1 truncate text-xs text-ink/80 dark:text-brand-light/80 font-medium">
           {displayName}
         </span>
-        {canView && (
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1 rounded-md bg-brand/15 px-2 py-1 text-[11px] font-semibold text-brand hover:bg-brand hover:text-white transition-all"
-          >
-            <PortfolioIcon name="play" width={11} height={11} />
-            Ver
-          </button>
-        )}
-        {canDownload && (
-          <a
-            href={url}
-            download={displayName}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-md bg-brand px-2 py-1 text-[11px] font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
-          >
-            <PortfolioIcon name="download" width={11} height={11} />
-            Descargar
-          </a>
-        )}
+
+        {/* Botones */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {canView && (
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="inline-flex items-center gap-1 rounded-md bg-brand/15 px-2.5 py-1.5 text-[11px] font-semibold text-brand hover:bg-brand hover:text-white transition-all"
+            >
+              <PortfolioIcon name="play" width={11} height={11} />
+              Ver
+            </button>
+          )}
+          {canDownload && (
+            <a
+              href={url}
+              download={displayName}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-md bg-brand px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
+            >
+              <PortfolioIcon name="download" width={11} height={11} />
+              Descargar
+            </a>
+          )}
+        </div>
       </div>
 
-      {/* Modal de previsualización */}
+      {/* Modal de previsualización — MUY GRANDE */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-5xl max-h-[90vh] p-0 gap-0 overflow-hidden bg-background">
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-background">
           <DialogTitle className="sr-only">{displayName}</DialogTitle>
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
-            <div className="flex items-center gap-2 min-w-0">
-              <PortfolioIcon name={isImageUrl(url) ? "book" : "pdf"} width={16} height={16} className="text-brand shrink-0" />
+          <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <PortfolioIcon
+                name={isImg ? "book" : isVid ? "video" : isPdf ? "pdf" : "code"}
+                width={18}
+                height={18}
+                className="text-brand shrink-0"
+              />
               <span className="text-sm font-semibold truncate">{displayName}</span>
             </div>
             {canDownload && (
@@ -97,14 +127,14 @@ export function FileBadge({
                 download={displayName}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
+                className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
               >
-                <PortfolioIcon name="download" width={13} height={13} />
+                <PortfolioIcon name="download" width={14} height={14} />
                 Descargar
               </a>
             )}
           </div>
-          <div className="bg-ink-deep/95" style={{ height: "75vh" }}>
+          <div className="bg-ink-deep" style={{ height: "88vh" }}>
             <FilePreview url={url} name={displayName} />
           </div>
         </DialogContent>
@@ -217,14 +247,14 @@ export function FilePreviewModal({
 }) {
   return (
     <Dialog open={!!preview} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-5xl max-h-[90vh] p-0 gap-0 overflow-hidden bg-background">
+      <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-background">
         <DialogTitle className="sr-only">{preview?.name ?? "Archivo"}</DialogTitle>
-        <div className="flex items-center justify-between border-b border-border px-4 py-3">
-          <div className="flex items-center gap-2 min-w-0">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+          <div className="flex items-center gap-2.5 min-w-0">
             <PortfolioIcon
               name={preview && isImageUrl(preview.url) ? "book" : "pdf"}
-              width={16}
-              height={16}
+              width={18}
+              height={18}
               className="text-brand shrink-0"
             />
             <span className="text-sm font-semibold truncate">{preview?.name}</span>
@@ -235,14 +265,14 @@ export function FilePreviewModal({
               download={preview.name}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
             >
               <PortfolioIcon name="download" width={13} height={13} />
               Descargar
             </a>
           )}
         </div>
-        <div className="bg-ink-deep" style={{ height: "75vh" }}>
+        <div className="bg-ink-deep" style={{ height: "88vh" }}>
           {preview && <FilePreview url={preview.url} name={preview.name} />}
         </div>
       </DialogContent>
