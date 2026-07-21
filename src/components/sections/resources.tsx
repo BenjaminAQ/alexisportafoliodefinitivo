@@ -7,6 +7,7 @@ import { LevelBadge } from "../portfolio/primitives";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { FileBadge } from "@/components/admin/file-viewer";
 import type { ResourcesData } from "@/lib/content-types";
 
 function typeIcon(type: string) {
@@ -83,6 +84,15 @@ export function ResourcesSection() {
                         </div>
                       )}
                     </div>
+                    {r.file && r.viewMode && r.viewMode !== "none" && (
+                      <div className="mt-3">
+                        <FileBadge
+                          name={r.title}
+                          url={r.file}
+                          viewMode={r.viewMode}
+                        />
+                      </div>
+                    )}
                   </motion.article>
                 ))}
               </AnimatePresence>

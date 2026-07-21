@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { Section } from "../portfolio/section";
 import { PortfolioIcon } from "../portfolio/icons";
@@ -7,6 +8,7 @@ import { LevelBadge } from "../portfolio/primitives";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { FileBadge } from "@/components/admin/file-viewer";
 import type { LibraryData } from "@/lib/content-types";
 
 export function LibrarySection() {
@@ -38,7 +40,7 @@ export function LibrarySection() {
                       hidden: { opacity: 0, y: 12 },
                       visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
                     }}
-                    className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10 hover:ring-brand/40 hover:shadow-[0_12px_28px_-18px_rgba(0,187,212,0.45)] transition-all"
+                    className="group flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10 hover:ring-brand/40 hover:shadow-[0_12px_28px_-18px_rgba(0,180,216,0.45)] transition-all"
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand ring-1 ring-inset ring-brand/25">
                       <PortfolioIcon name="pdf" width={18} height={18} />
@@ -53,16 +55,15 @@ export function LibrarySection() {
                         {d.date && <><span className="text-ink/30">·</span><time dateTime={d.date}>{d.date}</time></>}
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       {d.level && <LevelBadge level={d.level as any} />}
-                      <a
-                        href="#"
-                        onClick={(e) => e.preventDefault()}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-brand hover:text-white transition-all"
-                      >
-                        <PortfolioIcon name="download" width={12} height={12} />
-                        PDF
-                      </a>
+                      {d.file && d.viewMode && d.viewMode !== "none" ? (
+                        <FileBadge
+                          name={d.title}
+                          url={d.file}
+                          viewMode={d.viewMode}
+                        />
+                      ) : null}
                     </div>
                   </motion.div>
                 ))}

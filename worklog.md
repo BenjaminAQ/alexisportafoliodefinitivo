@@ -287,3 +287,31 @@ Stage Summary:
 - Firebase config is now hardcoded in the source code as fallback, so it works on ANY hosting (Hostinger, Vercel, Netlify, etc.) without needing .env files.
 - On Hostinger, the user needs to: (1) re-generate the ZIP with the updated src/lib/firebase.ts, (2) upload and rebuild, (3) add alexispompilla.com to Firebase Console → Authentication → Settings → Authorized domains.
 - Real-time sync works via Firestore onSnapshot listeners for all visitors.
+
+---
+Task ID: 12
+Agent: orchestrator
+Task: Fix "Objects are not valid as React child" error in Projects modal + allow all file types.
+
+Work Log:
+- Root cause: ProjectItem.files changed from string[] to ProjectFile[] (objects with {name, url, viewMode, id}), but projects.tsx line 114 still tried to render {f} directly as text → React error "Objects are not valid as a React child (found: object with keys {name, id, viewMode, url})".
+- Fixed ProjectDetailDialog in projects.tsx:
+  - Import FileBadge from file-viewer.
+  - Filter visibleFiles = project.files.filter(f => f.url && f.viewMode && f.viewMode !== "none").
+  - Render FileBadge for each visible file (handles view/download buttons + preview modal).
+  - Widened modal from max-w-3xl to max-w-5xl, max-h-88vh to max-h-92vh for more content visibility.
+  - Increased title size to text-3xl/4xl, scroll area to max-h-65vh.
+  - Translated labels to Spanish: "Archivos", "Referencias".
+- Updated Library section: replaced static "PDF" download button with FileBadge that respects viewMode (view/download/none). Each library item now shows Ver/Descargar buttons based on admin settings.
+- Updated Resources section: added FileBadge to each resource card, showing file preview/download when file + viewMode are set.
+- Updated FileField in field-editor.tsx:
+  - Increased file size limit from 25 MB to 100 MB.
+  - Removed accept restriction (was implicit, now accepts ALL file types: PDF, Word, Excel, images, ZIP, RAR, videos, code, etc.).
+  - Added help text: "PDF, Word, Excel, imágenes, ZIP, RAR, videos, código — hasta 100 MB".
+- Verified with Agent Browser: page loads with 0 console errors, projects section renders without React error, 10 sections visible. ESLint 0 errors.
+
+Stage Summary:
+- Projects modal now opens without errors, shows all content (sections, files with preview/download, references) in a wider, more notable dialog.
+- Library and Resources sections now show file preview/download buttons based on admin's viewMode setting.
+- Admin can upload ANY file type (ZIP, folders as ZIP, images, documents, videos, code) up to 100 MB.
+- All file previews work: images via <img>, PDFs via <object>, Office via Microsoft viewer, videos via <video>, others via download.

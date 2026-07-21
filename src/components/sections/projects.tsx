@@ -8,6 +8,7 @@ import { LevelBadge, TechTag } from "../portfolio/primitives";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { FileBadge } from "@/components/admin/file-viewer";
 import type { ProjectsData, ProjectItem } from "@/lib/content-types";
 import {
   Dialog,
@@ -61,24 +62,28 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
 
 function ProjectDetailDialog({ project, open, onOpenChange }: { project: ProjectItem | null; open: boolean; onOpenChange: (v: boolean) => void }) {
   if (!project) return null;
+  // Filtrar archivos visibles (viewMode !== "none" y con url)
+  const visibleFiles = project.files.filter((f) => f.url && f.viewMode && f.viewMode !== "none");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[88vh] p-0 gap-0 overflow-hidden bg-surface">
-        <div className="relative bg-brand-gradient px-6 py-8 sm:px-8">
+      <DialogContent className="max-w-5xl max-h-[92vh] p-0 gap-0 overflow-hidden bg-surface">
+        <div className="relative bg-brand-gradient px-6 py-8 sm:px-10">
           <div className="absolute inset-0 wire-mesh opacity-30" />
           <div className="relative">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-brand-light/70">
-                {project.area}
-              </span>
+              {project.area && (
+                <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-brand-light/70">
+                  {project.area}
+                </span>
+              )}
               {project.level && <LevelBadge level={project.level as any} />}
             </div>
             <DialogHeader className="mt-2">
-              <DialogTitle className="font-display text-2xl sm:text-3xl font-bold text-white text-left">
+              <DialogTitle className="font-display text-3xl sm:text-4xl font-bold text-white text-left">
                 {project.title}
               </DialogTitle>
             </DialogHeader>
-            <DialogDescription className="mt-2 text-sm sm:text-base text-brand-light/80 text-left max-w-2xl">
+            <DialogDescription className="mt-3 text-sm sm:text-base text-brand-light/80 text-left max-w-3xl">
               {project.abstract}
             </DialogDescription>
             {project.tech.length > 0 && (
@@ -91,11 +96,11 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
           </div>
         </div>
 
-        <ScrollArea className="max-h-[55vh]">
-          <div className="px-6 py-6 sm:px-8 space-y-6">
+        <ScrollArea className="max-h-[65vh]">
+          <div className="px-6 py-6 sm:px-10 space-y-6">
             {project.sections.map((s, i) => (
               <div key={i}>
-                <h3 className="font-display text-base font-semibold text-ink flex items-center gap-2">
+                <h3 className="font-display text-lg font-semibold text-ink flex items-center gap-2">
                   <span className="h-1 w-5 rounded-full bg-brand" />
                   {s.heading}
                 </h3>
@@ -103,34 +108,35 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
               </div>
             ))}
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {project.files.length > 0 && (
-                <div className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10">
-                  <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted">Files available</h4>
-                  <ul className="mt-2 space-y-1.5">
-                    {project.files.map((f, i) => (
-                      <li key={i} className="flex items-center gap-2 text-sm text-ink/80">
-                        <PortfolioIcon name="code" width={14} height={14} className="text-brand" />
-                        <span className="font-mono-code text-xs">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
+            {visibleFiles.length > 0 && (
+              <div className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10">
+                <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted mb-3">Archivos</h4>
+                <div className="space-y-2">
+                  {visibleFiles.map((f) => (
+                    <FileBadge
+                      key={f.id || f.url}
+                      name={f.name}
+                      url={f.url}
+                      viewMode={f.viewMode}
+                    />
+                  ))}
                 </div>
-              )}
-              {project.references.length > 0 && (
-                <div className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10">
-                  <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted">References</h4>
-                  <ul className="mt-2 space-y-1.5">
-                    {project.references.map((r, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-ink/80">
-                        <PortfolioIcon name="book" width={14} height={14} className="mt-0.5 text-brand shrink-0" />
-                        <span>{r}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {project.references.length > 0 && (
+              <div className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10">
+                <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted mb-3">Referencias</h4>
+                <ul className="space-y-1.5">
+                  {project.references.map((r, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-ink/80">
+                      <PortfolioIcon name="book" width={14} height={14} className="mt-0.5 text-brand shrink-0" />
+                      <span>{r}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </ScrollArea>
       </DialogContent>

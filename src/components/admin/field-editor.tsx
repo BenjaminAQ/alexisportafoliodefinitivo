@@ -566,8 +566,8 @@ function FileField({
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleFile = async (file: File) => {
-    if (file.size > 25 * 1024 * 1024) {
-      setError("El archivo debe ser menor a 25 MB.");
+    if (file.size > 100 * 1024 * 1024) {
+      setError("El archivo debe ser menor a 100 MB.");
       return;
     }
     setError(null);
@@ -623,6 +623,7 @@ function FileField({
           disabled={uploading}
           className="block w-full text-xs text-muted file:mr-3 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-brand-light hover:file:text-ink file:cursor-pointer file:transition-colors"
         />
+        <p className="mt-1 text-[10px] text-muted/70">PDF, Word, Excel, imágenes, ZIP, RAR, videos, código — hasta 100 MB</p>
         {uploading && progress > 0 && (
           <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
             <div className="h-full bg-brand transition-all duration-150" style={{ width: `${progress}%` }} />
