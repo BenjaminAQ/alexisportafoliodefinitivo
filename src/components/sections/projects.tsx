@@ -91,7 +91,7 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
   const visibleFiles = project.files.filter((f) => f.url && f.viewMode && f.viewMode !== "none");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[70vw] max-h-[90vh] p-0 gap-0 overflow-hidden bg-surface">
+      <DialogContent className="max-w-[92vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-surface">
         {/* Header con imagen de portada */}
         <div className="relative h-48 sm:h-56 overflow-hidden bg-brand-gradient shrink-0">
           {project.coverImage ? (

@@ -167,7 +167,7 @@ function HeaderField({
   onChange: (v: { eyebrow: string; title: string; description: string; eyebrowColor?: string; titleColor?: string; descriptionColor?: string }) => void;
 }) {
   return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10 space-y-3">
+    <div className="space-y-3">
       <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand">Encabezado de la sección</p>
       <Input
         label="Texto superior (eyebrow)"
@@ -382,33 +382,33 @@ function ObjectListField({
         </button>
       </div>
       {value.length === 0 ? (
-        <p className="rounded-md bg-white/50 px-3 py-4 text-center text-xs text-muted ring-1 ring-inset ring-dashed ring-ink/15">
+        <p className="rounded-md bg-surface px-3 py-4 text-center text-xs text-muted ring-1 ring-inset ring-dashed ring-ink/15">
           No hay {label.toLowerCase()} todavía. Pulsa "Añadir" para crear uno.
         </p>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-4">
           {value.map((item, i) => (
-            <li key={(item.id as string) || i} className="rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10">
-              <div className="flex items-center justify-between mb-3">
-                <span className="font-mono-code text-[10px] uppercase tracking-[0.12em] text-brand">
+            <li key={(item.id as string) || i} className="rounded-xl bg-surface p-4 ring-1 ring-inset ring-brand/20">
+              <div className="flex items-center justify-between mb-4 pb-3 border-b border-brand/10">
+                <span className="font-display text-sm font-bold text-brand">
                   #{String(i + 1).padStart(2, "0")} {item.title ? `· ${String(item.title).slice(0, 40)}` : ""}
                 </span>
                 <div className="flex items-center gap-1">
                   <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
-                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Subir">
+                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Subir">
                     <PortfolioIcon name="chevron" width={14} height={14} className="rotate-180" />
                   </button>
                   <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1}
-                    className="p-1 text-muted hover:text-brand disabled:opacity-30" aria-label="Bajar">
+                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Bajar">
                     <PortfolioIcon name="chevron" width={14} height={14} />
                   </button>
                   <button type="button" onClick={() => remove(i)}
-                    className="p-1 text-muted hover:text-red-500" aria-label="Eliminar">
+                    className="p-1.5 text-muted hover:text-red-500 hover:bg-red-50 rounded transition-all" aria-label="Eliminar">
                     <PortfolioIcon name="close" width={14} height={14} />
                   </button>
                 </div>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {itemSchema.map((f) => (
                   <FieldRenderer
                     key={f.key}

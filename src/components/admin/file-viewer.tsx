@@ -176,15 +176,26 @@ function FilePreview({ url, name }: { url: string; name: string }) {
   // 3. PDFs y documentos de Office — usar Google Docs Viewer
   //    Muestra el documento como una hoja limpia, SIN toolbar de descarga.
   //    Funciona para PDF, Word, Excel, PowerPoint, etc.
+  //    Un div invisible bloquea la esquina superior derecha donde Google
+  //    Docs Viewer muestra un botón de "abrir en ventana externa".
   if ((isPdf || isOfficeDoc) && !url.startsWith("data:")) {
     return (
-      <iframe
-        src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
-        title={name}
-        className="h-full w-full border-0 bg-white"
-        allow="fullscreen"
-        sandbox="allow-scripts allow-same-origin allow-popups"
-      />
+      <div className="relative h-full w-full">
+        <iframe
+          src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
+          title={name}
+          className="h-full w-full border-0 bg-white"
+          allow="fullscreen"
+          sandbox="allow-scripts allow-same-origin allow-popups"
+        />
+        {/* Div invisible que bloquea el botón "ventana externa" del Google Docs Viewer */}
+        <div
+          className="absolute top-0 right-0 z-10"
+          style={{ width: "120px", height: "60px", background: "transparent" }}
+          aria-hidden="true"
+          onClick={(e) => e.preventDefault()}
+        />
+      </div>
     );
   }
 

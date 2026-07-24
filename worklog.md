@@ -374,3 +374,30 @@ Stage Summary:
 - Each project can have a cover image (uploaded from admin).
 - Project modal is 70% of screen width for better content visibility.
 - Admin can add unlimited projects per category, create multiple categories.
+
+---
+Task ID: 15
+Agent: orchestrator
+Task: Admin panel visual separators + block external window button in preview + bigger project modal.
+
+Work Log:
+- Admin panel visual improvements (section-editor.tsx):
+  - Each field is now wrapped in its own card: rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10 shadow-sm.
+  - Each card has a header with numbered label (01, 02, 03...) in brand color + field label in semibold, separated by a border-b.
+  - Clear visual separation between fields — no more "field soup".
+- HeaderField: removed its own card wrapper (section-editor now provides the card), keeping just the space-y-3 for internal fields.
+- ObjectListField improvements (field-editor.tsx):
+  - Each list item now uses bg-surface with ring-brand/20 border for clear distinction.
+  - Item header: font-display text-sm font-bold text-brand with border-b separator.
+  - Buttons (move up/down/delete) now have hover backgrounds (bg-brand/10, bg-red-50) and rounded corners.
+  - More spacing (space-y-4) between items and between sub-fields.
+  - Empty state message uses bg-surface instead of bg-white/50.
+- File preview: added invisible div (120px x 60px) in top-right corner over the Google Docs Viewer iframe to block the "open in external window" button. Prevents users from clicking it accidentally.
+- Project modal: changed from max-w-[70vw] to max-w-[92vw] max-h-[95vh] — now fills almost the entire screen like another window.
+- Verified with Agent Browser: 0 console errors, 10 sections render, admin panel loads. ESLint 0 errors.
+
+Stage Summary:
+- Admin panel now has clear visual separators: each field in its own card with numbered header and border.
+- Object list items have better visual hierarchy with branded borders and hover effects.
+- File preview blocks the "external window" button with an invisible overlay.
+- Project detail modal is now 92vw x 95vh — nearly fullscreen.

@@ -109,17 +109,30 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
         </div>
       </div>
 
-      {/* Fields */}
-      <div className="space-y-5">
-        {schema.map((field) => (
-          <FieldRenderer
+      {/* Fields — cada campo en su propia card con borde para separación visual */}
+      <div className="space-y-4">
+        {schema.map((field, idx) => (
+          <div
             key={field.key}
-            schema={field}
-            value={(data as Record<string, unknown>)[field.key]}
-            onChange={(v) => update(field.key, v)}
-            placeholder={field.placeholder}
-            uid={uid}
-          />
+            className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10 shadow-sm"
+          >
+            {/* Etiqueta del campo como header */}
+            <div className="mb-3 flex items-center gap-2 pb-2 border-b border-ink/8">
+              <span className="font-mono-code text-[10px] font-bold uppercase tracking-[0.15em] text-brand">
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+              <span className="font-display text-sm font-semibold text-ink">
+                {field.label}
+              </span>
+            </div>
+            <FieldRenderer
+              schema={field}
+              value={(data as Record<string, unknown>)[field.key]}
+              onChange={(v) => update(field.key, v)}
+              placeholder={field.placeholder}
+              uid={uid}
+            />
+          </div>
         ))}
       </div>
     </div>
