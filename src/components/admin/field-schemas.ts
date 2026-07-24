@@ -58,6 +58,8 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "header", type: "header", label: "Encabezado de la sección" },
     { key: "projects", type: "objectList", label: "Proyectos", itemSchema: [
       { key: "title", type: "text", label: "Título", placeholder: "Solver de análisis matricial" },
+      { key: "category", type: "text", label: "Categoría / Temática", placeholder: "Ej: Análisis Matricial, Dinámica Estructural, Diseño Sísmico...", hint: "Los proyectos se agrupan automáticamente por esta categoría en la web." },
+      { key: "coverImage", type: "image", label: "Imagen de portada del proyecto" },
       { key: "area", type: "text", label: "Área", placeholder: "Análisis Matricial Estructural" },
       { key: "level", type: "text", label: "Nivel", placeholder: "Principiante | Intermedio | Avanzado | Investigación" },
       { key: "abstract", type: "textarea", label: "Resumen" },

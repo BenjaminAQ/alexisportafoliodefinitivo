@@ -144,27 +144,28 @@ export function FileBadge({
 }
 
 // Previsualización del archivo según su tipo
+// Muestra el documento como una hoja limpia (sin barras de herramientas ni
+// opciones de descarga integradas). La descarga se controla desde el botón
+// externo del modal, no desde el visor.
 function FilePreview({ url, name }: { url: string; name: string }) {
-  const [pdfFailed, setPdfFailed] = React.useState(false);
-  const [officeFailed, setOfficeFailed] = React.useState(false);
-
-  // Detectar tipos de Office
+  // Detectar tipos
   const isOfficeDoc = /\.(docx?|xlsx?|pptx?|odt|ods|odp)(\?|$)/i.test(url);
+  const isPdf = isPdfUrl(url);
 
-  // 1. Imágenes — siempre funcionan
+  // 1. Imágenes — visor nativo (limpio, sin toolbar)
   if (isImageUrl(url)) {
     return (
-      <div className="flex h-full w-full items-center justify-center p-4">
+      <div className="flex h-full w-full items-center justify-center bg-ink-deep p-6 overflow-auto">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={url} alt={name} className="max-h-full max-w-full object-contain rounded-lg shadow-2xl" />
       </div>
     );
   }
 
-  // 2. Videos — siempre funcionan
+  // 2. Videos — visor nativo
   if (isVideoUrl(url)) {
     return (
-      <div className="flex h-full w-full items-center justify-center p-4">
+      <div className="flex h-full w-full items-center justify-center bg-ink-deep p-6">
         <video src={url} controls className="max-h-full max-w-full rounded-lg shadow-2xl">
           Tu navegador no soporta la reproducción de video.
         </video>
@@ -172,67 +173,47 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 3. PDFs — usar <object> con fallback a <embed>, luego a Google Viewer
-  if (isPdfUrl(url) && !pdfFailed) {
-    return (
-      <object
-        data={url}
-        type="application/pdf"
-        className="h-full w-full"
-        title={name}
-      >
-        <iframe
-          src={url}
-          title={name}
-          className="h-full w-full border-0"
-          onError={() => setPdfFailed(true)}
-        />
-      </object>
-    );
-  }
-
-  // 3b. Si el PDF falló en iframe, intentar con Google Docs Viewer como fallback
-  if (isPdfUrl(url) && pdfFailed && !url.startsWith("data:")) {
+  // 3. PDFs y documentos de Office — usar Google Docs Viewer
+  //    Muestra el documento como una hoja limpia, SIN toolbar de descarga.
+  //    Funciona para PDF, Word, Excel, PowerPoint, etc.
+  if ((isPdf || isOfficeDoc) && !url.startsWith("data:")) {
     return (
       <iframe
         src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
         title={name}
-        className="h-full w-full border-0"
+        className="h-full w-full border-0 bg-white"
         allow="fullscreen"
-        onError={() => setPdfFailed(true)}
+        sandbox="allow-scripts allow-same-origin allow-popups"
       />
     );
   }
 
-  // 4. Documentos de Office (Word, Excel, PowerPoint) — Microsoft Office Online viewer
-  if (isOfficeDoc && !url.startsWith("data:") && !officeFailed) {
+  // 4. Para data URLs (archivos subidos en modo preview/localStorage) que son PDFs
+  if (isPdf && url.startsWith("data:")) {
     return (
-      <iframe
-        src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`}
+      <object
+        data={url}
+        type="application/pdf"
+        className="h-full w-full bg-white"
         title={name}
-        className="h-full w-full border-0"
-        allow="fullscreen"
-      />
+      >
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
+          <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
+          <p className="text-sm text-brand-light/70 max-w-md">
+            Tu navegador no puede previsualizar este PDF. Descárgalo para verlo.
+          </p>
+        </div>
+      </object>
     );
   }
 
-  // 5. Fallback final — si todo falla, mostrar opción de descargar
+  // 5. Fallback final — si todo falla, mostrar mensaje
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8 bg-ink-deep">
       <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
       <p className="text-sm text-brand-light/70 max-w-md">
-        No se pudo previsualizar este archivo en el navegador. Puedes descargarlo para verlo.
+        No se pudo previsualizar este archivo en el navegador.
       </p>
-      <a
-        href={url}
-        download={name}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
-      >
-        <PortfolioIcon name="download" width={16} height={16} />
-        Descargar archivo
-      </a>
     </div>
   );
 }

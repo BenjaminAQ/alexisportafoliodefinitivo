@@ -80,8 +80,10 @@ export interface ProjectItem {
   title: string;
   abstract: string;
   area: string;
+  category: string; // categoría/temática para agrupar
   tech: string[];
   level: string;
+  coverImage: string; // URL de imagen de portada
   sections: { heading: string; body: string }[];
   files: ProjectFile[];
   references: string[];

@@ -343,3 +343,34 @@ Stage Summary:
 - Images now show as thumbnails inline (not as links).
 - All modals (project detail, file preview) are now near-fullscreen (95vw x 95vh) for maximum content visibility.
 - File badges show thumbnail + name + Ver/Descargar buttons — never the raw URL.
+
+---
+Task ID: 14
+Agent: orchestrator
+Task: New file preview (clean document view, no download in viewer) + group projects by category + cover images + 70% modal.
+
+Work Log:
+- Rewrote FilePreview in file-viewer.tsx:
+  - Images: native <img> viewer (clean, no toolbar) on dark background.
+  - Videos: native <video> player.
+  - PDFs and Office docs (Word, Excel, PowerPoint): Google Docs Viewer (docs.google.com/viewer) — shows document as a clean sheet WITHOUT download toolbar. The download option is only in the external modal button, not in the viewer itself.
+  - Data URL PDFs (preview mode): <object> fallback.
+  - Removed all "Descargar archivo" buttons from inside the viewer — download is now only controlled by the external FileBadge/FilePreviewModal buttons.
+  - Added sandbox attribute to iframes for security.
+- Updated ProjectItem type: added `category` (string for grouping) and `coverImage` (string URL for project cover image).
+- Updated projects schema in field-schemas.ts:
+  - Added "Categoría / Temática" text field with hint "Los proyectos se agrupan automáticamente por esta categoría en la web."
+  - Added "Imagen de portada del proyecto" image upload field.
+- Rewrote projects.tsx completely:
+  - Projects now GROUP BY category: each category gets a header badge with project count, then a grid of project cards underneath.
+  - ProjectCard: shows cover image at top (h-40/44) with gradient overlay, badges (area, level) on top of image, title + abstract + tech tags below. Falls back to brand gradient if no cover image.
+  - ProjectDetailDialog: modal is now max-w-[70vw] max-h-[90vh] (70% of screen width). Has a header with cover image (h-48/56) + gradient overlay + category badge + title. Scrollable content area below with abstract, tech tags, detail sections, files (FileBadge), and references.
+  - Category headers: pill-shaped with brand color, project count, decorative lines on both sides.
+- Verified with Agent Browser: 0 console errors, 10 sections render. ESLint 0 errors.
+
+Stage Summary:
+- File preview now shows documents as clean sheets (Google Docs Viewer) — no download toolbar in the viewer itself.
+- Projects are grouped by category/temática — each category gets its own section with header and grid.
+- Each project can have a cover image (uploaded from admin).
+- Project modal is 70% of screen width for better content visibility.
+- Admin can add unlimited projects per category, create multiple categories.
