@@ -44,9 +44,9 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
         {/* Overlay gradient para legibilidad */}
         <div className="absolute inset-0 bg-gradient-to-t from-ink-deep/80 via-ink-deep/20 to-transparent" />
         {/* Badges sobre la imagen */}
-        <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between">
+        <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between gap-2">
           {project.area && (
-            <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-white/90">
+            <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-white/90 truncate max-w-[70%]">
               {project.area}
             </span>
           )}
@@ -55,11 +55,11 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
       </div>
 
       {/* Contenido */}
-      <div className="flex flex-col flex-1 p-5">
-        <h3 className="font-display text-lg font-bold text-ink leading-snug group-hover:text-brand transition-colors">
+      <div className="flex flex-col flex-1 p-5 min-w-0">
+        <h3 className="font-display text-lg font-bold text-ink leading-snug group-hover:text-brand transition-colors break-words line-clamp-2">
           {project.title}
         </h3>
-        <p className="mt-2 text-sm text-muted leading-relaxed line-clamp-3 flex-1">
+        <p className="mt-2 text-sm text-muted leading-relaxed line-clamp-3 flex-1 break-words overflow-hidden">
           {project.abstract}
         </p>
 
@@ -104,19 +104,19 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
           <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
             <div className="flex flex-wrap items-center gap-2 mb-2">
               {project.category && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-brand/30 px-2.5 py-0.5 text-[11px] font-semibold text-white ring-1 ring-inset ring-brand/40 backdrop-blur-sm">
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand/30 px-2.5 py-0.5 text-[11px] font-semibold text-white ring-1 ring-inset ring-brand/40 backdrop-blur-sm max-w-[200px] truncate">
                   {project.category}
                 </span>
               )}
               {project.area && (
-                <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-brand-light/80">
+                <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-brand-light/80 max-w-[150px] truncate">
                   {project.area}
                 </span>
               )}
               {project.level && <LevelBadge level={project.level as any} />}
             </div>
             <DialogHeader>
-              <DialogTitle className="font-display text-3xl sm:text-4xl font-bold text-white text-left">
+              <DialogTitle className="font-display text-3xl sm:text-4xl font-bold text-white text-left break-words">
                 {project.title}
               </DialogTitle>
             </DialogHeader>
@@ -126,7 +126,7 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
         <ScrollArea className="flex-1" style={{ maxHeight: "calc(90vh - 14rem)" }}>
           <div className="px-6 py-6 sm:px-8 space-y-6">
             {project.abstract && (
-              <DialogDescription className="text-sm sm:text-base text-ink/80 text-left leading-relaxed">
+              <DialogDescription className="text-sm sm:text-base text-ink/80 text-left leading-relaxed break-words">
                 {project.abstract}
               </DialogDescription>
             )}
@@ -140,12 +140,12 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
             )}
 
             {project.sections.map((s, i) => (
-              <div key={i}>
-                <h3 className="font-display text-lg font-semibold text-ink flex items-center gap-2">
-                  <span className="h-1 w-5 rounded-full bg-brand" />
-                  {s.heading}
+              <div key={i} className="min-w-0">
+                <h3 className="font-display text-lg font-semibold text-ink flex items-center gap-2 break-words">
+                  <span className="h-1 w-5 rounded-full bg-brand shrink-0" />
+                  <span className="break-words">{s.heading}</span>
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/80">{s.body}</p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/80 break-words whitespace-pre-wrap">{s.body}</p>
               </div>
             ))}
 
@@ -221,10 +221,10 @@ export function ProjectsSection() {
                   {/* Encabezado de categoría */}
                   <div className="flex items-center gap-3 mb-5">
                     <span className="h-px flex-1 bg-brand/30" />
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-ink px-3 py-1 rounded-full bg-brand/10 ring-1 ring-inset ring-brand/20">
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-ink px-3 py-1 rounded-full bg-brand/10 ring-1 ring-inset ring-brand/20 max-w-xs truncate">
                       {group.category}
                     </h3>
-                    <span className="font-mono-code text-[11px] text-muted">
+                    <span className="font-mono-code text-[11px] text-muted shrink-0">
                       {group.projects.length} {group.projects.length === 1 ? "proyecto" : "proyectos"}
                     </span>
                     <span className="h-px flex-1 bg-brand/30" />

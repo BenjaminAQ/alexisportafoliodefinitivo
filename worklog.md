@@ -401,3 +401,34 @@ Stage Summary:
 - Object list items have better visual hierarchy with branded borders and hover effects.
 - File preview blocks the "external window" button with an invisible overlay.
 - Project detail modal is now 92vw x 95vh — nearly fullscreen.
+
+---
+Task ID: 16
+Agent: orchestrator
+Task: Fix text overflow in projects (break-word, truncate) + ensure files display perfectly.
+
+Work Log:
+- Fixed text overflow issues in projects.tsx:
+  - ProjectCard title: added break-words + line-clamp-2 (was just leading-snug, could overflow).
+  - ProjectCard abstract: added break-words + overflow-hidden (was line-clamp-3 without break-words).
+  - ProjectCard content container: added min-w-0 (critical for flexbox truncation to work).
+  - ProjectCard area badge: added truncate max-w-[70%] so long area names don't push layout.
+  - Category header: added max-w-xs truncate so long category names are truncated.
+  - Category count: added shrink-0 so it doesn't get squeezed.
+- Fixed ProjectDetailDialog:
+  - DialogTitle: added break-words so long titles wrap instead of overflowing.
+  - DialogDescription (abstract): added break-words.
+  - Section headings: added min-w-0 to container, break-words to heading text, shrink-0 to the brand bar.
+  - Section body: added break-words + whitespace-pre-wrap so long text wraps and preserves line breaks.
+  - Category badge in modal: added max-w-[200px] truncate.
+  - Area badge in modal: added max-w-[150px] truncate.
+- Fixed FileBadge in file-viewer.tsx:
+  - Added min-w-0 to the file name span so truncate works properly in flexbox (was flex-1 truncate but missing min-w-0 which is required for truncation in flex children).
+- Verified with Agent Browser: 0 console errors, 10 sections render. ESLint 0 errors.
+
+Stage Summary:
+- All text in project cards and modals now wraps properly (break-words) — no more horizontal overflow with long strings.
+- Long titles, descriptions, category names, and area names are truncated with ellipsis where appropriate.
+- File names in FileBadge truncate properly thanks to min-w-0.
+- Project modal remains at 92vw x 95vh (near fullscreen) for maximum content visibility.
+- File previews use Google Docs Viewer with invisible overlay blocking the external window button.

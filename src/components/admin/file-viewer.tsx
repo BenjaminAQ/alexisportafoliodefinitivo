@@ -76,7 +76,7 @@ export function FileBadge({
         )}
 
         {/* Nombre del archivo (NO el link) */}
-        <span className="flex-1 truncate text-xs text-ink/80 dark:text-brand-light/80 font-medium">
+        <span className="flex-1 min-w-0 truncate text-xs text-ink/80 dark:text-brand-light/80 font-medium">
           {displayName}
         </span>
 
