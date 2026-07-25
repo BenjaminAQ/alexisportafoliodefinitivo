@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-// Determina si una URL es una imagen basándose en la extensión o el tipo MIME
+// Determina si una URL es una imagen
 function isImageUrl(url: string): boolean {
   return /\.(jpg|jpeg|png|gif|webp|svg|bmp|avif)(\?|$)/i.test(url) || url.startsWith("data:image/");
 }
@@ -32,7 +32,9 @@ function fileNameFromUrl(url: string, fallback: string): string {
   }
 }
 
-// Botón individual de archivo (se muestra en cards/listas)
+// ============================================================
+// FILE BADGE — tarjeta de archivo con botones Ver/Descargar
+// ============================================================
 export function FileBadge({
   name,
   url,
@@ -40,13 +42,12 @@ export function FileBadge({
 }: {
   name: string;
   url: string;
-  viewMode?: string; // "none" | "view" | "download"
+  viewMode?: string;
 }) {
   const [open, setOpen] = React.useState(false);
   const canView = viewMode === "view" || viewMode === "download";
   const canDownload = viewMode === "download";
 
-  // Si el modo es "none" o no hay URL, no mostrar nada
   if (viewMode === "none" || !url) return null;
 
   const displayName = name || fileNameFromUrl(url, "Archivo");
@@ -56,39 +57,34 @@ export function FileBadge({
 
   return (
     <>
-      <div className="flex items-center gap-3 rounded-lg bg-white/5 p-2.5 ring-1 ring-inset ring-brand/20">
-        {/* Miniatura: imagen real si es imagen, sino ícono */}
+      <div className="flex items-center gap-3 rounded-xl bg-white p-3 ring-1 ring-inset ring-ink/10 hover:ring-brand/30 transition-all">
+        {/* Miniatura */}
         {isImg ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
             alt={displayName}
-            className="h-12 w-12 shrink-0 rounded-md object-cover ring-1 ring-inset ring-brand/30"
+            className="h-14 w-14 shrink-0 rounded-lg object-cover ring-1 ring-inset ring-brand/20"
           />
         ) : (
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-brand/15 text-brand-light ring-1 ring-inset ring-brand/30">
-            <PortfolioIcon
-              name={isVid ? "video" : isPdf ? "pdf" : "code"}
-              width={20}
-              height={20}
-            />
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand ring-1 ring-inset ring-brand/20">
+            <PortfolioIcon name={isVid ? "video" : isPdf ? "pdf" : "code"} width={22} height={22} />
           </div>
         )}
 
-        {/* Nombre del archivo (NO el link) */}
-        <span className="flex-1 min-w-0 truncate text-xs text-ink/80 dark:text-brand-light/80 font-medium">
+        {/* Nombre */}
+        <span className="flex-1 min-w-0 truncate text-sm font-medium text-ink">
           {displayName}
         </span>
 
         {/* Botones */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           {canView && (
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="inline-flex items-center gap-1 rounded-md bg-brand/15 px-2.5 py-1.5 text-[11px] font-semibold text-brand hover:bg-brand hover:text-white transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand/15 px-3 py-2 text-xs font-semibold text-brand hover:bg-brand hover:text-white transition-all"
             >
-              <PortfolioIcon name="play" width={11} height={11} />
+              <PortfolioIcon name="play" width={13} height={13} />
               Ver
             </button>
           )}
@@ -98,43 +94,55 @@ export function FileBadge({
               download={displayName}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-md bg-brand px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
             >
-              <PortfolioIcon name="download" width={11} height={11} />
+              <PortfolioIcon name="download" width={13} height={13} />
               Descargar
             </a>
           )}
         </div>
       </div>
 
-      {/* Modal de previsualización — MUY GRANDE */}
+      {/* ====== MODAL DE PREVISUALIZACIÓN AMPLIO CON ZOOM ====== */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-background">
+        <DialogContent
+          className="p-0 gap-0 overflow-hidden bg-background flex flex-col"
+          style={{ maxWidth: "96vw", width: "96vw", maxHeight: "96vh", height: "96vh", borderRadius: "12px" }}
+        >
           <DialogTitle className="sr-only">{displayName}</DialogTitle>
-          <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-            <div className="flex items-center gap-2.5 min-w-0">
+
+          {/* Barra superior con nombre + controles de zoom + descargar */}
+          <div className="flex items-center justify-between border-b border-border px-5 py-3 shrink-0 bg-ink text-white">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <PortfolioIcon
                 name={isImg ? "book" : isVid ? "video" : isPdf ? "pdf" : "code"}
                 width={18}
                 height={18}
-                className="text-brand shrink-0"
+                className="text-brand-light shrink-0"
               />
               <span className="text-sm font-semibold truncate">{displayName}</span>
             </div>
+
+            {/* Controles de zoom (solo para imágenes) */}
+            {isImg && <ZoomControls />}
+
+            {/* Botón descargar */}
             {canDownload && (
               <a
                 href={url}
                 download={displayName}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0 ml-3"
               >
                 <PortfolioIcon name="download" width={14} height={14} />
                 Descargar
               </a>
             )}
           </div>
-          <div className="bg-ink-deep" style={{ height: "88vh" }}>
+
+          {/* Contenido del archivo — amplio y con zoom */}
+          <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
             <FilePreview url={url} name={displayName} />
           </div>
         </DialogContent>
@@ -143,29 +151,88 @@ export function FileBadge({
   );
 }
 
-// Previsualización del archivo según su tipo
-// Muestra el documento como una hoja limpia (sin barras de herramientas ni
-// opciones de descarga integradas). La descarga se controla desde el botón
-// externo del modal, no desde el visor.
+// ============================================================
+// CONTROLES DE ZOOM — para imágenes
+// ============================================================
+function ZoomControls() {
+  const [zoom, setZoom] = React.useState(100);
+  // Usar un evento personalizado para comunicar el zoom al FilePreview
+  React.useEffect(() => {
+    window.dispatchEvent(new CustomEvent("file-zoom", { detail: zoom }));
+  }, [zoom]);
+
+  return (
+    <div className="flex items-center gap-1.5 shrink-0">
+      <button
+        type="button"
+        onClick={() => setZoom((z) => Math.max(25, z - 25))}
+        className="h-7 w-7 rounded-md bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center font-bold"
+        aria-label="Alejar"
+      >
+        −
+      </button>
+      <span className="text-xs font-mono-code text-brand-light w-10 text-center">{zoom}%</span>
+      <button
+        type="button"
+        onClick={() => setZoom((z) => Math.min(300, z + 25))}
+        className="h-7 w-7 rounded-md bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center font-bold"
+        aria-label="Acercar"
+      >
+        +
+      </button>
+      <button
+        type="button"
+        onClick={() => setZoom(100)}
+        className="h-7 px-2 rounded-md bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center justify-center text-[10px] font-semibold ml-1"
+        aria-label="Restablecer zoom"
+      >
+        100%
+      </button>
+    </div>
+  );
+}
+
+// ============================================================
+// FILE PREVIEW — renderiza el archivo según su tipo
+// Para imágenes: permite zoom y scroll. Para PDFs/Office: Google Docs Viewer amplio.
+// ============================================================
 function FilePreview({ url, name }: { url: string; name: string }) {
-  // Detectar tipos
+  const [zoom, setZoom] = React.useState(100);
+
+  React.useEffect(() => {
+    const handler = (e: Event) => {
+      setZoom((e as CustomEvent).detail as number);
+    };
+    window.addEventListener("file-zoom", handler);
+    return () => window.removeEventListener("file-zoom", handler);
+  }, []);
+
   const isOfficeDoc = /\.(docx?|xlsx?|pptx?|odt|ods|odp)(\?|$)/i.test(url);
   const isPdf = isPdfUrl(url);
 
-  // 1. Imágenes — visor nativo (limpio, sin toolbar)
+  // 1. Imágenes — con zoom y scroll
   if (isImageUrl(url)) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-ink-deep p-6 overflow-auto">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={url} alt={name} className="max-h-full max-w-full object-contain rounded-lg shadow-2xl" />
+      <div className="h-full w-full overflow-auto flex items-center justify-center p-6">
+        <img
+          src={url}
+          alt={name}
+          className="rounded-lg shadow-2xl transition-transform duration-200"
+          style={{
+            transform: `scale(${zoom / 100})`,
+            transformOrigin: "center center",
+            maxWidth: zoom <= 100 ? "100%" : "none",
+            maxHeight: zoom <= 100 ? "100%" : "none",
+          }}
+        />
       </div>
     );
   }
 
-  // 2. Videos — visor nativo
+  // 2. Videos
   if (isVideoUrl(url)) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-ink-deep p-6">
+      <div className="flex h-full w-full items-center justify-center p-6">
         <video src={url} controls className="max-h-full max-w-full rounded-lg shadow-2xl">
           Tu navegador no soporta la reproducción de video.
         </video>
@@ -173,11 +240,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 3. PDFs y documentos de Office — usar Google Docs Viewer
-  //    Muestra el documento como una hoja limpia, SIN toolbar de descarga.
-  //    Funciona para PDF, Word, Excel, PowerPoint, etc.
-  //    Un div invisible bloquea la esquina superior derecha donde Google
-  //    Docs Viewer muestra un botón de "abrir en ventana externa".
+  // 3. PDFs y Office — Google Docs Viewer amplio
   if ((isPdf || isOfficeDoc) && !url.startsWith("data:")) {
     return (
       <div className="relative h-full w-full">
@@ -188,7 +251,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
           allow="fullscreen"
           sandbox="allow-scripts allow-same-origin allow-popups"
         />
-        {/* Div invisible que bloquea el botón "ventana externa" del Google Docs Viewer */}
+        {/* Div invisible que bloquea el botón "ventana externa" */}
         <div
           className="absolute top-0 right-0 z-10"
           style={{ width: "120px", height: "60px", background: "transparent" }}
@@ -199,15 +262,10 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 4. Para data URLs (archivos subidos en modo preview/localStorage) que son PDFs
+  // 4. Data URL PDFs
   if (isPdf && url.startsWith("data:")) {
     return (
-      <object
-        data={url}
-        type="application/pdf"
-        className="h-full w-full bg-white"
-        title={name}
-      >
+      <object data={url} type="application/pdf" className="h-full w-full bg-white" title={name}>
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
           <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
           <p className="text-sm text-brand-light/70 max-w-md">
@@ -218,9 +276,9 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 5. Fallback final — si todo falla, mostrar mensaje
+  // 5. Fallback
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8 bg-ink-deep">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
       <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
       <p className="text-sm text-brand-light/70 max-w-md">
         No se pudo previsualizar este archivo en el navegador.
@@ -229,7 +287,9 @@ function FilePreview({ url, name }: { url: string; name: string }) {
   );
 }
 
-// Modal de previsualización controlado (para usar desde secciones públicas)
+// ============================================================
+// FILE PREVIEW MODAL — modal controlado para uso externo (CV)
+// ============================================================
 export function FilePreviewModal({
   preview,
   onClose,
@@ -239,15 +299,18 @@ export function FilePreviewModal({
 }) {
   return (
     <Dialog open={!!preview} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-background">
+      <DialogContent
+        className="p-0 gap-0 overflow-hidden bg-background flex flex-col"
+        style={{ maxWidth: "96vw", width: "96vw", maxHeight: "96vh", height: "96vh", borderRadius: "12px" }}
+      >
         <DialogTitle className="sr-only">{preview?.name ?? "Archivo"}</DialogTitle>
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3 shrink-0 bg-ink text-white">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <PortfolioIcon
               name={preview && isImageUrl(preview.url) ? "book" : "pdf"}
               width={18}
               height={18}
-              className="text-brand shrink-0"
+              className="text-brand-light shrink-0"
             />
             <span className="text-sm font-semibold truncate">{preview?.name}</span>
           </div>
@@ -257,18 +320,17 @@ export function FilePreviewModal({
               download={preview.name}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0 ml-3"
             >
-              <PortfolioIcon name="download" width={13} height={13} />
+              <PortfolioIcon name="download" width={14} height={14} />
               Descargar
             </a>
           )}
         </div>
-        <div className="bg-ink-deep" style={{ height: "88vh" }}>
+        <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
           {preview && <FilePreview url={preview.url} name={preview.name} />}
         </div>
       </DialogContent>
     </Dialog>
   );
 }
-

@@ -94,6 +94,12 @@ export interface ProjectsData {
 }
 
 // ---- Open Academic Resources ----
+export interface ResourceFile {
+  id: string;
+  name: string;
+  url: string;
+  viewMode?: string;
+}
 export interface ResourceItem {
   id: string;
   title: string;
@@ -105,7 +111,9 @@ export interface ResourceItem {
   prerequisites: string;
   objectives: string;
   file?: string;
-  viewMode?: string; // "none" | "view" | "download"
+  viewMode?: string;
+  files?: ResourceFile[]; // múltiples archivos (carpeta)
+  coverImage?: string; // imagen de portada
 }
 export interface ResourcesData {
   header: SectionHeader;
@@ -113,6 +121,12 @@ export interface ResourcesData {
 }
 
 // ---- Technical Library ----
+export interface LibraryFile {
+  id: string;
+  name: string;
+  url: string;
+  viewMode?: string;
+}
 export interface LibraryItem {
   id: string;
   title: string;
@@ -123,7 +137,9 @@ export interface LibraryItem {
   language: string;
   date: string;
   file?: string;
-  viewMode?: string; // "none" | "view" | "download"
+  viewMode?: string;
+  files?: LibraryFile[]; // múltiples archivos (carpeta)
+  coverImage?: string; // imagen de portada
 }
 export interface LibraryData {
   header: SectionHeader;

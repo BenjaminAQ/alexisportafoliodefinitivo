@@ -466,3 +466,39 @@ Stage Summary:
 - Files are clearly visible in a dedicated "Archivos del proyecto" section with FileBadge (thumbnails for images, Ver/Descargar buttons).
 - Cover images display in both card and modal header.
 - Category grouping with clean headers.
+
+---
+Task ID: 18
+Agent: orchestrator
+Task: Wider file viewer with zoom + folder system (multiple files) for Library and Resources.
+
+Work Log:
+- Rewrote file-viewer.tsx:
+  - FileBadge: bigger cards (h-14 w-14 thumbnails, text-sm font-medium, px-3 py-2 buttons).
+  - Modal: 96vw x 96vh (near fullscreen) with flex-col layout.
+  - Header bar: dark background (bg-ink), name + zoom controls + download button.
+  - ZoomControls component: − / percentage / + / 100% reset buttons for images.
+  - FilePreview: images support zoom via CSS transform:scale() with scrollable container. PDFs/Office use Google Docs Viewer (full width). Videos use native player.
+  - Zoom communication via window CustomEvent "file-zoom".
+  - FilePreviewModal (CV): same 96vw x 96vh treatment.
+- Updated content-types.ts:
+  - ResourceItem: added files (ResourceFile[]), coverImage.
+  - LibraryItem: added files (LibraryFile[]), coverImage.
+- Updated field-schemas.ts:
+  - Resources: added coverImage, files (objectList with name/url/viewMode), category with hint.
+  - Library: added coverImage, files (objectList with name/url/viewMode), area with hint.
+- Rewrote library.tsx completely:
+  - LibraryCard: cover image, file count badge, title (2-line clamp), metadata, "Ver documento".
+  - LibraryDetailDialog: 96vw x 96vh modal with header image, metadata, files section.
+  - Grouped by area with pill headers.
+- Rewrote resources.tsx completely:
+  - ResourceCard: cover image, file count badge, type icon, title, description, duration.
+  - ResourceDetailDialog: 96vw x 96vh modal with header image, description, objectives, files.
+  - Grouped by category with pill headers.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- File viewer: 96vw wide (near fullscreen), zoom controls for images (25%-300%), Google Docs Viewer for PDFs/Office (full width, no external window button).
+- Library: folder system (multiple files per document), cover images, grouped by area, 96vw modal.
+- Resources: folder system (multiple files per resource), cover images, grouped by category, 96vw modal.
+- All modals are near-fullscreen for maximum readability at 100% zoom.
