@@ -432,3 +432,37 @@ Stage Summary:
 - File names in FileBadge truncate properly thanks to min-w-0.
 - Project modal remains at 92vw x 95vh (near fullscreen) for maximum content visibility.
 - File previews use Google Docs Viewer with invisible overlay blocking the external window button.
+
+---
+Task ID: 17
+Agent: orchestrator
+Task: Completely delete and rebuild Projects section from scratch — near-fullscreen modal, no overflow, files visible.
+
+Work Log:
+- DELETED entire projects.tsx and rebuilt from scratch with clean architecture.
+- ProjectCard (grid card):
+  - Cover image h-44/48 with gradient overlay, badges on top (area truncated to 60%, level badge).
+  - Title: CSS -webkit-line-clamp:2 + overflowWrap:break-word + wordBreak:break-word — NO MORE OVERFLOW.
+  - Abstract: -webkit-line-clamp:3 + overflowWrap:break-word — text wraps properly.
+  - Container has minWidth:0 (critical for flexbox truncation).
+  - Tech tags limited to 3 + "+N" indicator.
+- ProjectDetailDialog (modal):
+  - Size: 96vw x 96vh (near fullscreen) via inline style — fills almost entire screen.
+  - Header (220px): cover image with dark gradient overlay, category badge (truncated 250px), area (truncated 200px), level badge, title with overflowWrap:break-word.
+  - Content area: flex-1 overflow-y-auto, max-w-5xl mx-auto for readability, space-y-8 between sections.
+  - All text elements have overflowWrap:break-word + wordBreak:break-word inline styles (not just Tailwind classes — inline styles are more reliable).
+  - Section body has whiteSpace:pre-wrap to preserve line breaks.
+  - Files section: clearly labeled "Archivos del proyecto" with layers icon, FileBadge for each visible file (images show thumbnails, others show icons, all have Ver/Descargar buttons).
+  - References section: clearly labeled with book icon.
+  - Separators (h-px bg-ink/10) between major content blocks.
+- Projects grouping: by category, with pill-shaped headers (truncated to 320px), project count, decorative lines.
+- Used inline styles for overflow control instead of relying solely on Tailwind classes — more reliable across browsers.
+- Verified: 0 console errors, 10 sections render, ESLint 0 errors.
+
+Stage Summary:
+- Projects section completely rebuilt from scratch.
+- Modal is 96vw x 96vh — nearly fullscreen, like another window.
+- ALL text has break-word — no more horizontal overflow with long strings.
+- Files are clearly visible in a dedicated "Archivos del proyecto" section with FileBadge (thumbnails for images, Ver/Descargar buttons).
+- Cover images display in both card and modal header.
+- Category grouping with clean headers.

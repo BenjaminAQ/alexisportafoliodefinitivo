@@ -13,27 +13,26 @@ import type { ProjectsData, ProjectItem } from "@/lib/content-types";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
+// ============================================================
+// PROJECT CARD — tarjeta visible en el grid
+// ============================================================
 function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => void }) {
   return (
     <motion.button
       layout
       onClick={onOpen}
-      className="group relative flex flex-col text-left rounded-2xl bg-white p-0 ring-1 ring-inset ring-ink/10 shadow-[0_2px_10px_-4px_rgba(51,78,104,0.10)] hover:ring-brand/40 hover:shadow-[0_18px_40px_-20px_rgba(0,180,216,0.45)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      className="group relative flex flex-col text-left rounded-2xl bg-white overflow-hidden ring-1 ring-inset ring-ink/10 shadow-sm hover:ring-brand/40 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
     >
-      {/* Imagen de portada (o gradient fallback) */}
-      <div className="relative h-40 sm:h-44 overflow-hidden bg-brand-gradient">
+      {/* Imagen de portada */}
+      <div className="relative h-44 sm:h-48 overflow-hidden bg-brand-gradient shrink-0">
         {project.coverImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={project.coverImage}
             alt={project.title}
-            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <>
@@ -41,12 +40,11 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
             <div className="absolute -right-6 -top-6 h-28 w-28 rounded-full bg-brand/25 blur-2xl" />
           </>
         )}
-        {/* Overlay gradient para legibilidad */}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-deep/80 via-ink-deep/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
         {/* Badges sobre la imagen */}
         <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between gap-2">
           {project.area && (
-            <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-white/90 truncate max-w-[70%]">
+            <span className="font-mono-code text-[10px] uppercase tracking-wider text-white/90 truncate max-w-[60%]">
               {project.area}
             </span>
           )}
@@ -54,23 +52,29 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
         </div>
       </div>
 
-      {/* Contenido */}
-      <div className="flex flex-col flex-1 p-5 min-w-0">
-        <h3 className="font-display text-lg font-bold text-ink leading-snug group-hover:text-brand transition-colors break-words line-clamp-2">
+      {/* Contenido textual */}
+      <div className="flex flex-col flex-1 p-5" style={{ minWidth: 0 }}>
+        <h3
+          className="font-display text-lg font-bold text-ink leading-snug group-hover:text-brand transition-colors"
+          style={{ overflowWrap: "break-word", wordBreak: "break-word", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+        >
           {project.title}
         </h3>
-        <p className="mt-2 text-sm text-muted leading-relaxed line-clamp-3 flex-1 break-words overflow-hidden">
+        <p
+          className="mt-2 text-sm text-muted leading-relaxed flex-1"
+          style={{ overflowWrap: "break-word", wordBreak: "break-word", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+        >
           {project.abstract}
         </p>
 
         {project.tech.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {project.tech.slice(0, 4).map((t) => (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.tech.slice(0, 3).map((t) => (
               <TechTag key={t}>{t}</TechTag>
             ))}
-            {project.tech.length > 4 && (
+            {project.tech.length > 3 && (
               <span className="inline-flex items-center rounded-md bg-ink px-2 py-0.5 font-mono-code text-[11px] text-brand-light">
-                +{project.tech.length - 4}
+                +{project.tech.length - 3}
               </span>
             )}
           </div>
@@ -85,74 +89,133 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
   );
 }
 
-function ProjectDetailDialog({ project, open, onOpenChange }: { project: ProjectItem | null; open: boolean; onOpenChange: (v: boolean) => void }) {
+// ============================================================
+// PROJECT DETAIL MODAL — casi pantalla completa, sin desbordes
+// ============================================================
+function ProjectDetailDialog({
+  project,
+  open,
+  onOpenChange,
+}: {
+  project: ProjectItem | null;
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
   if (!project) return null;
-  // Filtrar archivos visibles (viewMode !== "none" y con url)
-  const visibleFiles = project.files.filter((f) => f.url && f.viewMode && f.viewMode !== "none");
+
+  const visibleFiles = project.files.filter(
+    (f) => f.url && f.viewMode && f.viewMode !== "none"
+  );
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[92vw] max-h-[95vh] p-0 gap-0 overflow-hidden bg-surface">
-        {/* Header con imagen de portada */}
-        <div className="relative h-48 sm:h-56 overflow-hidden bg-brand-gradient shrink-0">
+      <DialogContent
+        className="p-0 gap-0 overflow-hidden bg-surface flex flex-col"
+        style={{
+          maxWidth: "96vw",
+          width: "96vw",
+          maxHeight: "96vh",
+          height: "96vh",
+          borderRadius: "16px",
+        }}
+      >
+        {/* ====== HEADER con imagen de portada ====== */}
+        <div
+          className="relative overflow-hidden bg-brand-gradient shrink-0"
+          style={{ height: "220px" }}
+        >
           {project.coverImage ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={project.coverImage} alt={project.title} className="h-full w-full object-cover" />
+            <img
+              src={project.coverImage}
+              alt={project.title}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="absolute inset-0 wire-mesh opacity-30" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-deep via-ink-deep/60 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-            <div className="flex flex-wrap items-center gap-2 mb-2">
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-deep via-ink-deep/70 to-transparent" />
+
+          {/* Badges y título sobre la imagen */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8" style={{ minWidth: 0 }}>
+            <div className="flex flex-wrap items-center gap-2 mb-3">
               {project.category && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-brand/30 px-2.5 py-0.5 text-[11px] font-semibold text-white ring-1 ring-inset ring-brand/40 backdrop-blur-sm max-w-[200px] truncate">
+                <span
+                  className="inline-block rounded-full bg-brand/40 px-3 py-1 text-[11px] font-semibold text-white ring-1 ring-inset ring-brand/50 backdrop-blur-sm truncate"
+                  style={{ maxWidth: "250px" }}
+                >
                   {project.category}
                 </span>
               )}
               {project.area && (
-                <span className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-brand-light/80 max-w-[150px] truncate">
+                <span className="font-mono-code text-[10px] uppercase tracking-wider text-brand-light/80 truncate" style={{ maxWidth: "200px" }}>
                   {project.area}
                 </span>
               )}
               {project.level && <LevelBadge level={project.level as any} />}
             </div>
-            <DialogHeader>
-              <DialogTitle className="font-display text-3xl sm:text-4xl font-bold text-white text-left break-words">
-                {project.title}
-              </DialogTitle>
-            </DialogHeader>
+            <DialogTitle
+              className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-left"
+              style={{ overflowWrap: "break-word", wordBreak: "break-word", lineHeight: "1.2" }}
+            >
+              {project.title}
+            </DialogTitle>
           </div>
         </div>
 
-        <ScrollArea className="flex-1" style={{ maxHeight: "calc(90vh - 14rem)" }}>
-          <div className="px-6 py-6 sm:px-8 space-y-6">
+        {/* ====== CONTENIDO SCROLLABLE ====== */}
+        <div
+          className="flex-1 overflow-y-auto px-6 py-6 sm:px-10 sm:py-8"
+          style={{ minWidth: 0 }}
+        >
+          <div className="max-w-5xl mx-auto space-y-8">
+            {/* Resumen */}
             {project.abstract && (
-              <DialogDescription className="text-sm sm:text-base text-ink/80 text-left leading-relaxed break-words">
+              <p
+                className="text-base sm:text-lg text-ink/80 leading-relaxed"
+                style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
+              >
                 {project.abstract}
-              </DialogDescription>
+              </p>
             )}
 
+            {/* Tecnologías */}
             {project.tech.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {project.tech.map((t) => (
                   <TechTag key={t}>{t}</TechTag>
                 ))}
               </div>
             )}
 
+            {/* Separador */}
+            <div className="h-px bg-ink/10" />
+
+            {/* Secciones de detalle */}
             {project.sections.map((s, i) => (
-              <div key={i} className="min-w-0">
-                <h3 className="font-display text-lg font-semibold text-ink flex items-center gap-2 break-words">
-                  <span className="h-1 w-5 rounded-full bg-brand shrink-0" />
-                  <span className="break-words">{s.heading}</span>
+              <div key={i} style={{ minWidth: 0 }}>
+                <h3 className="font-display text-xl font-semibold text-ink flex items-center gap-3 mb-3">
+                  <span className="h-1 w-6 rounded-full bg-brand shrink-0" />
+                  <span style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                    {s.heading}
+                  </span>
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-ink/80 break-words whitespace-pre-wrap">{s.body}</p>
+                <p
+                  className="text-base leading-relaxed text-ink/80 pl-9"
+                  style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}
+                >
+                  {s.body}
+                </p>
               </div>
             ))}
 
+            {/* Archivos */}
             {visibleFiles.length > 0 && (
-              <div className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10">
-                <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted mb-3">Archivos</h4>
-                <div className="space-y-2">
+              <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
+                <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
+                  Archivos del proyecto
+                </h4>
+                <div className="space-y-3">
                   {visibleFiles.map((f) => (
                     <FileBadge
                       key={f.id || f.url}
@@ -165,13 +228,21 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
               </div>
             )}
 
+            {/* Referencias */}
             {project.references.length > 0 && (
-              <div className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10">
-                <h4 className="font-mono-code text-[10px] uppercase tracking-[0.18em] text-muted mb-3">Referencias</h4>
-                <ul className="space-y-1.5">
+              <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
+                <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <PortfolioIcon name="book" width={16} height={16} className="text-brand" />
+                  Referencias
+                </h4>
+                <ul className="space-y-2">
                   {project.references.map((r, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-ink/80">
-                      <PortfolioIcon name="book" width={14} height={14} className="mt-0.5 text-brand shrink-0" />
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-ink/80"
+                      style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
+                    >
+                      <PortfolioIcon name="book" width={14} height={14} className="mt-1 text-brand shrink-0" />
                       <span>{r}</span>
                     </li>
                   ))}
@@ -179,12 +250,15 @@ function ProjectDetailDialog({ project, open, onOpenChange }: { project: Project
               </div>
             )}
           </div>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
 }
 
+// ============================================================
+// PROJECTS SECTION — agrupada por categoría
+// ============================================================
 export function ProjectsSection() {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<ProjectsData>("projects");
@@ -215,13 +289,16 @@ export function ProjectsSection() {
           <DynamicSectionHeader header={data.header} />
 
           {data.projects.length > 0 ? (
-            <div className="mt-8 space-y-10">
+            <div className="mt-10 space-y-12">
               {grouped.map((group) => (
                 <div key={group.category}>
                   {/* Encabezado de categoría */}
-                  <div className="flex items-center gap-3 mb-5">
+                  <div className="flex items-center gap-4 mb-6">
                     <span className="h-px flex-1 bg-brand/30" />
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-ink px-3 py-1 rounded-full bg-brand/10 ring-1 ring-inset ring-brand/20 max-w-xs truncate">
+                    <h3
+                      className="font-display text-lg sm:text-xl font-bold text-ink px-4 py-1.5 rounded-full bg-brand/10 ring-1 ring-inset ring-brand/20 truncate"
+                      style={{ maxWidth: "320px" }}
+                    >
                       {group.category}
                     </h3>
                     <span className="font-mono-code text-[11px] text-muted shrink-0">
@@ -230,14 +307,14 @@ export function ProjectsSection() {
                     <span className="h-px flex-1 bg-brand/30" />
                   </div>
 
-                  {/* Grid de proyectos de esta categoría */}
+                  {/* Grid de proyectos */}
                   <motion.div
                     layout
                     initial={reduce ? false : "hidden"}
                     whileInView="visible"
                     viewport={{ once: true, margin: "-5%" }}
                     variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06 } } }}
-                    className="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                    className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
                   >
                     <AnimatePresence mode="popLayout">
                       {group.projects.map((p) => (
