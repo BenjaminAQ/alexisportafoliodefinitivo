@@ -297,7 +297,6 @@ export function ProjectsSection() {
                     <span className="h-px flex-1 bg-brand/30" />
                     <h3
                       className="font-display text-lg sm:text-xl font-bold text-ink px-4 py-1.5 rounded-full bg-brand/10 ring-1 ring-inset ring-brand/20 truncate"
-                      style={{ maxWidth: "320px" }}
                     >
                       {group.category}
                     </h3>

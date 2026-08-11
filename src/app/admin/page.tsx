@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { useAuth } from "@/components/admin/auth-provider";
 import { SECTION_LABELS } from "@/components/admin/field-schemas";
 import { SectionEditor } from "@/components/admin/section-editor";
@@ -14,6 +15,9 @@ const SECTION_IDS = Object.keys(SECTION_LABELS) as SectionId[];
 
 export default function AdminPage() {
   const { user, loading, signIn, signInWithEmail, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
   const [active, setActive] = React.useState<SectionId>("about");
   const [signInError, setSignInError] = React.useState<string | null>(null);
   const [signingIn, setSigningIn] = React.useState(false);
@@ -83,6 +87,15 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {mounted && (
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  aria-label="Cambiar tema"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"
+                >
+                  <PortfolioIcon name={theme === "dark" ? "sun" : "moon"} width={16} height={16} />
+                </button>
+              )}
               <Link
                 href="/"
                 className="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-3 py-2 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"

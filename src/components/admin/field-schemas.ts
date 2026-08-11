@@ -27,6 +27,9 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "cv", type: "text", label: "Nombre pestaña: CV", placeholder: "CV" },
     { key: "contact", type: "text", label: "Nombre pestaña: Contacto", placeholder: "Contacto" },
   ],
+  order: [
+    { key: "sections", type: "stringList", label: "Orden de las secciones (de arriba a abajo)", hint: "Edita el orden moviendo los elementos. La primera sección siempre es Inicio (Home).", placeholder: "Añadir ID de sección..." },
+  ],
   home: [
     { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
     { key: "eyebrowColor", type: "color", label: "Color del texto superior" },
@@ -177,6 +180,7 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
 
 export const SECTION_LABELS: Record<SectionId, string> = {
   nav: "Navegación",
+  order: "Orden de secciones",
   home: "Inicio",
   about: "Acerca de",
   expertise: "Áreas de Experiencia",

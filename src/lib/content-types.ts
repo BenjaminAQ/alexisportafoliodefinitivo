@@ -12,7 +12,8 @@ export type SectionId =
   | "teaching"
   | "cv"
   | "contact"
-  | "nav";
+  | "nav"
+  | "order";
 
 // ---- Nav labels (editable) ----
 export interface NavLabels {
@@ -25,6 +26,11 @@ export interface NavLabels {
   teaching: string;
   cv: string;
   contact: string;
+}
+
+// ---- Section order (reorderable) ----
+export interface SectionOrderData {
+  sections: string[]; // ordered list of section IDs (excluding "home" which is always first)
 }
 
 // ---- Generic section header (eyebrow + title + description + colors) ----
@@ -212,6 +218,7 @@ export interface ContactData {
 // ---- Union ----
 export type SectionData =
   | NavLabels
+  | SectionOrderData
   | HomeData
   | AboutData
   | ExpertiseData
@@ -224,40 +231,42 @@ export type SectionData =
 
 // ---- Default headers (shown until admin edits them) ----
 export const DEFAULT_HEADERS: Record<SectionId, SectionHeader> = {
+  nav: { eyebrow: "", title: "", description: "" },
+  order: { eyebrow: "", title: "", description: "" },
   home: {
-    eyebrow: "Academic Portfolio · Civil Engineer",
+    eyebrow: "Portafolio Académico · Ingeniero Civil",
     title: "Structural Engineering, {accent}Earthquake Engineering{/accent} and {accent}Computational Tools{/accent}",
     description: "",
   },
   about: {
-    eyebrow: "About",
+    eyebrow: "Acerca de",
     title: "Civil engineer building bridges between theory, computation and practice",
     description: "A focus on advanced structural engineering, computational tools and engineering education.",
   },
   expertise: {
-    eyebrow: "Areas of Expertise",
+    eyebrow: "Áreas de Experiencia",
     title: "Domains of modern structural engineering",
     description: "Each area links theory, computation and engineering practice.",
   },
   projects: {
-    eyebrow: "Projects",
+    eyebrow: "Proyectos",
     title: "Documented work bridging theory, modeling and code",
     description:
       "Each project combines a clear problem statement, methodology, theoretical background, computational implementation and reproducible results.",
   },
   resources: {
-    eyebrow: "Open Academic Resources",
+    eyebrow: "Recursos Académicos",
     title: "A free library for engineering education and capacity building",
     description:
       "Open academic resources in structural engineering, earthquake engineering, computational modeling, and seismic risk assessment.",
   },
   library: {
-    eyebrow: "Technical Library",
+    eyebrow: "Biblioteca Técnica",
     title: "An ordered repository of documents, notes and references",
     description: "Filter by area, level, type, software, language and date.",
   },
   teaching: {
-    eyebrow: "Teaching Portfolio",
+    eyebrow: "Portafolio Docente",
     title: "Teaching that makes advanced engineering accessible and rigorous",
     description:
       "Making advanced structural engineering concepts accessible through rigorous explanations, step-by-step examples, computational tools, and professionally documented technical material.",
@@ -269,7 +278,7 @@ export const DEFAULT_HEADERS: Record<SectionId, SectionHeader> = {
       "A complete overview of education, research interests, teaching, projects, computational tools, software skills and references.",
   },
   contact: {
-    eyebrow: "Contact",
+    eyebrow: "Contacto",
     title: "Let's talk about structures, code or research",
     description:
       "Use the form for technical questions, collaboration proposals, teaching invitations or feedback on the open resources.",
@@ -323,6 +332,10 @@ export function emptySectionData(id: SectionId): SectionData {
         teaching: "Portafolio Docente",
         cv: "CV",
         contact: "Contacto",
+      };
+    case "order":
+      return {
+        sections: ["about", "expertise", "projects", "resources", "library", "teaching", "cv", "contact"],
       };
   }
 }

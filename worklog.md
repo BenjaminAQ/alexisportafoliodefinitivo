@@ -527,3 +527,28 @@ Stage Summary:
 - Nav labels editable from admin panel (section "Navegación"), saved to Firestore, applied in real-time to navbar and footer.
 - About section now has Quick Facts column on the right (dark card with label/value pairs).
 - Expertise and Resources cards show full text without truncation.
+
+---
+Task ID: 20
+Agent: orchestrator
+Task: Fix eyebrow text + admin dark mode + reorderable sections + remove category truncation.
+
+Work Log:
+- Updated DEFAULT_HEADERS to Spanish: about→"Acerca de", expertise→"Áreas de Experiencia", projects→"Proyectos", resources→"Recursos Académicos", library→"Biblioteca Técnica", teaching→"Portafolio Docente", contact→"Contacto". The eyebrow now shows exactly what the admin enters (no translation mismatch).
+- Added nav and order to DEFAULT_HEADERS with empty placeholders.
+- Admin dark mode: added next-themes useTheme toggle button (sun/moon icon) in the admin top bar. Re-enabled enableSystem in ThemeProvider so the toggle works.
+- Section reordering system:
+  - Added SectionOrderData interface (sections: string[]) and "order" to SectionId/SectionData/emptySectionData.
+  - Added "order" schema (stringList of section IDs) and "Orden de secciones" to SECTION_LABELS.
+  - Rewrote page.tsx: loads order from Firestore, maps section IDs to components dynamically, renders in the saved order. Home is always first.
+  - Default order: about, expertise, projects, resources, library, teaching, cv, contact.
+  - Admin can edit the order via the "Orden de secciones" section (stringList with move up/down buttons).
+  - Changes save to Firestore and reflect in real-time for all visitors.
+- Removed truncation from category headers in Projects, Library, and Resources (removed maxWidth:320px and truncate class). Category titles now show fully.
+- Verified: 0 console errors, 10 sections, admin loads, ESLint 0 errors.
+
+Stage Summary:
+- Eyebrow text matches exactly what admin enters (Spanish defaults, no English mismatch).
+- Admin panel has dark/light mode toggle (sun/moon button in top bar).
+- Sections can be reordered from admin → "Orden de secciones" → move up/down → save → reflects on web in real-time.
+- Category headers in Projects/Library/Resources show full text without truncation.
