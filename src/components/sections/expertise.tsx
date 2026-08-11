@@ -59,10 +59,10 @@ export function ExpertiseSection() {
                       </span>
                     </div>
 
-                    <h3 className="relative mt-5 font-display text-xl sm:text-2xl font-bold text-white leading-snug">
+                    <h3 className="relative mt-5 font-display text-xl sm:text-2xl font-bold text-white leading-snug" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
                       {area.title}
                     </h3>
-                    <p className="relative mt-3 text-sm leading-relaxed text-brand-light/75 line-clamp-3">
+                    <p className="relative mt-3 text-sm leading-relaxed text-brand-light/75" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
                       {area.description}
                     </p>
 

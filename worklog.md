@@ -502,3 +502,28 @@ Stage Summary:
 - Library: folder system (multiple files per document), cover images, grouped by area, 96vw modal.
 - Resources: folder system (multiple files per resource), cover images, grouped by category, 96vw modal.
 - All modals are near-fullscreen for maximum readability at 100% zoom.
+
+---
+Task ID: 19
+Agent: orchestrator
+Task: Editable nav labels + Quick Facts in About + remove text truncation in Expertise/Resources.
+
+Work Log:
+- Added "nav" to SectionId type and NavLabels interface (home, about, expertise, projects, resources, library, teaching, cv, contact — all strings).
+- Added "nav" to SectionData union, emptySectionData (with Spanish defaults: Inicio, Acerca de, etc.), and SECTION_SCHEMAS (9 text fields for each nav label).
+- Added "Navegación" to SECTION_LABELS.
+- Updated navbar.tsx: imports useSectionData + NavLabels, loads nav labels from Firestore, getLabel() function returns Firestore label or default. Both desktop nav and mobile drawer use getLabel().
+- Updated footer.tsx: same pattern — loads nav labels from Firestore and uses getLabel() for sitemap links.
+- Added QuickFact interface (id, label, value) and quickFacts field to AboutData.
+- Updated emptySectionData for about to include quickFacts: [].
+- Added quickFacts to about schema in field-schemas.ts (objectList with label + value, hint "Aparece en la columna derecha").
+- Rewrote about.tsx layout: now 3-column grid (col-span-5 portrait, col-span-4 bio+highlights, col-span-3 Quick Facts card). Quick Facts card has dark gradient background, "Datos rápidos" header with layers icon, list of label/value pairs with break-word.
+- Removed line-clamp-3 from Expertise area descriptions — full text now shows.
+- Removed WebkitLineClamp from Resources card titles and descriptions — full text now shows.
+- Added break-word styles to all About text elements.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- Nav labels editable from admin panel (section "Navegación"), saved to Firestore, applied in real-time to navbar and footer.
+- About section now has Quick Facts column on the right (dark card with label/value pairs).
+- Expertise and Resources cards show full text without truncation.

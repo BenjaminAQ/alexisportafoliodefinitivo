@@ -16,6 +16,17 @@ export interface FieldSchema {
 }
 
 export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
+  nav: [
+    { key: "home", type: "text", label: "Nombre pestaña: Inicio", placeholder: "Inicio" },
+    { key: "about", type: "text", label: "Nombre pestaña: Acerca de", placeholder: "Acerca de" },
+    { key: "expertise", type: "text", label: "Nombre pestaña: Áreas de Experiencia", placeholder: "Áreas de Experiencia" },
+    { key: "projects", type: "text", label: "Nombre pestaña: Proyectos", placeholder: "Proyectos" },
+    { key: "resources", type: "text", label: "Nombre pestaña: Recursos Académicos", placeholder: "Recursos Académicos" },
+    { key: "library", type: "text", label: "Nombre pestaña: Biblioteca Técnica", placeholder: "Biblioteca Técnica" },
+    { key: "teaching", type: "text", label: "Nombre pestaña: Portafolio Docente", placeholder: "Portafolio Docente" },
+    { key: "cv", type: "text", label: "Nombre pestaña: CV", placeholder: "CV" },
+    { key: "contact", type: "text", label: "Nombre pestaña: Contacto", placeholder: "Contacto" },
+  ],
   home: [
     { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
     { key: "eyebrowColor", type: "color", label: "Color del texto superior" },
@@ -41,6 +52,10 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "stats", type: "objectList", label: "Estadísticas", itemSchema: [
       { key: "value", type: "text", label: "Valor", placeholder: "8+" },
       { key: "label", type: "text", label: "Etiqueta", placeholder: "Años de experiencia" },
+    ]},
+    { key: "quickFacts", type: "objectList", label: "Datos rápidos (Quick Facts)", hint: "Aparece en la columna derecha de la sección About.", itemSchema: [
+      { key: "label", type: "text", label: "Etiqueta", placeholder: "Rol actual" },
+      { key: "value", type: "text", label: "Valor", placeholder: "Ingeniero Civil" },
     ]},
   ],
   expertise: [
@@ -161,6 +176,7 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
 };
 
 export const SECTION_LABELS: Record<SectionId, string> = {
+  nav: "Navegación",
   home: "Inicio",
   about: "Acerca de",
   expertise: "Áreas de Experiencia",

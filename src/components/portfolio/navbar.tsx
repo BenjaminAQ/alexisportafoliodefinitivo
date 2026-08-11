@@ -5,11 +5,14 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/data/content";
 import { PortfolioIcon } from "./icons";
+import { useSectionData } from "@/components/admin/use-section-data";
+import type { NavLabels } from "@/lib/content-types";
 
 export function Navbar() {
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState<string>("home");
+  const { data: navLabels } = useSectionData<NavLabels>("nav");
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -43,6 +46,15 @@ export function Navbar() {
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+
+  // Get label for a nav item (from Firestore if available, else default)
+  const getLabel = (id: string): string => {
+    if (navLabels && (navLabels as Record<string, string>)[id]) {
+      return (navLabels as Record<string, string>)[id];
+    }
+    const item = NAV_ITEMS.find((n) => n.id === id);
+    return item ? item.label : id;
   };
 
   return (
@@ -88,7 +100,7 @@ export function Navbar() {
                     : "text-brand-light/70 hover:text-white"
                 )}
               >
-                {item.label}
+                {getLabel(item.id)}
                 <span
                   className={cn(
                     "absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand transition-transform duration-300",
@@ -153,7 +165,7 @@ export function Navbar() {
                     : "text-brand-light/80 hover:bg-white/5 hover:text-white"
                 )}
               >
-                {item.label}
+                {getLabel(item.id)}
                 <PortfolioIcon name="arrow" width={14} height={14} className="opacity-50" />
               </button>
             ))}

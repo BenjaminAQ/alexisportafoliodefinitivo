@@ -75,13 +75,13 @@ function ResourceCard({ item, onOpen }: { item: ResourceItem; onOpen: () => void
       <div className="flex flex-col flex-1 p-4" style={{ minWidth: 0 }}>
         <h3
           className="font-display text-base font-bold text-ink leading-snug group-hover:text-brand transition-colors"
-          style={{ overflowWrap: "break-word", wordBreak: "break-word", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+          style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
         >
           {item.title}
         </h3>
         <p
           className="mt-1.5 text-xs text-muted leading-relaxed flex-1"
-          style={{ overflowWrap: "break-word", wordBreak: "break-word", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+          style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
         >
           {item.description}
         </p>

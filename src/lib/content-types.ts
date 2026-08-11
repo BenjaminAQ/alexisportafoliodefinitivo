@@ -11,7 +11,21 @@ export type SectionId =
   | "library"
   | "teaching"
   | "cv"
-  | "contact";
+  | "contact"
+  | "nav";
+
+// ---- Nav labels (editable) ----
+export interface NavLabels {
+  home: string;
+  about: string;
+  expertise: string;
+  projects: string;
+  resources: string;
+  library: string;
+  teaching: string;
+  cv: string;
+  contact: string;
+}
 
 // ---- Generic section header (eyebrow + title + description + colors) ----
 export interface SectionHeader {
@@ -46,11 +60,17 @@ export interface AboutStat {
   value: string;
   label: string;
 }
+export interface QuickFact {
+  id: string;
+  label: string;
+  value: string;
+}
 export interface AboutData {
   header: SectionHeader;
   bio: string;
   highlights: string[];
   stats: AboutStat[];
+  quickFacts: QuickFact[];
 }
 
 // ---- Areas of Expertise ----
@@ -191,6 +211,7 @@ export interface ContactData {
 
 // ---- Union ----
 export type SectionData =
+  | NavLabels
   | HomeData
   | AboutData
   | ExpertiseData
@@ -276,7 +297,7 @@ export function emptySectionData(id: SectionId): SectionData {
         ],
       };
     case "about":
-      return { header, bio: "", highlights: [], stats: [] };
+      return { header, bio: "", highlights: [], stats: [], quickFacts: [] };
     case "expertise":
       return { header, areas: [] };
     case "projects":
@@ -291,5 +312,17 @@ export function emptySectionData(id: SectionId): SectionData {
       return { header, downloads: [], sections: [] };
     case "contact":
       return { header, links: [] };
+    case "nav":
+      return {
+        home: "Inicio",
+        about: "Acerca de",
+        expertise: "Áreas de Experiencia",
+        projects: "Proyectos",
+        resources: "Recursos Académicos",
+        library: "Biblioteca Técnica",
+        teaching: "Portafolio Docente",
+        cv: "CV",
+        contact: "Contacto",
+      };
   }
 }

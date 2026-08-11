@@ -1,10 +1,24 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { NAV_ITEMS } from "@/data/content";
 import { PortfolioIcon } from "./icons";
+import { useSectionData } from "@/components/admin/use-section-data";
+import type { NavLabels } from "@/lib/content-types";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const { data: navLabels } = useSectionData<NavLabels>("nav");
+
+  const getLabel = (id: string): string => {
+    if (navLabels && (navLabels as Record<string, string>)[id]) {
+      return (navLabels as Record<string, string>)[id];
+    }
+    const item = NAV_ITEMS.find((n) => n.id === id);
+    return item ? item.label : id;
+  };
+
   return (
     <footer className="mt-auto bg-brand-gradient text-white">
       {/* Top accent line */}
@@ -62,7 +76,7 @@ export function Footer() {
                         href={`#${item.id}`}
                         className="text-sm text-brand-light/80 hover:text-white transition-colors"
                       >
-                        {item.label}
+                        {getLabel(item.id)}
                       </Link>
                     </li>
                   ))}
