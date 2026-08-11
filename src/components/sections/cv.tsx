@@ -111,6 +111,65 @@ export function CvSection() {
           ) : (
             <EmptyState sectionId="cv" />
           )}
+
+          {/* Línea de tiempo */}
+          {data.timeline && data.timeline.length > 0 && (
+            <motion.div
+              initial={reduce ? false : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true, margin: "-10%" }}
+              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+              className="mt-16"
+            >
+              <h3 className="font-display text-xl font-bold text-ink mb-8 flex items-center gap-3">
+                <span className="h-1 w-6 rounded-full bg-brand" />
+                Trayectoria
+              </h3>
+              <div className="relative">
+                {/* Línea vertical central */}
+                <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-brand/30 sm:-translate-x-1/2" />
+
+                {data.timeline.map((item, i) => (
+                  <motion.div
+                    key={item.id}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                    }}
+                    className={`relative flex items-start gap-6 mb-8 ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"}`}
+                  >
+                    {/* Nodo (punto) */}
+                    <div className="absolute left-4 sm:left-1/2 top-2 -translate-x-1/2 z-10">
+                      <div className="h-4 w-4 rounded-full bg-brand ring-4 ring-brand/20" />
+                    </div>
+
+                    {/* Contenido */}
+                    <div className={`flex-1 pl-12 sm:pl-0 ${i % 2 === 0 ? "sm:pr-12 sm:text-right" : "sm:pl-12"}`}>
+                      <div className="rounded-2xl bg-white p-5 ring-1 ring-inset ring-ink/10 shadow-sm">
+                        {item.date && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-2.5 py-1 text-[11px] font-semibold text-brand mb-2">
+                            <PortfolioIcon name="clock" width={11} height={11} />
+                            {item.date}
+                          </span>
+                        )}
+                        <h4 className="font-display text-base font-bold text-ink mb-1" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                          {item.title}
+                        </h4>
+                        {item.description && (
+                          <p className="text-sm text-muted leading-relaxed" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Espaciador para el otro lado */}
+                    <div className="hidden sm:block flex-1" />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </>
       )}
       <FilePreviewModal preview={preview} onClose={() => setPreview(null)} />

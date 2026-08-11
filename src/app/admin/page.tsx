@@ -70,7 +70,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Top bar */}
       <header className="sticky top-0 z-30 bg-ink/95 backdrop-blur-xl border-b border-brand/20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -119,8 +119,8 @@ export default function AdminPage() {
         <div className="grid gap-6 lg:grid-cols-12">
           {/* Sidebar: section list */}
           <aside className="lg:col-span-3">
-            <div className="lg:sticky lg:top-24 rounded-2xl bg-white p-3 ring-1 ring-inset ring-ink/10">
-              <p className="px-2 py-1.5 font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted">
+            <div className="lg:sticky lg:top-24 rounded-2xl bg-card p-3 ring-1 ring-inset ring-border">
+              <p className="px-2 py-1.5 font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                 Secciones
               </p>
               <nav className="space-y-0.5">
@@ -132,7 +132,7 @@ export default function AdminPage() {
                       "w-full flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-colors",
                       active === id
                         ? "bg-brand text-white"
-                        : "text-ink/80 hover:bg-surface hover:text-brand"
+                        : "text-foreground/80 hover:bg-muted hover:text-brand"
                     )}
                   >
                     <span>{SECTION_LABELS[id]}</span>
@@ -148,8 +148,8 @@ export default function AdminPage() {
             </div>
 
             {/* Backend status */}
-            <div className="mt-3 rounded-xl bg-white p-4 ring-1 ring-inset ring-ink/10">
-              <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted mb-2">
+            <div className="mt-3 rounded-xl bg-card p-4 ring-1 ring-inset ring-border">
+              <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2">
                 Estado del backend
               </p>
               <div className="flex items-center gap-2">
@@ -159,7 +159,7 @@ export default function AdminPage() {
                     isFirebaseConfigured ? "bg-green-500" : "bg-amber-400"
                   )}
                 />
-                <span className="text-xs text-ink/80">
+                <span className="text-xs text-foreground/80">
                   {isFirebaseConfigured ? "Firebase Firestore" : "Almacenamiento local (modo preview)"}
                 </span>
               </div>

@@ -114,14 +114,14 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
         {schema.map((field, idx) => (
           <div
             key={field.key}
-            className="rounded-xl bg-white p-5 ring-1 ring-inset ring-ink/10 shadow-sm"
+            className="rounded-xl bg-card p-5 ring-1 ring-inset ring-border shadow-sm"
           >
             {/* Etiqueta del campo como header */}
-            <div className="mb-3 flex items-center gap-2 pb-2 border-b border-ink/8">
+            <div className="mb-3 flex items-center gap-2 pb-2 border-b border-border">
               <span className="font-mono-code text-[10px] font-bold uppercase tracking-[0.15em] text-brand">
                 {String(idx + 1).padStart(2, "0")}
               </span>
-              <span className="font-display text-sm font-semibold text-ink">
+              <span className="font-display text-sm font-semibold text-foreground">
                 {field.label}
               </span>
             </div>

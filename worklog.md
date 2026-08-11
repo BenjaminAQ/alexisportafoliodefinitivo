@@ -552,3 +552,27 @@ Stage Summary:
 - Admin panel has dark/light mode toggle (sun/moon button in top bar).
 - Sections can be reordered from admin → "Orden de secciones" → move up/down → save → reflects on web in real-time.
 - Category headers in Projects/Library/Resources show full text without truncation.
+
+---
+Task ID: 21
+Agent: orchestrator
+Task: Reorder-only list + fix admin dark mode + English nav labels + CV timeline.
+
+Work Log:
+- Created "reorderList" field type: shows numbered list of sections with only up/down arrows (no add/delete). SECTION_DISPLAY_NAMES maps IDs to English names (About, Areas of Expertise, etc.).
+- Updated order schema to use reorderList instead of stringList.
+- Added reorderList case to FieldRenderer.
+- Fixed admin dark mode: replaced all hardcoded color classes (bg-surface, text-ink, bg-white, ring-ink/10) with theme-aware classes (bg-background, text-foreground, bg-card, ring-border, text-muted-foreground, bg-muted) in admin page, section-editor, and field-editor. Now toggling dark/light actually changes the panel appearance.
+- Re-enabled enableSystem in ThemeProvider so the toggle works.
+- Changed NavLabels defaults back to English: Home, About, Areas of Expertise, Projects, Open Academic Resources, Technical Library, Teaching Portfolio, CV, Contact.
+- Added TimelineItem interface (id, title, date, description) and timeline field to CvData.
+- Updated emptySectionData for cv to include timeline: [].
+- Added timeline to cv schema (objectList with title, date, description).
+- Added timeline rendering to cv.tsx: vertical line with alternating cards (left/right), nodes (dots with ring), date badges, title, description. All text has break-word.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- "Orden de secciones": only allows reordering (up/down arrows), no create/delete.
+- Admin dark mode: fully working — toggling changes background to dark, text to light, cards adapt.
+- Navigation labels: English defaults (Home, About, etc.).
+- CV: new timeline section with vertical line, alternating cards, nodes, dates — editable from admin.

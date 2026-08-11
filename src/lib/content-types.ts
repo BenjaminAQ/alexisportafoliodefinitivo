@@ -196,10 +196,17 @@ export interface CvDownload {
   file: string;      // URL del archivo en Storage
   viewMode?: string; // "none" | "view" | "download"
 }
+export interface TimelineItem {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+}
 export interface CvData {
   header: SectionHeader;
   downloads: CvDownload[];
   sections: CvSection[];
+  timeline: TimelineItem[];
 }
 
 // ---- Contact ----
@@ -318,20 +325,20 @@ export function emptySectionData(id: SectionId): SectionData {
     case "teaching":
       return { header, items: [] };
     case "cv":
-      return { header, downloads: [], sections: [] };
+      return { header, downloads: [], sections: [], timeline: [] };
     case "contact":
       return { header, links: [] };
     case "nav":
       return {
-        home: "Inicio",
-        about: "Acerca de",
-        expertise: "Áreas de Experiencia",
-        projects: "Proyectos",
-        resources: "Recursos Académicos",
-        library: "Biblioteca Técnica",
-        teaching: "Portafolio Docente",
+        home: "Home",
+        about: "About",
+        expertise: "Areas of Expertise",
+        projects: "Projects",
+        resources: "Open Academic Resources",
+        library: "Technical Library",
+        teaching: "Teaching Portfolio",
         cv: "CV",
-        contact: "Contacto",
+        contact: "Contact",
       };
     case "order":
       return {

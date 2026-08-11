@@ -45,8 +45,8 @@ function ColorField({
 
   return (
     <div className="relative">
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <div className="flex items-center gap-2">
         {/* Color swatch button */}
         <button
@@ -66,7 +66,7 @@ function ColorField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder="Automático (hereda del tema)"
-          className="flex-1 rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/60 font-mono-code"
+          className="flex-1 rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-brand/60 font-mono-code"
         />
         {value && (
           <button
@@ -117,11 +117,68 @@ function ColorField({
               value={value}
               onChange={(e) => onChange(e.target.value)}
               placeholder="#00B4D8"
-              className="flex-1 rounded-md bg-surface px-3 py-2 text-sm font-mono-code text-ink ring-1 ring-inset ring-ink/15 focus:outline-none focus:ring-2 focus:ring-brand/60"
+              className="flex-1 rounded-md bg-background px-3 py-2 text-sm font-mono-code text-foreground ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-brand/60"
             />
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+// ---------- Reorder list (solo reordenar, sin crear/eliminar) ----------
+const SECTION_DISPLAY_NAMES: Record<string, string> = {
+  about: "About",
+  expertise: "Areas of Expertise",
+  projects: "Projects",
+  resources: "Open Academic Resources",
+  library: "Technical Library",
+  teaching: "Teaching Portfolio",
+  cv: "CV",
+  contact: "Contact",
+};
+
+function ReorderListField({
+  label,
+  value,
+  onChange,
+  hint,
+}: {
+  label: string;
+  value: string[];
+  onChange: (v: string[]) => void;
+  hint?: string;
+}) {
+  const move = (i: number, dir: -1 | 1) => {
+    const j = i + dir;
+    if (j < 0 || j >= value.length) return;
+    const next = [...value];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+
+  return (
+    <div>
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-2 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
+      <ul className="space-y-2">
+        {value.map((item, i) => (
+          <li key={item} className="flex items-center gap-3 rounded-lg bg-background px-3 py-2.5 ring-1 ring-inset ring-border">
+            <span className="font-mono-code text-[10px] text-brand shrink-0 w-6">{String(i + 1).padStart(2, "0")}</span>
+            <span className="flex-1 text-sm font-medium text-foreground">{SECTION_DISPLAY_NAMES[item] || item}</span>
+            <div className="flex items-center gap-1 shrink-0">
+              <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
+                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Subir">
+                <PortfolioIcon name="chevron" width={14} height={14} className="rotate-180" />
+              </button>
+              <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1}
+                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Bajar">
+                <PortfolioIcon name="chevron" width={14} height={14} />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -142,12 +199,12 @@ function SelectField({
 }) {
   return (
     <label className="block">
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 focus:outline-none focus:ring-2 focus:ring-brand/60 cursor-pointer"
+        className="w-full rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-brand/60 cursor-pointer"
       >
         <option value="">— Seleccionar —</option>
         {options.map((opt) => (
@@ -222,14 +279,14 @@ function Input({
 }) {
   return (
     <label className="block">
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
+        className="w-full rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
       />
     </label>
   );
@@ -251,14 +308,14 @@ function TextArea({
 }) {
   return (
     <label className="block">
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-1.5 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <textarea
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         rows={4}
-        className="w-full resize-y rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
+        className="w-full resize-y rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
       />
     </label>
   );
@@ -285,7 +342,7 @@ function StringListField({
   };
   return (
     <div>
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
       <div className="flex gap-2">
         <input
           type="text"
@@ -298,12 +355,12 @@ function StringListField({
             }
           }}
           placeholder={placeholder}
-          className="flex-1 rounded-md bg-surface px-3 py-2 text-sm text-ink ring-1 ring-inset ring-ink/15 placeholder:text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
+          className="flex-1 rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-brand/60"
         />
         <button
           type="button"
           onClick={add}
-          className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
+          className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-foreground transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
           Añadir
@@ -313,7 +370,7 @@ function StringListField({
         <ul className="mt-2 space-y-1">
           {value.map((item, i) => (
             <li key={i} className="flex items-center gap-2 rounded-md bg-white px-3 py-1.5 ring-1 ring-inset ring-ink/10 group">
-              <span className="flex-1 text-sm text-ink">{item}</span>
+              <span className="flex-1 text-sm text-foreground">{item}</span>
               <button
                 type="button"
                 onClick={() => onChange(value.filter((_, j) => j !== i))}
@@ -375,20 +432,20 @@ function ObjectListField({
         <button
           type="button"
           onClick={add}
-          className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
+          className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-foreground transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
           Añadir {label.replace(/s$/, "").toLowerCase()}
         </button>
       </div>
       {value.length === 0 ? (
-        <p className="rounded-md bg-surface px-3 py-4 text-center text-xs text-muted ring-1 ring-inset ring-dashed ring-ink/15">
+        <p className="rounded-md bg-muted px-3 py-4 text-center text-xs text-muted-foreground ring-1 ring-inset ring-dashed ring-ink/15">
           No hay {label.toLowerCase()} todavía. Pulsa "Añadir" para crear uno.
         </p>
       ) : (
         <ul className="space-y-4">
           {value.map((item, i) => (
-            <li key={(item.id as string) || i} className="rounded-xl bg-surface p-4 ring-1 ring-inset ring-brand/20">
+            <li key={(item.id as string) || i} className="rounded-xl bg-muted p-4 ring-1 ring-inset ring-border">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-brand/10">
                 <span className="font-display text-sm font-bold text-brand">
                   #{String(i + 1).padStart(2, "0")} {item.title ? `· ${String(item.title).slice(0, 40)}` : ""}
@@ -479,11 +536,11 @@ function ImageField({
 
   return (
     <div>
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-2 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-2 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <div className="flex items-start gap-4">
         {/* Preview */}
-        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full bg-surface ring-1 ring-inset ring-ink/15 flex items-center justify-center">
+        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-inset ring-border flex items-center justify-center">
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={value} alt="Preview" className="h-full w-full object-cover" />
@@ -508,7 +565,7 @@ function ImageField({
               e.target.value = "";
             }}
             disabled={uploading}
-            className="block w-full text-xs text-muted file:mr-3 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-brand-light hover:file:text-ink file:cursor-pointer file:transition-colors"
+            className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-brand-light hover:file:text-foreground file:cursor-pointer file:transition-colors"
           />
           {uploading && progress > 0 && (
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
@@ -523,7 +580,7 @@ function ImageField({
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
-                className="inline-flex items-center gap-1 rounded-md bg-white px-2.5 py-1 text-[11px] font-semibold text-ink ring-1 ring-inset ring-ink/15 hover:ring-brand hover:text-brand transition-all"
+                className="inline-flex items-center gap-1 rounded-md bg-muted px-2.5 py-1 text-[11px] font-semibold text-foreground ring-1 ring-inset ring-border hover:ring-brand hover:text-brand transition-all"
               >
                 <PortfolioIcon name="arrow" width={11} height={11} className="rotate-[-45deg]" />
                 Reemplazar
@@ -593,8 +650,8 @@ function FileField({
 
   return (
     <div>
-      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted mb-1">{label}</span>
-      {hint && <p className="mb-2 text-[11px] text-muted/80 leading-snug">{hint}</p>}
+      <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
+      {hint && <p className="mb-2 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <div className="space-y-2">
         {value && (
           <div className="flex items-center gap-2 rounded-md bg-white px-3 py-2 ring-1 ring-inset ring-ink/10">
@@ -621,7 +678,7 @@ function FileField({
             e.target.value = "";
           }}
           disabled={uploading}
-          className="block w-full text-xs text-muted file:mr-3 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-brand-light hover:file:text-ink file:cursor-pointer file:transition-colors"
+          className="block w-full text-xs text-muted-foreground file:mr-3 file:rounded-md file:border-0 file:bg-brand file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-brand-light hover:file:text-foreground file:cursor-pointer file:transition-colors"
         />
         <p className="mt-1 text-[10px] text-muted/70">PDF, Word, Excel, imágenes, ZIP, RAR, videos, código — hasta 100 MB</p>
         {uploading && progress > 0 && (
@@ -706,6 +763,15 @@ export function FieldRenderer({
           onChange={onChange}
           hint={schema.hint}
           options={schema.options}
+        />
+      );
+    case "reorderList":
+      return (
+        <ReorderListField
+          label={schema.label}
+          value={(value as string[]) ?? []}
+          onChange={onChange}
+          hint={schema.hint}
         />
       );
     default:

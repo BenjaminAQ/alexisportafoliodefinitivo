@@ -3,7 +3,7 @@
 
 import type { SectionId } from "@/lib/content-types";
 
-export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file" | "color" | "select";
+export type FieldType = "text" | "textarea" | "stringList" | "objectList" | "header" | "image" | "file" | "color" | "select" | "reorderList";
 
 export interface FieldSchema {
   key: string;
@@ -28,7 +28,7 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "contact", type: "text", label: "Nombre pestaña: Contacto", placeholder: "Contacto" },
   ],
   order: [
-    { key: "sections", type: "stringList", label: "Orden de las secciones (de arriba a abajo)", hint: "Edita el orden moviendo los elementos. La primera sección siempre es Inicio (Home).", placeholder: "Añadir ID de sección..." },
+    { key: "sections", type: "reorderList", label: "Orden de las secciones", hint: "Usa las flechas ↑↓ para reordenar. Inicio (Home) siempre va primero y no se puede mover." },
   ],
   home: [
     { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
@@ -165,6 +165,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "sections", type: "objectList", label: "Secciones del CV", itemSchema: [
       { key: "title", type: "text", label: "Título de la sección", placeholder: "Educación" },
       { key: "items", type: "stringList", label: "Elementos", placeholder: "Añadir un elemento..." },
+    ]},
+    { key: "timeline", type: "objectList", label: "Línea de tiempo", hint: "Aparece como una línea de tiempo vertical con nodos y fechas.", itemSchema: [
+      { key: "title", type: "text", label: "Título", placeholder: "Ingeniero Civil" },
+      { key: "date", type: "text", label: "Fecha / Período", placeholder: "2020 - 2024" },
+      { key: "description", type: "textarea", label: "Descripción" },
     ]},
   ],
   contact: [
