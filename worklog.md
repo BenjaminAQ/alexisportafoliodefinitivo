@@ -633,3 +633,30 @@ Stage Summary:
 - CV: timeline on the right (PC), below on mobile. Download buttons more aesthetic. "Timeline" in English.
 - Teaching: activities timeline centered and larger. "Activities" in English.
 - All cards adapt to light/dark tone using conditional classes.
+
+---
+Task ID: 24
+Agent: orchestrator
+Task: Teaching activities with image+text layout + About redesign with left box + right fact sections with emojis.
+
+Work Log:
+- Updated TeachingItem and TeachingActivity types to include `image` field.
+- Updated teaching schema: items now have optional image field, activities have image field (left side).
+- Rewrote teaching.tsx:
+  - Items: cards with optional image at top (h-40, object-cover, hover scale).
+  - Activities: each activity is a horizontal card with image on left (sm:w-48) and text on right (title, date, description). Stacks vertically on mobile. No timeline — simple clean layout.
+  - "Activities" header in English.
+  - All cards use conditional classes for light/dark tone.
+- Added FactSection interface (id, emoji, title, items[]) and factSections field to AboutData.
+- Updated about schema: added factSections (objectList with emoji, title, items stringList).
+- Rewrote about.tsx completely:
+  - Left column (lg:col-span-7): rounded box with bio + highlights. Uses conditional classes for light/dark.
+  - Right column (lg:col-span-5): rounded box with fact sections. Each section has emoji + title + bulleted list. Quick Facts (legacy) still supported.
+  - Responsive: stacks vertically on mobile (left above right).
+  - All text has break-word.
+- Verified: 0 console errors, 10 sections, responsive on 375px and 1440px, ESLint 0 errors.
+
+Stage Summary:
+- Teaching: activities now show image left + text right (no timeline). Items support optional images.
+- About: left box with all info (bio + highlights), right box with fact sections (emoji + title + list items). Fully responsive.
+- All sections use conditional classes for light/dark tone adaptation.

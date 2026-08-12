@@ -50,11 +50,16 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
   ],
   about: [
     { key: "header", type: "header", label: "Encabezado de la sección" },
-    { key: "bio", type: "textarea", label: "Biografía", placeholder: "Tu biografía profesional..." },
+    { key: "bio", type: "textarea", label: "Biografía (cuadro izquierdo)", placeholder: "Toda la información que se mostrará en el cuadro izquierdo..." },
     { key: "highlights", type: "stringList", label: "Puntos destacados", placeholder: "Añadir un punto destacado..." },
     { key: "stats", type: "objectList", label: "Estadísticas", itemSchema: [
       { key: "value", type: "text", label: "Valor", placeholder: "8+" },
       { key: "label", type: "text", label: "Etiqueta", placeholder: "Años de experiencia" },
+    ]},
+    { key: "factSections", type: "objectList", label: "Secciones de datos (lado derecho)", hint: "Cada sección tiene emoji, título y lista de items. Aparece en la columna derecha de About.", itemSchema: [
+      { key: "emoji", type: "text", label: "Emoji", placeholder: "🎓" },
+      { key: "title", type: "text", label: "Título", placeholder: "Education" },
+      { key: "items", type: "stringList", label: "Items", placeholder: "Añadir item..." },
     ]},
     { key: "quickFacts", type: "objectList", label: "Datos rápidos (Quick Facts)", hint: "Aparece en la columna derecha de la sección About.", itemSchema: [
       { key: "label", type: "text", label: "Etiqueta", placeholder: "Rol actual" },
@@ -148,11 +153,13 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "items", type: "objectList", label: "Elementos de enseñanza", itemSchema: [
       { key: "title", type: "text", label: "Título" },
       { key: "icon", type: "text", label: "Nombre del ícono", placeholder: "book | layers | code | users | target" },
+      { key: "image", type: "image", label: "Imagen (opcional)" },
       { key: "body", type: "textarea", label: "Contenido" },
     ]},
-    { key: "activities", type: "objectList", label: "Actividades (línea de tiempo)", hint: "Se muestran como una línea de tiempo vertical sin recuadros.", itemSchema: [
-      { key: "title", type: "text", label: "Título", placeholder: "Curso de Análisis Estructural" },
-      { key: "date", type: "text", label: "Fecha / Período", placeholder: "2024 - Presente" },
+    { key: "activities", type: "objectList", label: "Activities", hint: "Imagen a la izquierda, texto a la derecha.", itemSchema: [
+      { key: "image", type: "image", label: "Imagen (izquierda)" },
+      { key: "title", type: "text", label: "Título", placeholder: "Course title" },
+      { key: "date", type: "text", label: "Fecha / Período", placeholder: "2024 - Present" },
       { key: "description", type: "textarea", label: "Descripción" },
     ]},
   ],

@@ -66,10 +66,11 @@ export interface AboutStat {
   value: string;
   label: string;
 }
-export interface QuickFact {
+export interface FactSection {
   id: string;
-  label: string;
-  value: string;
+  emoji: string;
+  title: string;
+  items: string[];
 }
 export interface AboutData {
   header: SectionHeader;
@@ -77,6 +78,7 @@ export interface AboutData {
   highlights: string[];
   stats: AboutStat[];
   quickFacts: QuickFact[];
+  factSections: FactSection[];
 }
 
 // ---- Areas of Expertise ----
@@ -178,12 +180,14 @@ export interface TeachingItem {
   icon: string;
   title: string;
   body: string;
+  image: string;
 }
 export interface TeachingActivity {
   id: string;
   title: string;
   date: string;
   description: string;
+  image: string;
 }
 export interface TeachingData {
   header: SectionHeader;
@@ -320,7 +324,7 @@ export function emptySectionData(id: SectionId): SectionData {
         ],
       };
     case "about":
-      return { header, bio: "", highlights: [], stats: [], quickFacts: [] };
+      return { header, bio: "", highlights: [], stats: [], quickFacts: [], factSections: [] };
     case "expertise":
       return { header, areas: [] };
     case "projects":
