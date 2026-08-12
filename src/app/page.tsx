@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Navbar } from "@/components/portfolio/navbar";
 import { Footer } from "@/components/portfolio/footer";
+import { LoadingScreen } from "@/components/portfolio/loading-screen";
 import { HeroSection } from "@/components/sections/hero";
 import { AboutSection } from "@/components/sections/about";
 import { ExpertiseSection } from "@/components/sections/expertise";
@@ -30,11 +31,14 @@ const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
 const DEFAULT_ORDER = ["about", "expertise", "projects", "resources", "library", "teaching", "cv", "contact"];
 
 export default function Home() {
-  const { data: orderData, loading } = useSectionData<SectionOrderData>("order");
+  const [loading, setLoading] = React.useState(true);
+  const { data: orderData } = useSectionData<SectionOrderData>("order");
   const order = (orderData?.sections && orderData.sections.length > 0) ? orderData.sections : DEFAULT_ORDER;
 
   return (
     <div className="relative flex min-h-screen flex-col bg-background text-foreground">
+      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+
       <a
         href="#home"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"

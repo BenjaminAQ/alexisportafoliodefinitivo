@@ -576,3 +576,34 @@ Stage Summary:
 - Admin dark mode: fully working — toggling changes background to dark, text to light, cards adapt.
 - Navigation labels: English defaults (Home, About, etc.).
 - CV: new timeline section with vertical line, alternating cards, nodes, dates — editable from admin.
+
+---
+Task ID: 22
+Agent: orchestrator
+Task: Teaching timeline (no boxes) + admin dark/light improvements + 3s loading screen.
+
+Work Log:
+- Added TeachingActivity interface (id, title, date, description) and activities field to TeachingData.
+- Updated emptySectionData for teaching to include activities: [].
+- Added activities to teaching schema (objectList with title, date, description).
+- Added timeline rendering to teaching.tsx: vertical line with gradient (from-brand via-brand/50 to-transparent), glowing nodes (bg-brand with shadow and ring), no boxes — just text with date badge, title, description. Uses brand palette colors (text-white, text-brand, text-brand-light/70).
+- Fixed admin dark/light mode contrast:
+  - ObjectListField items: bg-muted → bg-card with ring-brand/20 for better visibility.
+  - FileBadge: bg-white → bg-card, ring-ink/10 → ring-border.
+  - File link preview: bg-white → bg-card.
+  - Empty state: bg-muted → bg-muted/50.
+  - All use theme-aware classes that adapt to dark/light.
+- Created LoadingScreen component: 3-second animated loading screen with:
+  - Navy gradient background with wire-mesh and glow blobs.
+  - Animated "A" logo with pulsing glow.
+  - "Alexis." name and "STRUCTURAL ENGINEERING" subtitle.
+  - Progress bar (0-100% over 3 seconds) with gradient fill.
+  - Percentage counter.
+  - Fade-out animation on completion.
+- Integrated LoadingScreen in page.tsx: shows on page load, disappears after 3 seconds, then content is visible.
+- Verified: loading screen appears at 0.5s, page content visible after 3s, 0 console errors, ESLint 0 errors.
+
+Stage Summary:
+- Teaching: timeline of activities without boxes, using brand palette (glowing nodes, gradient line, text-based layout).
+- Admin: improved dark/light contrast with theme-aware classes on all form elements.
+- Loading screen: 3-second animated splash with logo, progress bar, and fade transition.

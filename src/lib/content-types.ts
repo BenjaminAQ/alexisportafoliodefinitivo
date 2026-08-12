@@ -179,9 +179,16 @@ export interface TeachingItem {
   title: string;
   body: string;
 }
+export interface TeachingActivity {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+}
 export interface TeachingData {
   header: SectionHeader;
   items: TeachingItem[];
+  activities: TeachingActivity[];
 }
 
 // ---- CV ----
@@ -323,7 +330,7 @@ export function emptySectionData(id: SectionId): SectionData {
     case "library":
       return { header, items: [] };
     case "teaching":
-      return { header, items: [] };
+      return { header, items: [], activities: [] };
     case "cv":
       return { header, downloads: [], sections: [], timeline: [] };
     case "contact":

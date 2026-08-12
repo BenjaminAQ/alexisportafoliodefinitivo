@@ -150,6 +150,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "icon", type: "text", label: "Nombre del ícono", placeholder: "book | layers | code | users | target" },
       { key: "body", type: "textarea", label: "Contenido" },
     ]},
+    { key: "activities", type: "objectList", label: "Actividades (línea de tiempo)", hint: "Se muestran como una línea de tiempo vertical sin recuadros.", itemSchema: [
+      { key: "title", type: "text", label: "Título", placeholder: "Curso de Análisis Estructural" },
+      { key: "date", type: "text", label: "Fecha / Período", placeholder: "2024 - Presente" },
+      { key: "description", type: "textarea", label: "Descripción" },
+    ]},
   ],
   cv: [
     { key: "header", type: "header", label: "Encabezado de la sección" },

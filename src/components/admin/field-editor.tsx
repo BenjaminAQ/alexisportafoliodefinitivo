@@ -439,13 +439,13 @@ function ObjectListField({
         </button>
       </div>
       {value.length === 0 ? (
-        <p className="rounded-md bg-muted px-3 py-4 text-center text-xs text-muted-foreground ring-1 ring-inset ring-dashed ring-ink/15">
+        <p className="rounded-md bg-muted/50 px-3 py-4 text-center text-xs text-muted-foreground ring-1 ring-inset ring-dashed ring-ink/15">
           No hay {label.toLowerCase()} todavía. Pulsa "Añadir" para crear uno.
         </p>
       ) : (
         <ul className="space-y-4">
           {value.map((item, i) => (
-            <li key={(item.id as string) || i} className="rounded-xl bg-muted p-4 ring-1 ring-inset ring-border">
+            <li key={(item.id as string) || i} className="rounded-xl bg-card p-4 ring-1 ring-inset ring-brand/20">
               <div className="flex items-center justify-between mb-4 pb-3 border-b border-brand/10">
                 <span className="font-display text-sm font-bold text-brand">
                   #{String(i + 1).padStart(2, "0")} {item.title ? `· ${String(item.title).slice(0, 40)}` : ""}
@@ -654,7 +654,7 @@ function FileField({
       {hint && <p className="mb-2 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>}
       <div className="space-y-2">
         {value && (
-          <div className="flex items-center gap-2 rounded-md bg-white px-3 py-2 ring-1 ring-inset ring-ink/10">
+          <div className="flex items-center gap-2 rounded-md bg-card px-3 py-2 ring-1 ring-inset ring-border">
             <PortfolioIcon name="pdf" width={14} height={14} className="text-brand shrink-0" />
             <a href={value} target="_blank" rel="noopener noreferrer" className="flex-1 truncate text-xs text-brand hover:underline">
               {fileName || "Ver archivo"}
