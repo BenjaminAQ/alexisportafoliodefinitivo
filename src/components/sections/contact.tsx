@@ -10,7 +10,7 @@ import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynami
 import type { ContactData } from "@/lib/content-types";
 import { toast } from "sonner";
 
-export function ContactSection() {
+export function ContactSection({ tone = "dark" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<ContactData>("contact");
   const [form, setForm] = React.useState({ name: "", email: "", subject: "", message: "" });
@@ -47,16 +47,16 @@ export function ContactSection() {
   });
 
   return (
-    <Section id="contact" tone="dark" className="overflow-hidden">
+    <Section id="contact" tone={tone} className="overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 wire-mesh opacity-20" />
       <div aria-hidden className="pointer-events-none absolute right-1/4 -bottom-20 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
 
       <div className="relative">
         {loading || !data ? (
-          <SectionSkeleton tone="dark" />
+          <SectionSkeleton tone={tone} />
         ) : (
           <>
-            <DynamicSectionHeader header={data.header} tone="dark" />
+            <DynamicSectionHeader header={data.header} tone={tone} />
 
             {data.links.length > 0 ? (
               <div className="mt-12 grid gap-8 lg:grid-cols-12">

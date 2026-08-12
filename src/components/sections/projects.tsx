@@ -259,7 +259,7 @@ function ProjectDetailDialog({
 // ============================================================
 // PROJECTS SECTION — agrupada por categoría
 // ============================================================
-export function ProjectsSection() {
+export function ProjectsSection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<ProjectsData>("projects");
   const [selected, setSelected] = React.useState<ProjectItem | null>(null);
@@ -281,7 +281,7 @@ export function ProjectsSection() {
   }, [data]);
 
   return (
-    <Section id="projects" tone="light">
+    <Section id="projects" tone={tone}>
       {loading || !data ? (
         <SectionSkeleton />
       ) : (

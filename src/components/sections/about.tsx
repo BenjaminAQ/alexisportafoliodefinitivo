@@ -8,12 +8,12 @@ import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import type { AboutData } from "@/lib/content-types";
 
-export function AboutSection() {
+export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<AboutData>("about");
 
   return (
-    <Section id="about" tone="light">
+    <Section id="about" tone={tone}>
       {loading || !data ? (
         <SectionSkeleton />
       ) : (

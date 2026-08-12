@@ -607,3 +607,29 @@ Stage Summary:
 - Teaching: timeline of activities without boxes, using brand palette (glowing nodes, gradient line, text-based layout).
 - Admin: improved dark/light contrast with theme-aware classes on all form elements.
 - Loading screen: 3-second animated splash with logo, progress bar, and fade transition.
+
+---
+Task ID: 23
+Agent: orchestrator
+Task: Dynamic tone by position + CV timeline on right + Teaching timeline centered + English labels.
+
+Work Log:
+- Changed section tone from hardcoded per-section to dynamic by position. page.tsx calculates tone: index 0 (first after hero) = light, index 1 = dark, alternating. Each section component now accepts `tone` prop and passes it to Section, DynamicSectionHeader, SectionSkeleton, and internal cards (conditional classes via cn()).
+- Updated all 8 sections (about, expertise, projects, resources, library, teaching, cv, contact) to accept `tone?: "light" | "dark"` prop and use it dynamically.
+- Rewrote CV section:
+  - 2-column layout on PC: left (col-span-7) = downloads + sections, right (col-span-5) = timeline (sticky).
+  - On mobile: everything stacks (timeline below).
+  - Download buttons: rounded-xl, bold, shadow, more aesthetic. "View" and "Download" labels.
+  - Timeline: vertical line with gradient, glowing nodes, no boxes. "Timeline" header in English.
+  - Cards use conditional classes (isDark) for both light and dark.
+- Rewrote Teaching section:
+  - Activities timeline: centered (max-w-4xl mx-auto), larger (text-2xl header, text-xl titles, text-base descriptions, bigger nodes h-5 w-5).
+  - "Activities" header in English, centered with decorative lines on both sides.
+  - Cards use conditional classes for light/dark adaptation.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- Section backgrounds now alternate by position (light/dark) regardless of which section is where. Reordering doesn't break the pattern.
+- CV: timeline on the right (PC), below on mobile. Download buttons more aesthetic. "Timeline" in English.
+- Teaching: activities timeline centered and larger. "Activities" in English.
+- All cards adapt to light/dark tone using conditional classes.

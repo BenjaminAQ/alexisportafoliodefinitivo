@@ -173,7 +173,7 @@ function LibraryDetailDialog({
   );
 }
 
-export function LibrarySection() {
+export function LibrarySection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<LibraryData>("library");
   const [selected, setSelected] = React.useState<LibraryItem | null>(null);
@@ -195,7 +195,7 @@ export function LibrarySection() {
   }, [data]);
 
   return (
-    <Section id="library" tone="light">
+    <Section id="library" tone={tone}>
       {loading || !data ? (
         <SectionSkeleton />
       ) : (

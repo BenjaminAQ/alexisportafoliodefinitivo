@@ -9,167 +9,200 @@ import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FilePreviewModal } from "@/components/admin/file-viewer";
 import type { CvData } from "@/lib/content-types";
+import { cn } from "@/lib/utils";
 
-export function CvSection() {
+export function CvSection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<CvData>("cv");
   const [preview, setPreview] = React.useState<{ url: string; name: string } | null>(null);
+  const isDark = tone === "dark";
 
   return (
-    <Section id="cv" tone="light">
+    <Section id="cv" tone={tone}>
       {loading || !data ? (
-        <SectionSkeleton />
+        <SectionSkeleton tone={tone} />
       ) : (
         <>
-          <DynamicSectionHeader header={data.header} />
+          <DynamicSectionHeader header={data.header} tone={tone} />
 
-          {/* Download buttons (dynamic from admin) */}
-          {data.downloads && data.downloads.length > 0 && (
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-10%" }}
-              transition={{ duration: 0.5 }}
-              className="mt-8 flex flex-wrap gap-3"
-            >
-              {data.downloads.map((dl) => {
-                const mode = dl.viewMode || "download";
-                if (mode === "none" || !dl.file) return null;
-                return (
-                  <div key={dl.id} className="flex items-center gap-2">
-                    {mode === "view" && (
-                      <button
-                        onClick={() => setPreview({ url: dl.file!, name: dl.label || "Documento" })}
-                        className="inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
-                      >
-                        <PortfolioIcon name="play" width={16} height={16} />
-                        {dl.label || "Ver documento"}
-                      </button>
-                    )}
-                    {mode === "download" && (
-                      <>
-                        <button
-                          onClick={() => setPreview({ url: dl.file!, name: dl.label || "Documento" })}
-                          className="inline-flex items-center gap-2.5 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand transition-all"
-                        >
-                          <PortfolioIcon name="play" width={16} height={16} />
-                          Ver
-                        </button>
-                        <a
-                          href={dl.file}
-                          download={dl.label || "documento"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group inline-flex items-center gap-2.5 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_30px_-12px_rgba(0,180,216,0.7)] hover:bg-brand-light hover:text-ink transition-all"
-                        >
-                          <PortfolioIcon name="download" width={16} height={16} />
-                          {dl.label || "Descargar"}
-                        </a>
-                      </>
-                    )}
-                  </div>
-                );
-              })}
-            </motion.div>
-          )}
-
-          {data.sections.length > 0 ? (
-            <motion.div
-              initial={reduce ? false : "hidden"}
-              whileInView="visible"
-              viewport={{ once: true, margin: "-10%" }}
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
-              className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-            >
-              {data.sections.map((sec, i) => (
+          {/* Layout: 2 columnas en PC (izquierda: contenido, derecha: timeline) */}
+          <div className="mt-8 grid gap-10 lg:grid-cols-12">
+            {/* Columna izquierda: descargas + secciones */}
+            <div className="lg:col-span-7" style={{ minWidth: 0 }}>
+              {/* Download buttons — más estéticos */}
+              {data.downloads && data.downloads.length > 0 && (
                 <motion.div
-                  key={sec.id}
-                  variants={{
-                    hidden: { opacity: 0, y: 18 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
-                  }}
-                  className="relative rounded-2xl bg-white p-5 sm:p-6 ring-1 ring-inset ring-ink/10 hover:ring-brand/30 transition-all overflow-hidden"
+                  initial={reduce ? false : { opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-wrap gap-3 mb-8"
                 >
-                  <div className="absolute top-3 right-4 font-mono-code text-[10px] text-muted/60">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="h-px w-5 bg-brand" />
-                    <h3 className="font-display text-sm font-semibold text-ink uppercase tracking-wide">{sec.title}</h3>
-                  </div>
-                  <ul className="mt-3 space-y-1.5">
-                    {sec.items.map((it, j) => (
-                      <li key={j} className="flex items-start gap-2 text-sm text-ink/75 leading-snug">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-brand" />
-                        {it}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : (
-            <EmptyState sectionId="cv" />
-          )}
-
-          {/* Línea de tiempo */}
-          {data.timeline && data.timeline.length > 0 && (
-            <motion.div
-              initial={reduce ? false : "hidden"}
-              whileInView="visible"
-              viewport={{ once: true, margin: "-10%" }}
-              variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
-              className="mt-16"
-            >
-              <h3 className="font-display text-xl font-bold text-ink mb-8 flex items-center gap-3">
-                <span className="h-1 w-6 rounded-full bg-brand" />
-                Trayectoria
-              </h3>
-              <div className="relative">
-                {/* Línea vertical central */}
-                <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-brand/30 sm:-translate-x-1/2" />
-
-                {data.timeline.map((item, i) => (
-                  <motion.div
-                    key={item.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                    }}
-                    className={`relative flex items-start gap-6 mb-8 ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"}`}
-                  >
-                    {/* Nodo (punto) */}
-                    <div className="absolute left-4 sm:left-1/2 top-2 -translate-x-1/2 z-10">
-                      <div className="h-4 w-4 rounded-full bg-brand ring-4 ring-brand/20" />
-                    </div>
-
-                    {/* Contenido */}
-                    <div className={`flex-1 pl-12 sm:pl-0 ${i % 2 === 0 ? "sm:pr-12 sm:text-right" : "sm:pl-12"}`}>
-                      <div className="rounded-2xl bg-white p-5 ring-1 ring-inset ring-ink/10 shadow-sm">
-                        {item.date && (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand/10 px-2.5 py-1 text-[11px] font-semibold text-brand mb-2">
-                            <PortfolioIcon name="clock" width={11} height={11} />
-                            {item.date}
-                          </span>
+                  {data.downloads.map((dl) => {
+                    const mode = dl.viewMode || "download";
+                    if (mode === "none" || !dl.file) return null;
+                    return (
+                      <div key={dl.id} className="flex items-center gap-2">
+                        {mode === "view" && (
+                          <button
+                            onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document" })}
+                            className={cn(
+                              "inline-flex items-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all",
+                              isDark
+                                ? "bg-white/10 text-white ring-1 ring-inset ring-brand/30 hover:bg-white/20"
+                                : "bg-white text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand"
+                            )}
+                          >
+                            <PortfolioIcon name="play" width={16} height={16} />
+                            {dl.label || "View"}
+                          </button>
                         )}
-                        <h4 className="font-display text-base font-bold text-ink mb-1" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                          {item.title}
-                        </h4>
-                        {item.description && (
-                          <p className="text-sm text-muted leading-relaxed" style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                            {item.description}
-                          </p>
+                        {mode === "download" && (
+                          <>
+                            <button
+                              onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document" })}
+                              className={cn(
+                                "inline-flex items-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all",
+                                isDark
+                                  ? "bg-white/10 text-white ring-1 ring-inset ring-brand/30 hover:bg-white/20"
+                                  : "bg-white text-ink ring-1 ring-inset ring-ink/20 hover:ring-brand hover:text-brand"
+                              )}
+                            >
+                              <PortfolioIcon name="play" width={16} height={16} />
+                              View
+                            </button>
+                            <a
+                              href={dl.file}
+                              download={dl.label || "document"}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group inline-flex items-center gap-2.5 rounded-xl bg-brand px-6 py-3 text-sm font-bold text-white shadow-[0_8px_30px_-8px_rgba(0,180,216,0.6)] hover:bg-brand-light hover:text-ink transition-all"
+                            >
+                              <PortfolioIcon name="download" width={16} height={16} />
+                              {dl.label || "Download"}
+                            </a>
+                          </>
                         )}
                       </div>
-                    </div>
+                    );
+                  })}
+                </motion.div>
+              )}
 
-                    {/* Espaciador para el otro lado */}
-                    <div className="hidden sm:block flex-1" />
-                  </motion.div>
-                ))}
+              {/* Secciones del CV */}
+              {data.sections.length > 0 ? (
+                <motion.div
+                  initial={reduce ? false : "hidden"}
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-10%" }}
+                  variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+                  className="grid gap-4 sm:grid-cols-2"
+                >
+                  {data.sections.map((sec, i) => (
+                    <motion.div
+                      key={sec.id}
+                      variants={{
+                        hidden: { opacity: 0, y: 18 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+                      }}
+                      className={cn(
+                        "relative rounded-2xl p-5 sm:p-6 ring-1 ring-inset hover:ring-brand/30 transition-all overflow-hidden",
+                        isDark ? "bg-ink-soft/60 ring-brand/20" : "bg-white ring-ink/10"
+                      )}
+                    >
+                      <div className="absolute top-3 right-4 font-mono-code text-[10px] opacity-40">
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="h-px w-5 bg-brand" />
+                        <h3 className={cn(
+                          "font-display text-sm font-semibold uppercase tracking-wide",
+                          isDark ? "text-white" : "text-ink"
+                        )}>{sec.title}</h3>
+                      </div>
+                      <ul className="mt-3 space-y-1.5">
+                        {sec.items.map((it, j) => (
+                          <li key={j} className={cn(
+                            "flex items-start gap-2 text-sm leading-snug",
+                            isDark ? "text-brand-light/80" : "text-ink/75"
+                          )}>
+                            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-brand" />
+                            {it}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              ) : (
+                <EmptyState sectionId="cv" />
+              )}
+            </div>
+
+            {/* Columna derecha: Timeline */}
+            {data.timeline && data.timeline.length > 0 && (
+              <div className="lg:col-span-5">
+                <motion.div
+                  initial={reduce ? false : "hidden"}
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-10%" }}
+                  variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.1 } } }}
+                  className="lg:sticky lg:top-24"
+                >
+                  <h3 className={cn(
+                    "font-display text-xl font-bold mb-8 flex items-center gap-3",
+                    isDark ? "text-white" : "text-ink"
+                  )}>
+                    <span className="h-1 w-6 rounded-full bg-brand" />
+                    Timeline
+                  </h3>
+                  <div className="relative pl-8">
+                    {/* Vertical line */}
+                    <div className="absolute left-2 top-0 bottom-0 w-px bg-gradient-to-b from-brand via-brand/50 to-transparent" />
+
+                    {data.timeline.map((item) => (
+                      <motion.div
+                        key={item.id}
+                        variants={{
+                          hidden: { opacity: 0, x: -20 },
+                          visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+                        }}
+                        className="relative mb-8 last:mb-0"
+                      >
+                        {/* Node */}
+                        <div className="absolute -left-8 top-1 flex items-center justify-center">
+                          <div className="h-4 w-4 rounded-full bg-brand shadow-[0_0_12px_rgba(0,180,216,0.6)] ring-4 ring-brand/10" />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex flex-col gap-1">
+                          {item.date && (
+                            <span className="font-mono-code text-[11px] uppercase tracking-[0.15em] text-brand">
+                              {item.date}
+                            </span>
+                          )}
+                          <h4 className={cn(
+                            "font-display text-base font-bold",
+                            isDark ? "text-white" : "text-ink"
+                          )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                            {item.title}
+                          </h4>
+                          {item.description && (
+                            <p className={cn(
+                              "text-sm leading-relaxed",
+                              isDark ? "text-brand-light/70" : "text-muted"
+                            )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                              {item.description}
+                            </p>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          )}
+            )}
+          </div>
         </>
       )}
       <FilePreviewModal preview={preview} onClose={() => setPreview(null)} />

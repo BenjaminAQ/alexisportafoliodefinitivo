@@ -17,7 +17,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import type { SectionOrderData } from "@/lib/content-types";
 
 // Map of section ID → component
-const SECTION_COMPONENTS: Record<string, React.ComponentType> = {
+const SECTION_COMPONENTS: Record<string, React.ComponentType<{ tone?: "light" | "dark" }>> = {
   about: AboutSection,
   expertise: ExpertiseSection,
   projects: ProjectsSection,
@@ -50,10 +50,16 @@ export default function Home() {
 
       <main className="flex-1">
         <HeroSection />
-        {order.map((sectionId) => {
+        {order.map((sectionId, index) => {
           const Component = SECTION_COMPONENTS[sectionId];
           if (!Component) return null;
-          return <Component key={sectionId} />;
+          // Hero is always first (dark). Sections alternate after that.
+          // index 0 = first section after hero = light
+          // index 1 = dark
+          // index 2 = light
+          // etc.
+          const tone = index % 2 === 0 ? "light" : "dark";
+          return <Component key={sectionId} tone={tone} />;
         })}
       </main>
 

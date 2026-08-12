@@ -202,7 +202,7 @@ function ResourceDetailDialog({
   );
 }
 
-export function ResourcesSection() {
+export function ResourcesSection({ tone = "dark" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<ResourcesData>("resources");
   const [selected, setSelected] = React.useState<ResourceItem | null>(null);
@@ -224,16 +224,16 @@ export function ResourcesSection() {
   }, [data]);
 
   return (
-    <Section id="resources" tone="dark" className="overflow-hidden">
+    <Section id="resources" tone={tone} className="overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 wire-mesh opacity-25" />
       <div aria-hidden className="pointer-events-none absolute right-1/4 top-0 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
 
       <div className="relative">
         {loading || !data ? (
-          <SectionSkeleton tone="dark" />
+          <SectionSkeleton tone={tone} />
         ) : (
           <>
-            <DynamicSectionHeader header={data.header} tone="dark" />
+            <DynamicSectionHeader header={data.header} tone={tone} />
 
             {data.resources.length > 0 ? (
               <div className="mt-10 space-y-12">

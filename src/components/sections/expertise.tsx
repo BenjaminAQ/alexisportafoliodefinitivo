@@ -14,21 +14,21 @@ import {
 } from "@/components/ui/accordion";
 import type { ExpertiseData } from "@/lib/content-types";
 
-export function ExpertiseSection() {
+export function ExpertiseSection({ tone = "dark" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
   const { data, loading } = useSectionData<ExpertiseData>("expertise");
 
   return (
-    <Section id="expertise" tone="dark" className="overflow-hidden">
+    <Section id="expertise" tone={tone} className="overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute inset-0 wire-mesh opacity-25" />
       <div aria-hidden className="pointer-events-none absolute -left-32 top-1/2 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
 
       <div className="relative">
         {loading || !data ? (
-          <SectionSkeleton tone="dark" />
+          <SectionSkeleton tone={tone} />
         ) : (
           <>
-            <DynamicSectionHeader header={data.header} tone="dark" />
+            <DynamicSectionHeader header={data.header} tone={tone} />
 
             {data.areas.length > 0 ? (
               <motion.div
