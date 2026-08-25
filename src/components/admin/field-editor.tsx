@@ -321,7 +321,7 @@ function TextArea({
   );
 }
 
-// ---------- String list (tags) ----------
+// ---------- String list (tags with inline editing) ----------
 function StringListField({
   label,
   value,
@@ -334,12 +334,37 @@ function StringListField({
   placeholder?: string;
 }) {
   const [draft, setDraft] = React.useState("");
+  const [editingIndex, setEditingIndex] = React.useState<number | null>(null);
+  const [editDraft, setEditDraft] = React.useState("");
+
   const add = () => {
     const v = draft.trim();
     if (!v) return;
     onChange([...value, v]);
     setDraft("");
   };
+
+  const startEdit = (i: number) => {
+    setEditingIndex(i);
+    setEditDraft(value[i]);
+  };
+
+  const saveEdit = () => {
+    if (editingIndex === null) return;
+    const v = editDraft.trim();
+    if (!v) return;
+    const next = [...value];
+    next[editingIndex] = v;
+    onChange(next);
+    setEditingIndex(null);
+    setEditDraft("");
+  };
+
+  const cancelEdit = () => {
+    setEditingIndex(null);
+    setEditDraft("");
+  };
+
   return (
     <div>
       <span className="block text-[11px] font-mono-code uppercase tracking-[0.12em] text-muted-foreground mb-1">{label}</span>
@@ -369,16 +394,69 @@ function StringListField({
       {value.length > 0 && (
         <ul className="mt-2 space-y-1">
           {value.map((item, i) => (
-            <li key={i} className="flex items-center gap-2 rounded-md bg-white px-3 py-1.5 ring-1 ring-inset ring-ink/10 group">
-              <span className="flex-1 text-sm text-foreground">{item}</span>
-              <button
-                type="button"
-                onClick={() => onChange(value.filter((_, j) => j !== i))}
-                className="text-muted hover:text-red-500 transition-colors"
-                aria-label="Eliminar"
-              >
-                <PortfolioIcon name="close" width={14} height={14} />
-              </button>
+            <li
+              key={i}
+              className="flex items-center gap-2 rounded-md bg-card px-3 py-2 ring-1 ring-inset ring-border group hover:ring-brand/30 transition-all"
+            >
+              {editingIndex === i ? (
+                // Modo edición: input inline
+                <>
+                  <input
+                    type="text"
+                    value={editDraft}
+                    onChange={(e) => setEditDraft(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") { e.preventDefault(); saveEdit(); }
+                      if (e.key === "Escape") { e.preventDefault(); cancelEdit(); }
+                    }}
+                    autoFocus
+                    className="flex-1 min-w-0 rounded-md bg-background px-2 py-1 text-sm text-foreground ring-1 ring-inset ring-brand/40 focus:outline-none focus:ring-2 focus:ring-brand/60"
+                  />
+                  <button
+                    type="button"
+                    onClick={saveEdit}
+                    className="inline-flex items-center gap-1 rounded-md bg-brand px-2 py-1 text-[11px] font-semibold text-white hover:bg-brand-light transition-all shrink-0"
+                  >
+                    <PortfolioIcon name="check" width={11} height={11} />
+                    Guardar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                    className="text-muted hover:text-foreground transition-colors p-1 shrink-0"
+                    aria-label="Cancelar"
+                  >
+                    <PortfolioIcon name="close" width={14} height={14} />
+                  </button>
+                </>
+              ) : (
+                // Modo vista: click para editar
+                <>
+                  <span
+                    className="flex-1 min-w-0 text-sm text-foreground cursor-pointer truncate"
+                    onClick={() => startEdit(i)}
+                    title="Click para editar"
+                  >
+                    {item}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => startEdit(i)}
+                    className="opacity-0 group-hover:opacity-100 text-muted hover:text-brand transition-all p-1 shrink-0"
+                    aria-label="Editar"
+                  >
+                    <PortfolioIcon name="chevron" width={14} height={14} className="rotate-[-90deg]" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onChange(value.filter((_, j) => j !== i))}
+                    className="opacity-0 group-hover:opacity-100 text-muted hover:text-red-500 transition-all p-1 shrink-0"
+                    aria-label="Eliminar"
+                  >
+                    <PortfolioIcon name="close" width={14} height={14} />
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>

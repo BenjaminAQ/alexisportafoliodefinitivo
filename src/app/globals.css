@@ -104,22 +104,22 @@
    ============================================================ */
 .dark {
   --background: #0a0e27;
-  --foreground: #e0e0e0;
-  --card: #1a1f4e;
-  --card-foreground: #e0e0e0;
+  --foreground: #f0f4f8;
+  --card: #141a3d;
+  --card-foreground: #f0f4f8;
   --popover: #0a0e27;
-  --popover-foreground: #e0e0e0;
+  --popover-foreground: #f0f4f8;
   --primary: #00b4d8;
   --primary-foreground: #ffffff;
   --secondary: #1f2557;
-  --secondary-foreground: #e0e0e0;
-  --muted: #141a3d;
-  --muted-foreground: #8b94a8;
+  --secondary-foreground: #f0f4f8;
+  --muted: #1a1f4e;
+  --muted-foreground: #a0aec0;
   --accent: #2a9d8f;
   --accent-foreground: #ffffff;
   --destructive: #e74c3c;
-  --border: rgba(0, 180, 216, 0.18);
-  --input: rgba(0, 180, 216, 0.22);
+  --border: rgba(0, 180, 216, 0.25);
+  --input: rgba(0, 180, 216, 0.25);
   --ring: #00b4d8;
 }
 

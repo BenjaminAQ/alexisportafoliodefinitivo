@@ -688,3 +688,33 @@ Stage Summary:
 - About: bold text via {bold}markup{/bold} in bio, highlights, and quick facts values. Quick Facts emoji and title editable from admin.
 - Teaching: activities support files with viewMode (view/download/none). FileBadge renders each file.
 - Code: console.warn suppressed in production, dynamic imports already in place, animations optimized with once: true.
+
+---
+Task ID: 26
+Agent: orchestrator
+Task: Inline editing for string lists + fix dark mode contrast in admin.
+
+Work Log:
+- Rewrote StringListField in field-editor.tsx:
+  - Items now have two modes: view and edit.
+  - View mode: click on text or pencil icon to start editing inline.
+  - Edit mode: input field appears inline with "Guardar" (save) and "X" (cancel) buttons.
+  - Enter key saves, Escape cancels.
+  - Delete (X) button appears on hover.
+  - Edit (pencil) button appears on hover.
+  - Cards use bg-card and ring-border (theme-aware) instead of bg-white.
+- Fixed dark mode contrast in globals.css:
+  - --foreground: #e0e0e0 → #f0f4f8 (brighter, more readable)
+  - --card: #1a1f4e → #141a3d (darker, better contrast with text)
+  - --card-foreground: #e0e0e0 → #f0f4f8
+  - --secondary-foreground: #e0e0e0 → #f0f4f8
+  - --muted: #141a3d → #1a1f4e (lighter, more visible as background)
+  - --muted-foreground: #8b94a8 → #a0aec0 (brighter, more readable labels)
+  - --border: rgba(0,180,216,0.18) → rgba(0,180,216,0.25) (more visible borders)
+  - --input: rgba(0,180,216,0.22) → rgba(0,180,216,0.25) (more visible inputs)
+- All text in admin dark mode is now clearly readable with proper contrast.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- String lists (highlights, topics, tech, references, items): click to edit inline, Enter to save, Escape to cancel. Delete button on hover.
+- Admin dark mode: all text (foreground, muted-foreground, card-foreground) now uses brighter colors (#f0f4f8, #a0aec0) for proper contrast on dark navy background.
