@@ -39,7 +39,7 @@ async function fsGet<T>(id: string, db: NonNullable<ReturnType<typeof getDb>>): 
     const snap = await getDoc(ref);
     return snap.exists() ? (snap.data() as T) : null;
   } catch (err) {
-    console.warn(`[store] Firestore getSection("${id}") failed, using fallback:`, err);
+    if (process.env.NODE_ENV !== "production") console.warn(`[store] Firestore getSection("${id}") failed, using fallback:`, err);
     return lsGet<T>(id);
   }
 }
@@ -50,7 +50,7 @@ async function fsSet<T>(id: string, data: T, db: NonNullable<ReturnType<typeof g
     await setDoc(ref, data as Record<string, unknown>, { merge: false });
     lsSet(id, data);
   } catch (err) {
-    console.warn(`[store] Firestore setSection("${id}") failed, saving to localStorage:`, err);
+    if (process.env.NODE_ENV !== "production") console.warn(`[store] Firestore setSection("${id}") failed, saving to localStorage:`, err);
     lsSet(id, data);
     throw err;
   }
@@ -116,12 +116,12 @@ export function subscribeToSection<T extends SectionData>(
           cb(snap.exists() ? (snap.data() as T) : (emptySectionData(id) as T));
         },
         (err) => {
-          console.warn(`[store] Firestore onSnapshot("${id}") error, using localStorage:`, err);
+          if (process.env.NODE_ENV !== "production") console.warn(`[store] Firestore onSnapshot("${id}") error, using localStorage:`, err);
           cb(lsGet<T>(id) ?? (emptySectionData(id) as T));
         }
       );
     } catch (err) {
-      console.warn(`[store] Failed to set up onSnapshot for "${id}":`, err);
+      if (process.env.NODE_ENV !== "production") console.warn(`[store] Failed to set up onSnapshot for "${id}":`, err);
       cb(lsGet<T>(id) ?? (emptySectionData(id) as T));
     }
   })();

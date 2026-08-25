@@ -41,7 +41,7 @@ export async function fetchUserRole(uid: string): Promise<UserRole | null> {
     if (!snap.exists()) return null;
     return (snap.data().role as UserRole) ?? "pending";
   } catch (err) {
-    console.warn("[auth] fetchUserRole failed:", err);
+    if (process.env.NODE_ENV !== "production") console.warn("[auth] fetchUserRole failed:", err);
     return null;
   }
 }
@@ -60,7 +60,7 @@ async function createUserDoc(uid: string, email: string, displayName: string | n
       createdAt: serverTimestamp(),
     }, { merge: false });
   } catch (err) {
-    console.warn("[auth] createUserDoc failed:", err);
+    if (process.env.NODE_ENV !== "production") console.warn("[auth] createUserDoc failed:", err);
     throw err;
   }
 }

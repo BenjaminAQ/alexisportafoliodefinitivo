@@ -7,6 +7,7 @@ import { PortfolioIcon } from "../portfolio/icons";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { FileBadge } from "@/components/admin/file-viewer";
 import type { TeachingData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
 
@@ -140,6 +141,15 @@ export function TeachingSection({ tone = "dark" }: { tone?: "light" | "dark" }) 
                         )} style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
                           {act.description}
                         </p>
+                      )}
+
+                      {/* Archivos */}
+                      {act.files && act.files.filter(f => f.url && f.viewMode && f.viewMode !== "none").length > 0 && (
+                        <div className="mt-4 space-y-2">
+                          {act.files.filter(f => f.url && f.viewMode && f.viewMode !== "none").map((f) => (
+                            <FileBadge key={f.id || f.url} name={f.name} url={f.url} viewMode={f.viewMode} />
+                          ))}
+                        </div>
                       )}
                     </div>
                   </motion.div>

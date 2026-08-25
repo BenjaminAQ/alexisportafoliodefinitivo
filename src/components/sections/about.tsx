@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Section } from "../portfolio/section";
 import { PortfolioIcon } from "../portfolio/icons";
@@ -8,6 +9,19 @@ import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import type { AboutData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
+
+// Render text with {bold}text{/bold} markup → <strong>
+function renderRichText(text: string): React.ReactNode {
+  if (!text) return null;
+  const parts = text.split(/(\{bold\}.*?\{\/bold\})/g);
+  return parts.map((part, i) => {
+    const m = part.match(/^\{bold\}(.*)\{\/bold\}$/);
+    if (m) {
+      return <strong key={i} className="font-bold text-brand">{m[1]}</strong>;
+    }
+    return <React.Fragment key={i}>{part}</React.Fragment>;
+  });
+}
 
 export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();
@@ -40,15 +54,15 @@ export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                   isDark ? "bg-ink-soft/60 ring-brand/20" : "bg-white ring-ink/10"
                 )}>
                   {data.bio && (
-                    <p
+                    <div
                       className={cn(
                         "text-base sm:text-lg leading-relaxed whitespace-pre-line",
                         isDark ? "text-brand-light/85" : "text-ink/85"
                       )}
                       style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
                     >
-                      {data.bio}
-                    </p>
+                      {renderRichText(data.bio)}
+                    </div>
                   )}
 
                   {data.highlights.length > 0 && (
@@ -72,7 +86,7 @@ export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                             className={cn("text-sm leading-snug", isDark ? "text-brand-light/80" : "text-ink/80")}
                             style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
                           >
-                            {h}
+                            {renderRichText(h)}
                           </span>
                         </motion.li>
                       ))}
@@ -127,16 +141,16 @@ export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                     ))
                   ) : null}
 
-                  {/* Quick Facts (legacy support) */}
+                  {/* Quick Facts — emoji and title editable */}
                   {data.quickFacts && data.quickFacts.length > 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-3 pb-2 border-b border-brand/10">
-                        <span className="text-xl">ℹ️</span>
+                        <span className="text-xl">{data.quickFacts[0]?.emoji || "ℹ️"}</span>
                         <h3 className={cn(
                           "font-display text-sm font-bold uppercase tracking-wide",
                           isDark ? "text-white" : "text-ink"
                         )}>
-                          Quick Facts
+                          {data.quickFacts[0]?.title || "Quick Facts"}
                         </h3>
                       </div>
                       <dl className="space-y-3">
@@ -152,7 +166,7 @@ export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                               "text-sm font-medium",
                               isDark ? "text-white" : "text-ink"
                             )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                              {fact.value}
+                              {renderRichText(fact.value)}
                             </dd>
                           </div>
                         ))}

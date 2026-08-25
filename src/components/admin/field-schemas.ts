@@ -50,7 +50,7 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
   ],
   about: [
     { key: "header", type: "header", label: "Encabezado de la sección" },
-    { key: "bio", type: "textarea", label: "Biografía (cuadro izquierdo)", placeholder: "Toda la información que se mostrará en el cuadro izquierdo..." },
+    { key: "bio", type: "textarea", label: "Biografía (cuadro izquierdo)", hint: "Usa {bold}texto{/bold} para negrita.", placeholder: "Toda la información que se mostrará en el cuadro izquierdo..." },
     { key: "highlights", type: "stringList", label: "Puntos destacados", placeholder: "Añadir un punto destacado..." },
     { key: "stats", type: "objectList", label: "Estadísticas", itemSchema: [
       { key: "value", type: "text", label: "Valor", placeholder: "8+" },
@@ -61,9 +61,11 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "title", type: "text", label: "Título", placeholder: "Education" },
       { key: "items", type: "stringList", label: "Items", placeholder: "Añadir item..." },
     ]},
-    { key: "quickFacts", type: "objectList", label: "Datos rápidos (Quick Facts)", hint: "Aparece en la columna derecha de la sección About.", itemSchema: [
-      { key: "label", type: "text", label: "Etiqueta", placeholder: "Rol actual" },
-      { key: "value", type: "text", label: "Valor", placeholder: "Ingeniero Civil" },
+    { key: "quickFacts", type: "objectList", label: "Quick Facts", hint: "Aparece en la columna derecha de la sección About. Personaliza emoji y título.", itemSchema: [
+      { key: "emoji", type: "text", label: "Emoji", placeholder: "ℹ️" },
+      { key: "title", type: "text", label: "Título", placeholder: "Quick Facts" },
+      { key: "label", type: "text", label: "Etiqueta", placeholder: "Current role" },
+      { key: "value", type: "text", label: "Valor", placeholder: "Civil Engineer" },
     ]},
   ],
   expertise: [
@@ -156,11 +158,20 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "image", type: "image", label: "Imagen (opcional)" },
       { key: "body", type: "textarea", label: "Contenido" },
     ]},
-    { key: "activities", type: "objectList", label: "Activities", hint: "Imagen a la izquierda, texto a la derecha.", itemSchema: [
+    { key: "activities", type: "objectList", label: "Activities", hint: "Imagen a la izquierda, texto a la derecha. Archivos descargables opcionales.", itemSchema: [
       { key: "image", type: "image", label: "Imagen (izquierda)" },
       { key: "title", type: "text", label: "Título", placeholder: "Course title" },
       { key: "date", type: "text", label: "Fecha / Período", placeholder: "2024 - Present" },
-      { key: "description", type: "textarea", label: "Descripción" },
+      { key: "description", type: "textarea", label: "Descripción", hint: "Usa {bold}texto{/bold} para negrita." },
+      { key: "files", type: "objectList", label: "Archivos", itemSchema: [
+        { key: "name", type: "text", label: "Nombre visible", placeholder: "documento.pdf" },
+        { key: "url", type: "file", label: "Archivo (subir)" },
+        { key: "viewMode", type: "select", label: "Modo de visualización", options: [
+          { value: "none", label: "Oculto (no mostrar)" },
+          { value: "view", label: "Solo ver" },
+          { value: "download", label: "Ver y descargar" },
+        ]},
+      ]},
     ]},
   ],
   cv: [

@@ -660,3 +660,31 @@ Stage Summary:
 - Teaching: activities now show image left + text right (no timeline). Items support optional images.
 - About: left box with all info (bio + highlights), right box with fact sections (emoji + title + list items). Fully responsive.
 - All sections use conditional classes for light/dark tone adaptation.
+
+---
+Task ID: 25
+Agent: orchestrator
+Task: Bold markup in About + editable Quick Facts emoji/title + files in Teaching activities + code optimization.
+
+Work Log:
+- Added renderRichText() function in about.tsx that parses {bold}text{/bold} markup into <strong className="font-bold text-brand"> elements. Applied to bio, highlights, and quickFacts values.
+- Added hint to bio field: "Usa {bold}texto{/bold} para negrita."
+- Added hint to teaching activity description: "Usa {bold}texto{/bold} para negrita."
+- Updated QuickFact interface to include emoji and title fields (both editable from admin).
+- Updated quickFacts schema: now has 4 fields per fact (emoji, title, label, value).
+- Updated about.tsx Quick Facts rendering: uses fact.emoji and fact.title from the first quickFact (or defaults to ℹ️ and "Quick Facts").
+- QuickFact values now use renderRichText() for bold support.
+- Added TeachingFile interface and files field to TeachingActivity.
+- Updated teaching activities schema: added files objectList (name, url, viewMode) with select for viewMode.
+- Updated teaching.tsx: activities now render FileBadge for each visible file (filtered by viewMode !== "none" and url exists).
+- Code optimization:
+  - Wrapped all console.warn in store.ts and auth.ts with process.env.NODE_ENV !== "production" check to suppress in production.
+  - Firebase already uses dynamic imports (await import) for all SDK modules — no change needed.
+  - Framer Motion animations already use whileInView with once: true — no re-animations.
+  - onSnapshot listeners properly clean up on unmount.
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- About: bold text via {bold}markup{/bold} in bio, highlights, and quick facts values. Quick Facts emoji and title editable from admin.
+- Teaching: activities support files with viewMode (view/download/none). FileBadge renders each file.
+- Code: console.warn suppressed in production, dynamic imports already in place, animations optimized with once: true.

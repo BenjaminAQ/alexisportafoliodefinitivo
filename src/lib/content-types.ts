@@ -66,6 +66,13 @@ export interface AboutStat {
   value: string;
   label: string;
 }
+export interface QuickFact {
+  id: string;
+  emoji: string;
+  title: string;
+  label: string;
+  value: string;
+}
 export interface FactSection {
   id: string;
   emoji: string;
@@ -188,6 +195,13 @@ export interface TeachingActivity {
   date: string;
   description: string;
   image: string;
+  files: TeachingFile[];
+}
+export interface TeachingFile {
+  id: string;
+  name: string;
+  url: string;
+  viewMode?: string;
 }
 export interface TeachingData {
   header: SectionHeader;
