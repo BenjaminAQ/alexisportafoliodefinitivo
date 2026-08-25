@@ -718,3 +718,23 @@ Work Log:
 Stage Summary:
 - String lists (highlights, topics, tech, references, items): click to edit inline, Enter to save, Escape to cancel. Delete button on hover.
 - Admin dark mode: all text (foreground, muted-foreground, card-foreground) now uses brighter colors (#f0f4f8, #a0aec0) for proper contrast on dark navy background.
+
+---
+Task ID: 27
+Agent: orchestrator
+Task: Fix Hostinger deployment — .env included in ZIP, Firebase credentials available.
+
+Work Log:
+- Root cause: .gitignore had `.env*` which excluded ALL .env files from the ZIP. When the user downloaded the ZIP and uploaded to Hostinger, .env was missing → Firebase not configured → preview mode.
+- Fix 1: Updated .gitignore to only exclude .env.local and .env.*.local (secrets), NOT .env (which has public Firebase config).
+- Fix 2: Recreated .env with Firebase credentials (NEXT_PUBLIC_FIREBASE_*).
+- Fix 3: Recreated .env.local for local development.
+- Fix 4: Verified firebase.ts already has FALLBACK_CONFIG with hardcoded credentials (double safety — works even if .env is not loaded during build).
+- Created HOSTINGER_DEPLOY.md with step-by-step deployment instructions.
+- Verified: Firebase configured correctly (Google sign-in button visible, not in preview mode, "Conectado a Firebase" shown). ESLint 0 errors.
+
+Stage Summary:
+- .env with Firebase credentials is now included in the ZIP (not excluded by .gitignore).
+- firebase.ts has hardcoded fallback config that works on ANY hosting without env vars.
+- HOSTINGER_DEPLOY.md provides step-by-step instructions for deployment.
+- Three layers of Firebase config: env vars → .env file → hardcoded fallback in firebase.ts.
