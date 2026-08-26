@@ -1,41 +1,50 @@
-# Instrucciones de despliegue para Hostinger
+# Despliegue en Hostinger — Portafolio de Alexis
 
-## Paso 1: Generar el ZIP
-Desde el panel de Z.ai, genera un ZIP del proyecto completo.
-El archivo `.env` con las credenciales de Firebase **ya está incluido** en el proyecto.
+## Archivos modificados para compatibilidad con Hostinger
 
-## Paso 2: Subir a Hostinger
-1. Entra a tu panel de Hostinger → File Manager o Git
-2. Sube el ZIP y descomprímelo en la carpeta pública
-3. O conecta tu repositorio de Git si usas Git deployment
+### 1. `package.json`
+- `start`: cambiado de `bun` a `node` (Hostinger no tiene Bun)
+- `dev`: simplificado (sin `tee` ni pipes)
+- `bun-types` eliminado de devDependencies
 
-## Paso 3: Instalar dependencias y construir
-En Hostinger, ejecuta estos comandos en la terminal (si tienes acceso SSH):
+### 2. `.env`
+- `DATABASE_URL`: cambiado de path absoluto (`/home/z/my-project/...`) a relativo (`./dev.db`)
+- Credenciales Firebase `NEXT_PUBLIC_*` incluidas (públicas por diseño)
+
+### 3. `.gitignore`
+- `.env*` cambiado a `.env.local` y `.env.*.local` (`.env` ahora se incluye en el ZIP)
+
+### 4. `src/lib/firebase.ts`
+- Fallback con credenciales hardcodeadas (funciona sin .env)
+
+### 5. `next.config.ts`
+- `output: "standalone"` (genera servidor autocontenido)
+- `alexispompilla.com` añadido a `allowedDevOrigins`
+
+## Comandos de instalación, compilación e inicio
+
 ```bash
+# 1. Instalar dependencias
 npm install
+
+# 2. Compilar el proyecto (genera .next/standalone/)
 npm run build
+
+# 3. Iniciar el servidor en producción
 npm run start
 ```
 
-Si Hostinger usa Bun:
-```bash
-bun install
-bun run build
-bun run start
-```
+El servidor escuchará en `0.0.0.0` y usará `process.env.PORT` (o puerto 3000 por defecto).
 
-## Paso 4: Configurar el dominio en Firebase
-**CRÍTICO**: Sin esto, el login con Google NO funcionará.
+## Configuración en Firebase Console (obligatorio)
 
-1. Ve a [Firebase Console](https://console.firebase.google.com) → tu proyecto `alexisportafolio-8d4a7`
-2. **Authentication** → **Settings** (engranaje) → **Authorized domains**
-3. Añade: `alexispompilla.com`
-4. Añade: `www.alexispompilla.com` (si usas www)
+### Autorizar dominio
+Firebase Console → Authentication → Settings → Authorized domains → añadir:
+- `alexispompilla.com`
+- `www.alexispompilla.com` (si aplica)
 
-## Paso 5: Publicar las reglas de Firestore y Storage
-
-### Firestore Rules
-Firebase Console → Firestore → Rules → pegar y Publicar:
+### Publicar reglas de Firestore
+Firebase Console → Firestore → Rules:
 ```javascript
 rules_version = '2';
 service cloud.firestore {
@@ -65,8 +74,8 @@ service cloud.firestore {
 }
 ```
 
-### Storage Rules
-Firebase Console → Storage → Rules → pegar y Publicar:
+### Publicar reglas de Storage
+Firebase Console → Storage → Rules:
 ```javascript
 rules_version = '2';
 service firebase.storage {
@@ -94,16 +103,16 @@ service firebase.storage {
 }
 ```
 
-## Paso 6: Darte acceso de admin
+## Darte acceso de admin
 1. Entra a `https://alexispompilla.com/admin`
 2. Inicia sesión con tu Gmail
 3. Te aparecerá "pendiente de aprobación"
 4. Ve a **Firebase Console → Firestore → users → [tu-uid]**
 5. Cambia `role` de `"pending"` a `"admin"`
-6. Vuelve a entrar a `/admin` → ya puedes editar
+6. Vuelve a entrar a `/admin`
 
-## Notas importantes
-- Las credenciales de Firebase están en el archivo `.env` (públicas por diseño)
-- El archivo `.env.local` está excluido del ZIP (solo para desarrollo local)
-- El fallback con credenciales hardcodeadas está en `src/lib/firebase.ts` por si las variables de entorno no se cargan
-- El servidor debe correr en el puerto que Hostinger asigne (generalmente 3000)
+## Requisitos de Hostinger
+- Plan con soporte **Node.js** (VPS o Shared con Node)
+- Node.js versión 18 o superior (recomendado 20+)
+- Acceso SSH o terminal para ejecutar comandos
+- Puerto 3000 disponible (o configurar el que Hostinger asigne)

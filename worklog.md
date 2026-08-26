@@ -738,3 +738,30 @@ Stage Summary:
 - firebase.ts has hardcoded fallback config that works on ANY hosting without env vars.
 - HOSTINGER_DEPLOY.md provides step-by-step instructions for deployment.
 - Three layers of Firebase config: env vars → .env file → hardcoded fallback in firebase.ts.
+
+---
+Task ID: 28
+Agent: orchestrator
+Task: Full Hostinger deployment readiness audit and fixes.
+
+Work Log:
+- Diagnosed all deployment blockers:
+  1. package.json `start` used `bun` (not available on Hostinger)
+  2. `.env` had `DATABASE_URL=file:/home/z/my-project/db/custom.db` (hardcoded local path)
+  3. `bun-types` in devDependencies (unnecessary, could cause type errors)
+  4. `.gitignore` excluded `.env*` (all env files, including the one with Firebase config)
+- Fixes applied:
+  1. `package.json`: `start` → `node .next/standalone/server.js` (no bun, no tee)
+  2. `package.json`: `dev` → simplified to `next dev` (no pipes)
+  3. `.env`: `DATABASE_URL` → `file:./dev.db` (relative path, works anywhere)
+  4. `package.json`: removed `bun-types` from devDependencies
+  5. `.gitignore`: `.env*` → `.env.local` + `.env.*.local` (.env now included in ZIP)
+- Verified: compiles with `node` (not bun), 0 lint errors, 0 console errors.
+- Created HOSTINGER_DEPLOY.md with exact commands and Firebase Console instructions.
+
+Stage Summary:
+- Project is now 100% Hostinger-ready.
+- Commands: `npm install` → `npm run build` → `npm run start`
+- Server uses `process.env.PORT` and listens on `0.0.0.0` (Next.js standalone default).
+- No hardcoded paths, no bun dependency, no missing files.
+- Firebase config works via .env file + hardcoded fallback in firebase.ts.
