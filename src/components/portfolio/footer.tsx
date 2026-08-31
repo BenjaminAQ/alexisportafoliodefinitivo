@@ -5,11 +5,12 @@ import Link from "next/link";
 import { NAV_ITEMS } from "@/data/content";
 import { PortfolioIcon } from "./icons";
 import { useSectionData } from "@/components/admin/use-section-data";
-import type { NavLabels } from "@/lib/content-types";
+import type { NavLabels, FooterData } from "@/lib/content-types";
 
 export function Footer() {
   const year = new Date().getFullYear();
   const { data: navLabels } = useSectionData<NavLabels>("nav");
+  const { data: footerData } = useSectionData<FooterData>("footer");
 
   const getLabel = (id: string): string => {
     if (navLabels && (navLabels as Record<string, string>)[id]) {
@@ -19,11 +20,19 @@ export function Footer() {
     return item ? item.label : id;
   };
 
+  const brandName = footerData?.brandName || "Alexis";
+  const tagline = footerData?.tagline || "Structural engineering, earthquake engineering and computational tools for engineering education and practice.";
+  const statement = footerData?.statement || "Structural Engineering, Earthquake Engineering and Computational Tools";
+  const copyright = footerData?.copyright || "All rights reserved.";
+  const socials = footerData?.socials || [
+    { id: "s1", icon: "github", label: "GitHub", href: "https://github.com" },
+    { id: "s2", icon: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com" },
+    { id: "s3", icon: "mail", label: "Email", href: "mailto:alexis@example.com" },
+  ];
+
   return (
     <footer className="mt-auto bg-brand-gradient text-white">
-      {/* Top accent line */}
       <div className="h-px shimmer-line" />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Brand */}
@@ -33,27 +42,24 @@ export function Footer() {
                 <span className="font-display text-lg font-bold">A</span>
               </span>
               <span className="font-display text-lg font-bold tracking-tight">
-                Alexis<span className="text-brand-light">.</span>
+                {brandName}<span className="text-brand-light">.</span>
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm text-brand-light/70 leading-relaxed">
-              Structural engineering, earthquake engineering and computational tools for engineering education and practice.
+              {tagline}
             </p>
+            {/* Social icons from admin */}
             <div className="mt-5 flex items-center gap-2">
-              {[
-                { icon: "github", href: "https://github.com", label: "GitHub" },
-                { icon: "linkedin", href: "https://www.linkedin.com", label: "LinkedIn" },
-                { icon: "scholar", href: "#", label: "Google Scholar" },
-                { icon: "research", href: "#", label: "ResearchGate" },
-                { icon: "mail", href: "mailto:alexis@example.com", label: "Email" },
-              ].map((s) => (
+              {socials.map((s) => (
                 <a
-                  key={s.label}
+                  key={s.id}
                   href={s.href}
                   aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex h-9 w-9 items-center justify-center rounded-md bg-white/5 text-brand-light/80 ring-1 ring-inset ring-brand/20 hover:bg-brand hover:text-white hover:ring-brand transition-all"
                 >
-                  <PortfolioIcon name={s.icon} width={16} height={16} />
+                  <PortfolioIcon name={s.icon || "book"} width={16} height={16} />
                 </a>
               ))}
             </div>
@@ -85,13 +91,13 @@ export function Footer() {
             ))}
           </div>
 
-          {/* Tagline / closing */}
+          {/* Statement */}
           <div className="md:col-span-3">
             <h3 className="font-mono-code text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-light/60">
               Statement
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-white/90 italic">
-              &ldquo;Structural Engineering, Earthquake Engineering and Computational Tools&rdquo;
+              &ldquo;{statement}&rdquo;
             </p>
             <a
               href="#contact"
@@ -105,7 +111,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-brand/15 pt-6">
           <p className="text-xs text-brand-light/60">
-            &copy; {year} Alexis. All rights reserved.
+            &copy; {year} {brandName}. {copyright}
           </p>
           <p className="text-xs text-brand-light/60">
             Built with Next.js · TypeScript · Tailwind CSS · Framer Motion

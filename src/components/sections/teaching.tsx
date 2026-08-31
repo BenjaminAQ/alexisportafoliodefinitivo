@@ -8,6 +8,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FileBadge } from "@/components/admin/file-viewer";
+import { renderRichText } from "@/lib/richtext";
 import type { TeachingData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
 
@@ -72,7 +73,7 @@ export function TeachingSection({ tone = "dark" }: { tone?: "light" | "dark" }) 
                       "mt-2 text-sm leading-relaxed",
                       isDark ? "text-brand-light/70" : "text-muted"
                     )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                      {item.body}
+                      {renderRichText(item.body)}
                     </p>
                   </div>
                 </motion.div>
@@ -139,7 +140,7 @@ export function TeachingSection({ tone = "dark" }: { tone?: "light" | "dark" }) 
                           "text-sm leading-relaxed",
                           isDark ? "text-brand-light/70" : "text-muted"
                         )} style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
-                          {act.description}
+                          {renderRichText(act.description)}
                         </p>
                       )}
 

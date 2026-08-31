@@ -33,9 +33,23 @@ export function ContactSection({ tone = "dark" }: { tone?: "light" | "dark" }) {
     ev.preventDefault();
     if (!validate()) return;
     setSending(true);
-    await new Promise((r) => setTimeout(r, 900));
+    const targetEmail = data?.contactEmail || "";
+    try {
+      if (targetEmail) {
+        // Build a mailto link with the form data
+        const subject = encodeURIComponent(form.subject || "Contact from portfolio");
+        const body = encodeURIComponent(
+          `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+        );
+        window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+        toast.success("Tu cliente de correo se abrirá con el mensaje listo para enviar.");
+      } else {
+        toast.success("Message sent. Thank you for reaching out — I'll reply soon.");
+      }
+    } catch {
+      toast.error("Failed to send. Please try again.");
+    }
     setSending(false);
-    toast.success("Message sent. Thank you for reaching out — I'll reply soon.");
     setForm({ name: "", email: "", subject: "", message: "" });
   };
 

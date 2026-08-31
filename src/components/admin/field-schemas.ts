@@ -30,6 +30,27 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
   order: [
     { key: "sections", type: "reorderList", label: "Orden de las secciones", hint: "Usa las flechas ↑↓ para reordenar. Inicio (Home) siempre va primero y no se puede mover." },
   ],
+  footer: [
+    { key: "brandName", type: "text", label: "Nombre de marca", placeholder: "Alexis" },
+    { key: "tagline", type: "textarea", label: "Eslogan / descripción" },
+    { key: "statement", type: "textarea", label: "Frase final" },
+    { key: "copyright", type: "text", label: "Texto de copyright", placeholder: "All rights reserved." },
+    { key: "socials", type: "objectList", label: "Redes sociales", hint: "Selecciona el ícono y pon el enlace.", itemSchema: [
+      { key: "icon", type: "select", label: "Ícono", options: [
+        { value: "github", label: "GitHub" },
+        { value: "linkedin", label: "LinkedIn" },
+        { value: "mail", label: "Email" },
+        { value: "scholar", label: "Google Scholar" },
+        { value: "research", label: "ResearchGate" },
+        { value: "book", label: "Web" },
+      ]},
+      { key: "label", type: "text", label: "Etiqueta", placeholder: "GitHub" },
+      { key: "href", type: "text", label: "Enlace URL", placeholder: "https://..." },
+    ]},
+  ],
+  loading: [
+    { key: "subtitle", type: "text", label: "Texto de carga", placeholder: "Structural Engineering" },
+  ],
   home: [
     { key: "eyebrow", type: "text", label: "Texto superior (eyebrow)", placeholder: "Portafolio Académico · Ingeniero Civil" },
     { key: "eyebrowColor", type: "color", label: "Color del texto superior" },
@@ -192,11 +213,13 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
     { key: "timeline", type: "objectList", label: "Línea de tiempo", hint: "Aparece como una línea de tiempo vertical con nodos y fechas.", itemSchema: [
       { key: "title", type: "text", label: "Título", placeholder: "Ingeniero Civil" },
       { key: "date", type: "text", label: "Fecha / Período", placeholder: "2020 - 2024" },
-      { key: "description", type: "textarea", label: "Descripción" },
+      { key: "description", type: "textarea", label: "Descripción", hint: "Usa {bold}texto{/bold} para negrita." },
     ]},
+    { key: "timelineTitle", type: "text", label: "Título de la línea de tiempo", placeholder: "Timeline" },
   ],
   contact: [
     { key: "header", type: "header", label: "Encabezado de la sección" },
+    { key: "contactEmail", type: "text", label: "Correo de destino del formulario", placeholder: "alexis@example.com", hint: "Los mensajes del formulario de contacto se enviarán a este correo." },
     { key: "links", type: "objectList", label: "Enlaces de contacto", itemSchema: [
       { key: "label", type: "text", label: "Etiqueta", placeholder: "Correo" },
       { key: "value", type: "text", label: "Valor", placeholder: "alexis@example.com" },
@@ -209,6 +232,8 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
 export const SECTION_LABELS: Record<SectionId, string> = {
   nav: "Navegación",
   order: "Orden de secciones",
+  footer: "Footer",
+  loading: "Pantalla de carga",
   home: "Inicio",
   about: "Acerca de",
   expertise: "Áreas de Experiencia",

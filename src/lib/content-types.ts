@@ -13,7 +13,9 @@ export type SectionId =
   | "cv"
   | "contact"
   | "nav"
-  | "order";
+  | "order"
+  | "footer"
+  | "loading";
 
 // ---- Nav labels (editable) ----
 export interface NavLabels {
@@ -232,6 +234,7 @@ export interface CvData {
   downloads: CvDownload[];
   sections: CvSection[];
   timeline: TimelineItem[];
+  timelineTitle: string;
 }
 
 // ---- Contact ----
@@ -245,6 +248,27 @@ export interface ContactLink {
 export interface ContactData {
   header: SectionHeader;
   links: ContactLink[];
+  contactEmail: string;
+}
+
+// ---- Footer (editable) ----
+export interface FooterSocial {
+  id: string;
+  icon: string;
+  label: string;
+  href: string;
+}
+export interface FooterData {
+  brandName: string;
+  tagline: string;
+  statement: string;
+  copyright: string;
+  socials: FooterSocial[];
+}
+
+// ---- Loading screen (editable) ----
+export interface LoadingData {
+  subtitle: string;
 }
 
 // ---- Union ----
@@ -259,12 +283,16 @@ export type SectionData =
   | LibraryData
   | TeachingData
   | CvData
-  | ContactData;
+  | ContactData
+  | FooterData
+  | LoadingData;
 
 // ---- Default headers (shown until admin edits them) ----
 export const DEFAULT_HEADERS: Record<SectionId, SectionHeader> = {
   nav: { eyebrow: "", title: "", description: "" },
   order: { eyebrow: "", title: "", description: "" },
+  footer: { eyebrow: "", title: "", description: "" },
+  loading: { eyebrow: "", title: "", description: "" },
   home: {
     eyebrow: "Portafolio Académico · Ingeniero Civil",
     title: "Structural Engineering, {accent}Earthquake Engineering{/accent} and {accent}Computational Tools{/accent}",
@@ -350,9 +378,9 @@ export function emptySectionData(id: SectionId): SectionData {
     case "teaching":
       return { header, items: [], activities: [] };
     case "cv":
-      return { header, downloads: [], sections: [], timeline: [] };
+      return { header, downloads: [], sections: [], timeline: [], timelineTitle: "Timeline" };
     case "contact":
-      return { header, links: [] };
+      return { header, links: [], contactEmail: "" };
     case "nav":
       return {
         home: "Home",
@@ -368,6 +396,22 @@ export function emptySectionData(id: SectionId): SectionData {
     case "order":
       return {
         sections: ["about", "expertise", "projects", "resources", "library", "teaching", "cv", "contact"],
+      };
+    case "footer":
+      return {
+        brandName: "Alexis",
+        tagline: "Structural engineering, earthquake engineering and computational tools for engineering education and practice.",
+        statement: "Structural Engineering, Earthquake Engineering and Computational Tools",
+        copyright: "All rights reserved.",
+        socials: [
+          { id: "s1", icon: "github", label: "GitHub", href: "https://github.com" },
+          { id: "s2", icon: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com" },
+          { id: "s3", icon: "mail", label: "Email", href: "mailto:alexis@example.com" },
+        ],
+      };
+    case "loading":
+      return {
+        subtitle: "Structural Engineering",
       };
   }
 }

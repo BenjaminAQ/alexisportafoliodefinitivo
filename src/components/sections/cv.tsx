@@ -8,6 +8,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FilePreviewModal } from "@/components/admin/file-viewer";
+import { renderRichText } from "@/lib/richtext";
 import type { CvData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
 
@@ -154,7 +155,7 @@ export function CvSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                     isDark ? "text-white" : "text-ink"
                   )}>
                     <span className="h-1 w-6 rounded-full bg-brand" />
-                    Timeline
+                    {data.timelineTitle || "Timeline"}
                   </h3>
                   <div className="relative pl-8">
                     {/* Vertical line */}
@@ -185,14 +186,14 @@ export function CvSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                             "font-display text-base font-bold",
                             isDark ? "text-white" : "text-ink"
                           )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                            {item.title}
+                            {renderRichText(item.title)}
                           </h4>
                           {item.description && (
                             <p className={cn(
                               "text-sm leading-relaxed",
                               isDark ? "text-brand-light/70" : "text-muted"
                             )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                              {item.description}
+                              {renderRichText(item.description)}
                             </p>
                           )}
                         </div>

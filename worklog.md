@@ -765,3 +765,28 @@ Stage Summary:
 - Server uses `process.env.PORT` and listens on `0.0.0.0` (Next.js standalone default).
 - No hardcoded paths, no bun dependency, no missing files.
 - Firebase config works via .env file + hardcoded fallback in firebase.ts.
+
+---
+Task ID: 29
+Agent: orchestrator
+Task: Editable Timeline title + contact email + footer section + loading subtitle + bold black everywhere.
+
+Work Log:
+1. CV Timeline title editable: Added `timelineTitle` field to CvData and schema. CV section renders `data.timelineTitle || "Timeline"`. Added `renderRichText` to timeline titles and descriptions for bold support.
+
+2. Contact form sends to admin-configured email: Added `contactEmail` field to ContactData and schema (with hint "Los mensajes del formulario de contacto se enviarán a este correo"). Contact form's `onSubmit` now builds a `mailto:` link with the form data pre-filled and opens it, plus shows success toast.
+
+3. Footer fully editable: Added `footer` to SectionId, FooterData/FooterSocial interfaces, emptySectionData, DEFAULT_HEADERS, and schemas (brandName, tagline, statement, copyright, socials with icon select). Rewrote footer.tsx to load from Firestore and render editable content. Social icons selectable from dropdown (GitHub, LinkedIn, Email, Google Scholar, ResearchGate, Web).
+
+4. Loading screen subtitle editable: Added `loading` to SectionId, LoadingData interface, emptySectionData, schema (subtitle text field). Rewrote loading-screen.tsx with improved animation: rotating rings (SVG), animated glow orbs, pulse logo, gradient progress bar. Loads subtitle from Firestore.
+
+5. Bold renders in black (not cyan): Created shared `src/lib/richtext.tsx` with `renderRichText()` that renders `{bold}text{/bold}` as `<strong className="font-bold text-black dark:text-white">`. Applied to: About (bio, highlights, quick facts), CV (timeline titles + descriptions), Teaching (items body, activities description), Projects (abstract, section body). Old local `renderRichText` in about.tsx removed, now uses shared version.
+
+- Verified: 0 console errors, 10 sections, admin loads, ESLint 0 errors.
+
+Stage Summary:
+- CV: "Timeline" title editable from admin. Bold support in timeline items.
+- Contact: form sends to admin-configured email via mailto. Email field editable.
+- Footer: fully editable (brand, tagline, statement, copyright, socials with icon selector).
+- Loading: subtitle editable, animation improved with rotating rings and animated orbs.
+- Bold: renders in black/white (not cyan), works in About, CV, Teaching, Projects.

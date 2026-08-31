@@ -7,21 +7,9 @@ import { PortfolioIcon } from "../portfolio/icons";
 import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
+import { renderRichText } from "@/lib/richtext";
 import type { AboutData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
-
-// Render text with {bold}text{/bold} markup → <strong>
-function renderRichText(text: string): React.ReactNode {
-  if (!text) return null;
-  const parts = text.split(/(\{bold\}.*?\{\/bold\})/g);
-  return parts.map((part, i) => {
-    const m = part.match(/^\{bold\}(.*)\{\/bold\}$/);
-    if (m) {
-      return <strong key={i} className="font-bold text-brand">{m[1]}</strong>;
-    }
-    return <React.Fragment key={i}>{part}</React.Fragment>;
-  });
-}
 
 export function AboutSection({ tone = "light" }: { tone?: "light" | "dark" }) {
   const reduce = useReducedMotion();

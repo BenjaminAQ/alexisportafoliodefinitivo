@@ -9,6 +9,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FileBadge } from "@/components/admin/file-viewer";
+import { renderRichText } from "@/lib/richtext";
 import type { ProjectsData, ProjectItem } from "@/lib/content-types";
 import {
   Dialog,
@@ -64,7 +65,7 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
           className="mt-2 text-sm text-muted leading-relaxed flex-1"
           style={{ overflowWrap: "break-word", wordBreak: "break-word", display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}
         >
-          {project.abstract}
+          {renderRichText(project.abstract)}
         </p>
 
         {project.tech.length > 0 && (
@@ -174,7 +175,7 @@ function ProjectDetailDialog({
                 className="text-base sm:text-lg text-ink/80 leading-relaxed"
                 style={{ overflowWrap: "break-word", wordBreak: "break-word" }}
               >
-                {project.abstract}
+                {renderRichText(project.abstract)}
               </p>
             )}
 
@@ -203,7 +204,7 @@ function ProjectDetailDialog({
                   className="text-base leading-relaxed text-ink/80 pl-9"
                   style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}
                 >
-                  {s.body}
+                  {renderRichText(s.body)}
                 </p>
               </div>
             ))}
