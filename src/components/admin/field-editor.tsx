@@ -518,7 +518,7 @@ function ObjectListField({
       </div>
       {value.length === 0 ? (
         <p className="rounded-md bg-muted/50 px-3 py-4 text-center text-xs text-muted-foreground ring-1 ring-inset ring-dashed ring-ink/15">
-          No (.*) yet. Click "Add" to create one.
+          No {label.toLowerCase()} yet. Click "Add" to create one.
         </p>
       ) : (
         <ul className="space-y-4">

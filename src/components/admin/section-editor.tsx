@@ -46,9 +46,9 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
     try {
       await setSection(sectionId, data);
       setDirty(false);
-      toast.success("Sección guardada correctamente.");
+      toast.success("Section saved successfully.");
     } catch (err) {
-      toast.error("Error al guardar: " + (err instanceof Error ? err.message : "error desconocido"));
+      toast.error("Failed to save: " + (err instanceof Error ? err.message : "error desconocido"));
     } finally {
       setSaving(false);
     }
@@ -59,7 +59,7 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
     const empty = emptySectionData(sectionId);
     setData(empty);
     setDirty(true);
-    toast.info("Sección vaciada. Pulsa Guardar para conservar los cambios.");
+    toast.info("Section cleared. Press Save to persist changes.");
   };
 
   if (loading || !data) {
@@ -78,13 +78,13 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
       <div className="sticky top-16 z-20 flex items-center justify-between rounded-xl bg-brand-gradient px-4 py-3 ring-1 ring-inset ring-brand/30 shadow-lg">
         <div className="flex items-center gap-2">
           <span className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-brand-light/70">
-            Editando
+            Editing
           </span>
           <span className="font-display text-sm font-semibold text-white capitalize">{SECTION_LABELS[sectionId]}</span>
           {dirty && (
             <span className="inline-flex items-center gap-1 rounded-full bg-amber-400/20 px-2 py-0.5 text-[10px] font-semibold text-amber-200 ring-1 ring-inset ring-amber-300/40">
               <span className="h-1.5 w-1.5 rounded-full bg-amber-300 animate-pulse-dot" />
-              Cambios sin guardar
+              Unsaved changes
             </span>
           )}
         </div>
@@ -93,7 +93,7 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             onClick={reset}
             className="inline-flex items-center gap-1 rounded-md bg-white/5 px-3 py-1.5 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"
           >
-            Restablecer
+            Reset
           </button>
           <button
             onClick={save}
@@ -101,9 +101,9 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             className="inline-flex items-center gap-1.5 rounded-md bg-brand px-4 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saving ? (
-              <><span className="h-3 w-3 rounded-full border-2 border-white/40 border-t-white animate-spin" />Guardando...</>
+              <><span className="h-3 w-3 rounded-full border-2 border-white/40 border-t-white animate-spin" />Saving...</>
             ) : (
-              <><PortfolioIcon name="check" width={12} height={12} />Guardar cambios</>
+              <><PortfolioIcon name="check" width={12} height={12} />Save changes</>
             )}
           </button>
         </div>

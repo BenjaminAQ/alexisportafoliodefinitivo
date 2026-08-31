@@ -81,7 +81,7 @@ export default function AdminPage() {
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-white">
-                  Panel de Administración <span className="text-brand">·</span> Alexis
+                  Admin Panel <span className="text-brand">·</span> Alexis
                 </p>
                 <p className="text-[11px] text-brand-light/60">{user.email}</p>
               </div>
@@ -101,14 +101,14 @@ export default function AdminPage() {
                 className="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-3 py-2 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-white/10 transition-all"
               >
                 <PortfolioIcon name="arrow" width={12} height={12} className="rotate-180" />
-                Ver sitio
+                View site
               </Link>
               <button
                 onClick={signOut}
                 className="inline-flex items-center gap-1.5 rounded-md bg-white/5 px-3 py-2 text-xs font-semibold text-brand-light ring-1 ring-inset ring-brand/30 hover:bg-red-500/20 hover:text-red-300 transition-all"
               >
                 <PortfolioIcon name="close" width={12} height={12} />
-                Cerrar sesión
+                Sign out
               </button>
             </div>
           </div>
@@ -150,7 +150,7 @@ export default function AdminPage() {
             {/* Backend status */}
             <div className="mt-3 rounded-xl bg-card p-4 ring-1 ring-inset ring-border">
               <p className="font-mono-code text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-2">
-                Estado del backend
+                Backend status
               </p>
               <div className="flex items-center gap-2">
                 <span
@@ -160,12 +160,12 @@ export default function AdminPage() {
                   )}
                 />
                 <span className="text-xs text-foreground/80">
-                  {isFirebaseConfigured ? "Firebase Firestore" : "Almacenamiento local (modo preview)"}
+                  {isFirebaseConfigured ? "Firebase Firestore" : "Local storage (preview mode)"}
                 </span>
               </div>
               {!isFirebaseConfigured && (
                 <p className="mt-2 text-[11px] text-muted leading-relaxed">
-                  Añade las variables de entorno de Firebase para activar la persistencia en la nube. Los datos se guardan actualmente en tu navegador.
+                  Add Firebase env vars to enable cloud persistence. Data is currently saved in your browser.
                 </p>
               )}
             </div>
@@ -227,7 +227,7 @@ function LoginScreen({
               <p className="font-display text-lg font-bold text-white">
                 Alexis<span className="text-brand">.</span>
               </p>
-              <p className="text-xs text-brand-light/60">Panel de Administración</p>
+              <p className="text-xs text-brand-light/60">Admin Panel</p>
             </div>
           </div>
 
@@ -292,7 +292,7 @@ function LoginScreen({
             <p className="text-[11px] text-brand-light/70 leading-relaxed">
               {firebaseConfigured
                 ? "Conectado a Firebase. Los datos se guardan en Firestore."
-                : "Modo preview: los datos se guardan en este navegador. Añade las variables de entorno de Firebase para persistencia en la nube."}
+                : "Preview mode: data saves to this browser. Add Firebase env vars for cloud persistence."}
             </p>
           </div>
 

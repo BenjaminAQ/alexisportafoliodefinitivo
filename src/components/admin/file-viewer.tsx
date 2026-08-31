@@ -33,7 +33,7 @@ function fileNameFromUrl(url: string, fallback: string): string {
 }
 
 // ============================================================
-// FILE BADGE — tarjeta de archivo con botones Ver/Descargar
+// FILE BADGE — tarjeta de archivo con botones Ver/Download
 // ============================================================
 export function FileBadge({
   name,
@@ -50,7 +50,7 @@ export function FileBadge({
 
   if (viewMode === "none" || !url) return null;
 
-  const displayName = name || fileNameFromUrl(url, "Archivo");
+  const displayName = name || fileNameFromUrl(url, "File");
   const isImg = isImageUrl(url);
   const isVid = isVideoUrl(url);
   const isPdf = isPdfUrl(url);
@@ -85,7 +85,7 @@ export function FileBadge({
               className="inline-flex items-center gap-1.5 rounded-lg bg-brand/15 px-3 py-2 text-xs font-semibold text-brand hover:bg-brand hover:text-white transition-all"
             >
               <PortfolioIcon name="play" width={13} height={13} />
-              Ver
+              View
             </button>
           )}
           {canDownload && (
@@ -97,7 +97,7 @@ export function FileBadge({
               className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all"
             >
               <PortfolioIcon name="download" width={13} height={13} />
-              Descargar
+              Download
             </a>
           )}
         </div>
@@ -136,7 +136,7 @@ export function FileBadge({
                 className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0 ml-3"
               >
                 <PortfolioIcon name="download" width={14} height={14} />
-                Descargar
+                Download
               </a>
             )}
           </div>
@@ -234,7 +234,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     return (
       <div className="flex h-full w-full items-center justify-center p-6">
         <video src={url} controls className="max-h-full max-w-full rounded-lg shadow-2xl">
-          Tu navegador no soporta la reproducción de video.
+          Your browser does not support video playback.
         </video>
       </div>
     );
@@ -269,7 +269,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
           <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
           <p className="text-sm text-brand-light/70 max-w-md">
-            Tu navegador no puede previsualizar este PDF. Descárgalo para verlo.
+            Your browser cannot preview this PDF. Download it to view.
           </p>
         </div>
       </object>
@@ -281,7 +281,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
       <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
       <p className="text-sm text-brand-light/70 max-w-md">
-        No se pudo previsualizar este archivo en el navegador.
+        Could not preview this file in the browser.
       </p>
     </div>
   );
@@ -303,7 +303,7 @@ export function FilePreviewModal({
         className="p-0 gap-0 overflow-hidden bg-background flex flex-col"
         style={{ maxWidth: "96vw", width: "96vw", maxHeight: "96vh", height: "96vh", borderRadius: "12px" }}
       >
-        <DialogTitle className="sr-only">{preview?.name ?? "Archivo"}</DialogTitle>
+        <DialogTitle className="sr-only">{preview?.name ?? "File"}</DialogTitle>
         <div className="flex items-center justify-between border-b border-border px-5 py-3 shrink-0 bg-ink text-white">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <PortfolioIcon
@@ -323,7 +323,7 @@ export function FilePreviewModal({
               className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-ink transition-all shrink-0 ml-3"
             >
               <PortfolioIcon name="download" width={14} height={14} />
-              Descargar
+              Download
             </a>
           )}
         </div>

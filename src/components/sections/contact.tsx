@@ -42,7 +42,7 @@ export function ContactSection({ tone = "dark" }: { tone?: "light" | "dark" }) {
           `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
         );
         window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
-        toast.success("Tu cliente de correo se abrirá con el mensaje listo para enviar.");
+        toast.success("Your email client will open with the message ready to send.");
       } else {
         toast.success("Message sent. Thank you for reaching out — I'll reply soon.");
       }

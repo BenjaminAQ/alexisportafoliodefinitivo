@@ -162,10 +162,10 @@ function ResourceDetailDialog({
             {/* Metadata */}
             <div className="flex flex-wrap gap-4 text-sm">
               {item.duration && (
-                <div className="inline-flex items-center gap-1.5"><PortfolioIcon name="clock" width={14} height={14} className="text-brand" /><span className="text-muted">Duración:</span> <span className="font-medium text-ink">{item.duration}</span></div>
+                <div className="inline-flex items-center gap-1.5"><PortfolioIcon name="clock" width={14} height={14} className="text-brand" /><span className="text-muted">Duration:</span> <span className="font-medium text-ink">{item.duration}</span></div>
               )}
               {item.prerequisites && (
-                <div><span className="text-muted">Requisitos:</span> <span className="font-medium text-ink">{item.prerequisites}</span></div>
+                <div><span className="text-muted">Requirements:</span> <span className="font-medium text-ink">{item.prerequisites}</span></div>
               )}
             </div>
 
@@ -184,7 +184,7 @@ function ResourceDetailDialog({
               <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
                 <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
                   <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
-                  Archivos ({visibleFiles.length})
+                  Files ({visibleFiles.length})
                 </h4>
                 <div className="space-y-3">
                   {visibleFiles.map((f) => (
@@ -193,7 +193,7 @@ function ResourceDetailDialog({
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-muted text-center py-8">No hay archivos para mostrar.</p>
+              <p className="text-sm text-muted text-center py-8">No files to display.</p>
             )}
           </div>
         </div>
