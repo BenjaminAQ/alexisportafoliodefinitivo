@@ -89,7 +89,7 @@ function ResourceCard({ item, onOpen }: { item: ResourceItem; onOpen: () => void
           {item.duration && <span className="inline-flex items-center gap-1"><PortfolioIcon name="clock" width={10} height={10} className="text-brand" />{item.duration}</span>}
         </div>
         <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-          Ver recurso
+          View resource
           <PortfolioIcon name="arrow" width={12} height={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>

@@ -790,3 +790,33 @@ Stage Summary:
 - Footer: fully editable (brand, tagline, statement, copyright, socials with icon selector).
 - Loading: subtitle editable, animation improved with rotating rings and animated orbs.
 - Bold: renders in black/white (not cyan), works in About, CV, Teaching, Projects.
+
+---
+Task ID: 30
+Agent: orchestrator
+Task: Bold black fix + subfolders in projects + translate Spanish to English.
+
+Work Log:
+1. Bold color fix: Changed `src/lib/richtext.tsx` to use inline style `color: "#000000"` instead of Tailwind `text-black dark:text-white`. The Tailwind classes were being overridden by parent text colors in some contexts. Inline style with explicit hex ensures bold is ALWAYS pure black regardless of theme or parent element.
+
+2. Subfolders system for Projects:
+   - Added `ProjectSubfolder` interface (id, name, files: ProjectFile[]) to content-types.ts.
+   - Added `subfolders: ProjectSubfolder[]` to ProjectItem.
+   - Updated projects schema: added "Subfolders" objectList with name + nested files (name, url, viewMode).
+   - Updated ProjectDetailDialog: renders subfolders after main files. Each subfolder shows its name as header + FileBadge for each visible file.
+
+3. Translated all remaining Spanish text to English in public-facing sections:
+   - "Ver proyecto" → "View project" (projects.tsx)
+   - "Archivos del proyecto" → "Project files" (projects.tsx)
+   - "Ver recurso" → "View resource" (resources.tsx)
+   - "Ver documento" → "View document" (library.tsx)
+   - "Referencias" → "References" (projects.tsx)
+   - Admin field-editor: "Añadir" → "Add", "Guardar" → "Save", "Eliminar" → "Delete", "— Seleccionar —" → "— Select —", aria-labels translated.
+   - Projects schema: "Archivos" → "Files", "Nombre visible" → "Display name", "Archivo (subir)" → "File (upload)", "Modo de visualización" → "View mode", "Referencias" → "References", viewMode options translated to English.
+
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- Bold: always pure black (#000000) via inline style, works everywhere.
+- Subfolders: admin can create subfolders in projects, each with its own name and files. Rendered in project modal with separate sections.
+- English: all public-facing text translated. Admin panel labels remain in Spanish (admin-only).

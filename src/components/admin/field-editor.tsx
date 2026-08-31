@@ -168,11 +168,11 @@ function ReorderListField({
             <span className="flex-1 text-sm font-medium text-foreground">{SECTION_DISPLAY_NAMES[item] || item}</span>
             <div className="flex items-center gap-1 shrink-0">
               <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
-                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Subir">
+                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Move up">
                 <PortfolioIcon name="chevron" width={14} height={14} className="rotate-180" />
               </button>
               <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1}
-                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Bajar">
+                className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Move down">
                 <PortfolioIcon name="chevron" width={14} height={14} />
               </button>
             </div>
@@ -206,7 +206,7 @@ function SelectField({
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-md bg-background px-3 py-2 text-sm text-foreground ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-brand/60 cursor-pointer"
       >
-        <option value="">— Seleccionar —</option>
+        <option value="">— Select —</option>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
@@ -388,7 +388,7 @@ function StringListField({
           className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-2 text-xs font-semibold text-white hover:bg-brand-light hover:text-foreground transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
-          Añadir
+          Add
         </button>
       </div>
       {value.length > 0 && (
@@ -418,13 +418,13 @@ function StringListField({
                     className="inline-flex items-center gap-1 rounded-md bg-brand px-2 py-1 text-[11px] font-semibold text-white hover:bg-brand-light transition-all shrink-0"
                   >
                     <PortfolioIcon name="check" width={11} height={11} />
-                    Guardar
+                    Save
                   </button>
                   <button
                     type="button"
                     onClick={cancelEdit}
                     className="text-muted hover:text-foreground transition-colors p-1 shrink-0"
-                    aria-label="Cancelar"
+                    aria-label="Cancel"
                   >
                     <PortfolioIcon name="close" width={14} height={14} />
                   </button>
@@ -443,7 +443,7 @@ function StringListField({
                     type="button"
                     onClick={() => startEdit(i)}
                     className="opacity-0 group-hover:opacity-100 text-muted hover:text-brand transition-all p-1 shrink-0"
-                    aria-label="Editar"
+                    aria-label="Edit"
                   >
                     <PortfolioIcon name="chevron" width={14} height={14} className="rotate-[-90deg]" />
                   </button>
@@ -451,7 +451,7 @@ function StringListField({
                     type="button"
                     onClick={() => onChange(value.filter((_, j) => j !== i))}
                     className="opacity-0 group-hover:opacity-100 text-muted hover:text-red-500 transition-all p-1 shrink-0"
-                    aria-label="Eliminar"
+                    aria-label="Delete"
                   >
                     <PortfolioIcon name="close" width={14} height={14} />
                   </button>
@@ -513,12 +513,12 @@ function ObjectListField({
           className="inline-flex items-center gap-1 rounded-md bg-brand px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-light hover:text-foreground transition-all"
         >
           <PortfolioIcon name="arrow" width={12} height={12} className="rotate-[-45deg]" />
-          Añadir {label.replace(/s$/, "").toLowerCase()}
+          Add {label.replace(/s$/, "").toLowerCase()}
         </button>
       </div>
       {value.length === 0 ? (
         <p className="rounded-md bg-muted/50 px-3 py-4 text-center text-xs text-muted-foreground ring-1 ring-inset ring-dashed ring-ink/15">
-          No hay {label.toLowerCase()} todavía. Pulsa "Añadir" para crear uno.
+          No (.*) yet. Click "Add" to create one.
         </p>
       ) : (
         <ul className="space-y-4">
@@ -530,15 +530,15 @@ function ObjectListField({
                 </span>
                 <div className="flex items-center gap-1">
                   <button type="button" onClick={() => move(i, -1)} disabled={i === 0}
-                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Subir">
+                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Move up">
                     <PortfolioIcon name="chevron" width={14} height={14} className="rotate-180" />
                   </button>
                   <button type="button" onClick={() => move(i, 1)} disabled={i === value.length - 1}
-                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Bajar">
+                    className="p-1.5 text-muted hover:text-brand hover:bg-brand/10 rounded disabled:opacity-30 transition-all" aria-label="Move down">
                     <PortfolioIcon name="chevron" width={14} height={14} />
                   </button>
                   <button type="button" onClick={() => remove(i)}
-                    className="p-1.5 text-muted hover:text-red-500 hover:bg-red-50 rounded transition-all" aria-label="Eliminar">
+                    className="p-1.5 text-muted hover:text-red-500 hover:bg-red-50 rounded transition-all" aria-label="Delete">
                     <PortfolioIcon name="close" width={14} height={14} />
                   </button>
                 </div>
@@ -669,7 +669,7 @@ function ImageField({
                 className="inline-flex items-center gap-1 rounded-md bg-white px-2.5 py-1 text-[11px] font-semibold text-red-500 ring-1 ring-inset ring-red-200 hover:bg-red-50 transition-all"
               >
                 <PortfolioIcon name="close" width={11} height={11} />
-                Eliminar
+                Delete
               </button>
             </div>
           )}
@@ -741,7 +741,7 @@ function FileField({
               type="button"
               onClick={() => { onChange("", ""); setFileName(""); }}
               className="text-muted hover:text-red-500 transition-colors"
-              aria-label="Eliminar archivo"
+              aria-label="Delete file"
             >
               <PortfolioIcon name="close" width={13} height={13} />
             </button>

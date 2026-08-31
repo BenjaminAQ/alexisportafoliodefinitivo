@@ -112,17 +112,23 @@ export interface ProjectFile {
   url: string;
   viewMode?: string; // "none" | "view" | "download"
 }
+export interface ProjectSubfolder {
+  id: string;
+  name: string;
+  files: ProjectFile[];
+}
 export interface ProjectItem {
   id: string;
   title: string;
   abstract: string;
   area: string;
-  category: string; // categoría/temática para agrupar
+  category: string;
   tech: string[];
   level: string;
-  coverImage: string; // URL de imagen de portada
+  coverImage: string;
   sections: { heading: string; body: string }[];
   files: ProjectFile[];
+  subfolders: ProjectSubfolder[];
   references: string[];
 }
 export interface ProjectsData {

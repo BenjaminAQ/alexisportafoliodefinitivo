@@ -73,7 +73,7 @@ function LibraryCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }
           {item.date && <><span className="text-ink/30">·</span><time dateTime={item.date}>{item.date}</time></>}
         </div>
         <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-          Ver documento
+          View document
           <PortfolioIcon name="arrow" width={12} height={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>

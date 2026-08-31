@@ -82,7 +82,7 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
         )}
 
         <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-          Ver proyecto
+          View project
           <PortfolioIcon name="arrow" width={12} height={12} className="transition-transform group-hover:translate-x-0.5" />
         </span>
       </div>
@@ -209,12 +209,12 @@ function ProjectDetailDialog({
               </div>
             ))}
 
-            {/* Archivos */}
+            {/* Project files */}
             {visibleFiles.length > 0 && (
               <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
                 <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
                   <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
-                  Archivos del proyecto
+                  Project files
                 </h4>
                 <div className="space-y-3">
                   {visibleFiles.map((f) => (
@@ -229,12 +229,36 @@ function ProjectDetailDialog({
               </div>
             )}
 
-            {/* Referencias */}
+            {/* Subfolders */}
+            {project.subfolders && project.subfolders.length > 0 && project.subfolders.map((sf) => {
+              const sfFiles = (sf.files || []).filter(f => f.url && f.viewMode && f.viewMode !== "none");
+              if (sfFiles.length === 0) return null;
+              return (
+                <div key={sf.id} className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
+                  <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
+                    {sf.name || "Subfolder"}
+                  </h4>
+                  <div className="space-y-3">
+                    {sfFiles.map((f) => (
+                      <FileBadge
+                        key={f.id || f.url}
+                        name={f.name}
+                        url={f.url}
+                        viewMode={f.viewMode}
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* References */}
             {project.references.length > 0 && (
               <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
                 <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
                   <PortfolioIcon name="book" width={16} height={16} className="text-brand" />
-                  Referencias
+                  References
                 </h4>
                 <ul className="space-y-2">
                   {project.references.map((r, i) => (

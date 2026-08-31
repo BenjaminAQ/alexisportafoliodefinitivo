@@ -114,16 +114,28 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
         { key: "heading", type: "text", label: "Encabezado", placeholder: "Planteamiento del problema" },
         { key: "body", type: "textarea", label: "Contenido" },
       ]},
-      { key: "files", type: "objectList", label: "Archivos", itemSchema: [
-        { key: "name", type: "text", label: "Nombre visible", placeholder: "solver.py" },
-        { key: "url", type: "file", label: "Archivo (subir)" },
-        { key: "viewMode", type: "select", label: "Modo de visualización", hint: "Controla cómo se muestra el archivo en la web pública.", options: [
-          { value: "none", label: "Oculto (no mostrar)" },
-          { value: "view", label: "Solo ver (previsualizar sin descarga)" },
-          { value: "download", label: "Ver y descargar" },
+      { key: "files", type: "objectList", label: "Files", itemSchema: [
+        { key: "name", type: "text", label: "Display name", placeholder: "solver.py" },
+        { key: "url", type: "file", label: "File (upload)" },
+        { key: "viewMode", type: "select", label: "View mode", hint: "Controls how the file is shown on the website.", options: [
+          { value: "none", label: "Hidden (don't show)" },
+          { value: "view", label: "View only (preview without download)" },
+          { value: "download", label: "View and download" },
         ]},
       ]},
-      { key: "references", type: "stringList", label: "Referencias", placeholder: "Autor, Título..." },
+      { key: "subfolders", type: "objectList", label: "Subfolders", hint: "Create subfolders to organize files inside the project.", itemSchema: [
+        { key: "name", type: "text", label: "Subfolder name", placeholder: "Documentation" },
+        { key: "files", type: "objectList", label: "Files in subfolder", itemSchema: [
+          { key: "name", type: "text", label: "Display name", placeholder: "document.pdf" },
+          { key: "url", type: "file", label: "File (upload)" },
+          { key: "viewMode", type: "select", label: "View mode", options: [
+            { value: "none", label: "Hidden (don't show)" },
+            { value: "view", label: "View only" },
+            { value: "download", label: "View and download" },
+          ]},
+        ]},
+      ]},
+      { key: "references", type: "stringList", label: "References", placeholder: "Author, Title..." },
     ]},
   ],
   resources: [
