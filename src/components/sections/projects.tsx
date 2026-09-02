@@ -91,6 +91,74 @@ function ProjectCard({ project, onOpen }: { project: ProjectItem; onOpen: () => 
 }
 
 // ============================================================
+// FOLDER ITEM — file-explorer style collapsible folder (BIG & NOTABLE)
+// ============================================================
+function FolderItem({ folder }: { folder: { id: string; name: string; files: { id: string; name: string; url: string; viewMode?: string }[] } }) {
+  const [open, setOpen] = React.useState(true);
+  const visibleFiles = (folder.files || []).filter(f => f.url && f.viewMode && f.viewMode !== "none");
+
+  return (
+    <div className="rounded-xl ring-2 ring-brand/20 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      {/* Folder header — BIG and clickable */}
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-4 px-5 py-4 bg-gradient-to-r from-brand/10 to-brand/5 hover:from-brand/15 hover:to-brand/10 transition-all text-left group"
+      >
+        {/* Big folder icon */}
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/20 text-brand ring-1 ring-inset ring-brand/30 shadow-sm group-hover:scale-105 transition-transform">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          </svg>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <span className="block text-base font-bold text-ink truncate">
+            {folder.name || "Folder"}
+          </span>
+          <span className="block mt-0.5 font-mono-code text-[11px] text-muted">
+            {visibleFiles.length} {visibleFiles.length === 1 ? "file" : "files"}
+          </span>
+        </div>
+
+        {/* Chevron — big and rotates */}
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand group-hover:bg-brand/20 transition-colors">
+          <PortfolioIcon
+            name="chevron"
+            width={20}
+            height={20}
+            className="transition-transform duration-300"
+            style={{ transform: open ? "rotate(0deg)" : "rotate(-90deg)" }}
+          />
+        </div>
+      </button>
+
+      {/* Folder contents — indented like file explorer */}
+      {open && visibleFiles.length > 0 && (
+        <div className="px-5 pb-4 pt-2 space-y-2 bg-surface/30 border-t border-brand/10">
+          {/* Indentation line */}
+          <div className="absolute left-9 w-px h-4 bg-brand/20" />
+          {visibleFiles.map((f) => (
+            <div key={f.id || f.url} className="pl-6">
+              <FileBadge
+                name={f.name}
+                url={f.url}
+                viewMode={f.viewMode}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// EXPORT FOLDER ITEM for reuse in other sections
+// ============================================================
+export { FolderItem };
+
+// ============================================================
 // PROJECT DETAIL MODAL — casi pantalla completa, sin desbordes
 // ============================================================
 function ProjectDetailDialog({
@@ -209,14 +277,25 @@ function ProjectDetailDialog({
               </div>
             ))}
 
-            {/* Project files */}
-            {visibleFiles.length > 0 && (
+            {/* Project files — file explorer style */}
+            {(visibleFiles.length > 0 || (project.folders && project.folders.some(f => (f.files || []).some(ff => ff.url && ff.viewMode && ff.viewMode !== "none")))) && (
               <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
                 <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
                   <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
                   Project files
                 </h4>
-                <div className="space-y-3">
+
+                <div className="space-y-2">
+                  {/* Folders (collapsible, file-explorer style) */}
+                  {project.folders && project.folders.map((folder) => {
+                    const folderFiles = (folder.files || []).filter(f => f.url && f.viewMode && f.viewMode !== "none");
+                    if (folderFiles.length === 0) return null;
+                    return (
+                      <FolderItem key={folder.id} folder={folder} />
+                    );
+                  })}
+
+                  {/* Loose files (not inside a folder) */}
                   {visibleFiles.map((f) => (
                     <FileBadge
                       key={f.id || f.url}
@@ -228,30 +307,6 @@ function ProjectDetailDialog({
                 </div>
               </div>
             )}
-
-            {/* Subfolders */}
-            {project.subfolders && project.subfolders.length > 0 && project.subfolders.map((sf) => {
-              const sfFiles = (sf.files || []).filter(f => f.url && f.viewMode && f.viewMode !== "none");
-              if (sfFiles.length === 0) return null;
-              return (
-                <div key={sf.id} className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
-                  <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
-                    {sf.name || "Subfolder"}
-                  </h4>
-                  <div className="space-y-3">
-                    {sfFiles.map((f) => (
-                      <FileBadge
-                        key={f.id || f.url}
-                        name={f.name}
-                        url={f.url}
-                        viewMode={f.viewMode}
-                      />
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
 
             {/* References */}
             {project.references.length > 0 && (

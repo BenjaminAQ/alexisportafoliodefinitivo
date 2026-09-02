@@ -110,9 +110,9 @@ export interface ProjectFile {
   id: string;
   name: string;
   url: string;
-  viewMode?: string; // "none" | "view" | "download"
+  viewMode?: string;
 }
-export interface ProjectSubfolder {
+export interface ProjectFolder {
   id: string;
   name: string;
   files: ProjectFile[];
@@ -128,7 +128,7 @@ export interface ProjectItem {
   coverImage: string;
   sections: { heading: string; body: string }[];
   files: ProjectFile[];
-  subfolders: ProjectSubfolder[];
+  folders: ProjectFolder[];
   references: string[];
 }
 export interface ProjectsData {
@@ -182,6 +182,7 @@ export interface LibraryItem {
   file?: string;
   viewMode?: string;
   files?: LibraryFile[]; // múltiples archivos (carpeta)
+  folders?: LibraryFolder[];
   coverImage?: string; // imagen de portada
 }
 export interface LibraryData {

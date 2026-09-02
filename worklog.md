@@ -853,3 +853,31 @@ Stage Summary:
 - Bold renders in pure black (#000000) via inline style.
 - Subfolders system works in Projects (create subfolders with files).
 - About factSections already supports unlimited section creation.
+
+---
+Task ID: 32
+Agent: orchestrator
+Task: Replace subfolders with file-explorer style folders in Projects.
+
+Work Log:
+- Removed ProjectSubfolder interface and subfolders field from ProjectItem.
+- Added ProjectFolder interface (id, name, files: ProjectFile[]) and folders field to ProjectItem.
+- Updated projects schema: "Loose files" (files directly in project) + "Folders" (each folder has name + files inside). Removed "Subfolders" section entirely.
+- Created FolderItem component in projects.tsx:
+  - File-explorer style: folder icon (SVG), folder name, file count badge.
+  - Collapsible: click folder header to expand/collapse.
+  - Chevron icon rotates to indicate open/closed state.
+  - When open, shows FileBadge for each file inside (with View/Download buttons).
+  - Styled like a file explorer: bg-brand/5 header, bg-surface/50 content area.
+- Updated ProjectDetailDialog:
+  - "Project files" section now shows folders first (collapsible), then loose files.
+  - Folders render as FolderItem components (click to expand).
+  - Loose files render as FileBadge directly.
+  - Structure: Project > Folders (collapsible, with files inside) + Loose files (direct).
+- Verified: 0 console errors, 10 sections, ESLint 0 errors.
+
+Stage Summary:
+- Projects now support file-explorer style folders.
+- Admin: create folders with names, add files inside each folder. Also can add loose files directly.
+- Web: folders appear as collapsible cards with folder icon, name, and file count. Click to expand and see files inside.
+- Removed subfolders system entirely (replaced by folders).

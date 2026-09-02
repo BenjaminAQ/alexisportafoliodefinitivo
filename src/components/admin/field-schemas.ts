@@ -114,18 +114,18 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
         { key: "heading", type: "text", label: "Encabezado", placeholder: "Planteamiento del problema" },
         { key: "body", type: "textarea", label: "Contenido" },
       ]},
-      { key: "files", type: "objectList", label: "Files", itemSchema: [
+      { key: "files", type: "objectList", label: "Loose files", hint: "Files that appear directly in the project (not inside a folder).", itemSchema: [
         { key: "name", type: "text", label: "Display name", placeholder: "solver.py" },
         { key: "url", type: "file", label: "File (upload)" },
-        { key: "viewMode", type: "select", label: "View mode", hint: "Controls how the file is shown on the website.", options: [
+        { key: "viewMode", type: "select", label: "View mode", options: [
           { value: "none", label: "Hidden (don't show)" },
           { value: "view", label: "View only (preview without download)" },
           { value: "download", label: "View and download" },
         ]},
       ]},
-      { key: "subfolders", type: "objectList", label: "Subfolders", hint: "Create subfolders to organize files inside the project.", itemSchema: [
-        { key: "name", type: "text", label: "Subfolder name", placeholder: "Documentation" },
-        { key: "files", type: "objectList", label: "Files in subfolder", itemSchema: [
+      { key: "folders", type: "objectList", label: "Folders", hint: "Create folders to organize files. Each folder can contain multiple files.", itemSchema: [
+        { key: "name", type: "text", label: "Folder name", placeholder: "Documentation" },
+        { key: "files", type: "objectList", label: "Files in folder", itemSchema: [
           { key: "name", type: "text", label: "Display name", placeholder: "document.pdf" },
           { key: "url", type: "file", label: "File (upload)" },
           { key: "viewMode", type: "select", label: "View mode", options: [
