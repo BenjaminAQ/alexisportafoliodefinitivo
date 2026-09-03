@@ -51,5 +51,7 @@ test
 prompt
 
 server.log
+*.tar
+*.zip
 # Skills directory
 /skills/

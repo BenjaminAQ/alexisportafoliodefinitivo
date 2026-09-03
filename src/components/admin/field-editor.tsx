@@ -563,6 +563,48 @@ function ObjectListField({
   );
 }
 
+// Canvas-based client-side image compression (drastically reduces asset weight before uploading)
+async function compressImage(file: File, maxWidth = 1600, maxHeight = 1600, quality = 0.82): Promise<File> {
+  return new Promise((resolve) => {
+    if (!file.type.startsWith("image/") || file.type === "image/gif" || file.type === "image/svg+xml") {
+      resolve(file);
+      return;
+    }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let width = img.width;
+      let height = img.height;
+      if (width > maxWidth || height > maxHeight) {
+        if (width > height) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        } else {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) { resolve(file); return; }
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob((blob) => {
+        if (!blob) { resolve(file); return; }
+        const compressed = new File([blob], file.name.replace(/\.[^/.]+$/, ".webp"), {
+          type: "image/webp",
+          lastModified: Date.now(),
+        });
+        resolve(compressed);
+      }, "image/webp", quality);
+    };
+    img.onerror = () => resolve(file);
+    img.src = url;
+  });
+}
+
 // ---------- Image field (uploads to Firebase Storage) ----------
 function ImageField({
   label,
@@ -587,20 +629,21 @@ function ImageField({
       setError("Selecciona un archivo de imagen.");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      setError("La imagen debe ser menor a 5 MB.");
+    if (file.size > 15 * 1024 * 1024) {
+      setError("La imagen debe ser menor a 15 MB.");
       return;
     }
     setError(null);
     setUploading(true);
     setProgress(0);
     try {
-      // Simulate progress for better UX
+      // Compress image client-side to WebP for instant loads
+      const fileToUpload = await compressImage(file);
       const interval = setInterval(() => {
         setProgress((p) => Math.min(p + 10, 90));
       }, 150);
       const { uploadFile } = await import("@/lib/storage");
-      const result = await uploadFile(file, uid, "images");
+      const result = await uploadFile(fileToUpload, uid, "images");
       clearInterval(interval);
       setProgress(100);
       onChange(result.url, result.path);

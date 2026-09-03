@@ -150,13 +150,25 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "description", type: "textarea", label: "Descripción" },
       { key: "prerequisites", type: "text", label: "Requisitos previos" },
       { key: "objectives", type: "textarea", label: "Objetivos" },
-      { key: "files", type: "objectList", label: "Archivos (carpeta)", hint: "Añade todos los archivos que quieras a este recurso.", itemSchema: [
+      { key: "files", type: "objectList", label: "Archivos sueltos", hint: "Archivos sueltos que pertenecen directamente a este recurso.", itemSchema: [
         { key: "name", type: "text", label: "Nombre visible", placeholder: "documento.pdf" },
         { key: "url", type: "file", label: "Archivo (subir)" },
         { key: "viewMode", type: "select", label: "Modo de visualización", options: [
           { value: "none", label: "Hidden (don't show)" },
           { value: "view", label: "View only" },
           { value: "download", label: "View and download" },
+        ]},
+      ]},
+      { key: "folders", type: "objectList", label: "Carpetas (Folders)", hint: "Crea carpetas para organizar múltiples archivos.", itemSchema: [
+        { key: "name", type: "text", label: "Nombre de la carpeta", placeholder: "Material Complementario" },
+        { key: "files", type: "objectList", label: "Archivos en la carpeta", itemSchema: [
+          { key: "name", type: "text", label: "Nombre visible", placeholder: "documento.pdf" },
+          { key: "url", type: "file", label: "Archivo (subir)" },
+          { key: "viewMode", type: "select", label: "Modo de visualización", options: [
+            { value: "none", label: "Hidden (don't show)" },
+            { value: "view", label: "View only" },
+            { value: "download", label: "View and download" },
+          ]},
         ]},
       ]},
     ]},
@@ -172,13 +184,25 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "software", type: "text", label: "Software" },
       { key: "language", type: "text", label: "Idioma" },
       { key: "date", type: "text", label: "Fecha", placeholder: "2024-03-12" },
-      { key: "files", type: "objectList", label: "Archivos (carpeta)", hint: "Añade todos los archivos que quieras a este documento.", itemSchema: [
+      { key: "files", type: "objectList", label: "Archivos sueltos", hint: "Archivos sueltos que pertenecen a este documento.", itemSchema: [
         { key: "name", type: "text", label: "Nombre visible", placeholder: "documento.pdf" },
         { key: "url", type: "file", label: "Archivo (subir)" },
         { key: "viewMode", type: "select", label: "Modo de visualización", options: [
           { value: "none", label: "Hidden (don't show)" },
           { value: "view", label: "View only (preview without download)" },
           { value: "download", label: "View and download" },
+        ]},
+      ]},
+      { key: "folders", type: "objectList", label: "Carpetas (Folders)", hint: "Crea carpetas para organizar múltiples archivos.", itemSchema: [
+        { key: "name", type: "text", label: "Nombre de la carpeta", placeholder: "Anexos y Planos" },
+        { key: "files", type: "objectList", label: "Archivos en la carpeta", itemSchema: [
+          { key: "name", type: "text", label: "Nombre visible", placeholder: "plano.pdf" },
+          { key: "url", type: "file", label: "Archivo (subir)" },
+          { key: "viewMode", type: "select", label: "Modo de visualización", options: [
+            { value: "none", label: "Hidden (don't show)" },
+            { value: "view", label: "View only" },
+            { value: "download", label: "View and download" },
+          ]},
         ]},
       ]},
     ]},
@@ -196,13 +220,25 @@ export const SECTION_SCHEMAS: Record<SectionId, FieldSchema[]> = {
       { key: "title", type: "text", label: "Título", placeholder: "Course title" },
       { key: "date", type: "text", label: "Fecha / Período", placeholder: "2024 - Present" },
       { key: "description", type: "textarea", label: "Descripción", hint: "Usa {bold}texto{/bold} para negrita." },
-      { key: "files", type: "objectList", label: "Archivos", itemSchema: [
+      { key: "files", type: "objectList", label: "Archivos sueltos", itemSchema: [
         { key: "name", type: "text", label: "Nombre visible", placeholder: "documento.pdf" },
         { key: "url", type: "file", label: "Archivo (subir)" },
         { key: "viewMode", type: "select", label: "Modo de visualización", options: [
           { value: "none", label: "Hidden (don't show)" },
           { value: "view", label: "View only" },
           { value: "download", label: "View and download" },
+        ]},
+      ]},
+      { key: "folders", type: "objectList", label: "Carpetas (Folders)", hint: "Crea carpetas para organizar los archivos del curso/actividad.", itemSchema: [
+        { key: "name", type: "text", label: "Nombre de la carpeta", placeholder: "Syllabus y Clases" },
+        { key: "files", type: "objectList", label: "Archivos en la carpeta", itemSchema: [
+          { key: "name", type: "text", label: "Nombre visible", placeholder: "clase1.pdf" },
+          { key: "url", type: "file", label: "Archivo (subir)" },
+          { key: "viewMode", type: "select", label: "Modo de visualización", options: [
+            { value: "none", label: "Hidden (don't show)" },
+            { value: "view", label: "View only" },
+            { value: "download", label: "View and download" },
+          ]},
         ]},
       ]},
     ]},

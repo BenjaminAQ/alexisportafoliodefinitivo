@@ -8,6 +8,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FileBadge } from "@/components/admin/file-viewer";
+import { FolderItem } from "../portfolio/folder-item";
 import { renderRichText } from "@/lib/richtext";
 import type { TeachingData } from "@/lib/content-types";
 import { cn } from "@/lib/utils";
@@ -99,62 +100,73 @@ export function TeachingSection({ tone = "dark" }: { tone?: "light" | "dark" }) 
               </h3>
 
               <div className="space-y-8">
-                {data.activities.map((act) => (
-                  <motion.div
-                    key={act.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                    }}
-                    className={cn(
-                      "flex flex-col sm:flex-row gap-5 rounded-2xl overflow-hidden ring-1 ring-inset",
-                      isDark ? "bg-ink-soft/40 ring-brand/15" : "bg-white ring-ink/10"
-                    )}
-                  >
-                    {/* Imagen izquierda */}
-                    {act.image && (
-                      <div className="sm:w-48 sm:shrink-0 h-40 sm:h-auto overflow-hidden bg-brand-gradient">
-                        <img
-                          src={act.image}
-                          alt={act.title}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    )}
+                {data.activities.map((act) => {
+                  const visibleFiles = (act.files || []).filter(f => f.url && f.viewMode && f.viewMode !== "none");
+                  const visibleFolders = (act.folders || []).filter(folder =>
+                    (folder.files || []).some(f => f.url && f.viewMode && f.viewMode !== "none")
+                  );
+                  const hasFiles = visibleFiles.length > 0 || visibleFolders.length > 0;
 
-                    {/* Texto derecha */}
-                    <div className="flex-1 p-5 sm:py-6 sm:pr-6" style={{ minWidth: 0 }}>
-                      {act.date && (
-                        <span className="font-mono-code text-xs uppercase tracking-[0.15em] text-brand mb-2 block">
-                          {act.date}
-                        </span>
+                  return (
+                    <motion.div
+                      key={act.id}
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+                      }}
+                      className={cn(
+                        "flex flex-col sm:flex-row gap-5 rounded-2xl overflow-hidden ring-1 ring-inset",
+                        isDark ? "bg-ink-soft/40 ring-brand/15" : "bg-white ring-ink/10"
                       )}
-                      <h4 className={cn(
-                        "font-display text-lg font-bold mb-2",
-                        isDark ? "text-white" : "text-ink"
-                      )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
-                        {act.title}
-                      </h4>
-                      {act.description && (
-                        <p className={cn(
-                          "text-sm leading-relaxed",
-                          isDark ? "text-brand-light/70" : "text-muted"
-                        )} style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
-                          {renderRichText(act.description)}
-                        </p>
-                      )}
-
-                      {/* Archivos */}
-                      {act.files && act.files.filter(f => f.url && f.viewMode && f.viewMode !== "none").length > 0 && (
-                        <div className="mt-4 space-y-2">
-                          {act.files.filter(f => f.url && f.viewMode && f.viewMode !== "none").map((f) => (
-                            <FileBadge key={f.id || f.url} name={f.name} url={f.url} viewMode={f.viewMode} />
-                          ))}
+                    >
+                      {/* Imagen izquierda */}
+                      {act.image && (
+                        <div className="sm:w-48 sm:shrink-0 h-40 sm:h-auto overflow-hidden bg-brand-gradient">
+                          <img
+                            src={act.image}
+                            alt={act.title}
+                            className="h-full w-full object-cover"
+                          />
                         </div>
                       )}
-                    </div>
-                  </motion.div>
-                ))}
+
+                      {/* Texto derecha */}
+                      <div className="flex-1 p-5 sm:py-6 sm:pr-6" style={{ minWidth: 0 }}>
+                        {act.date && (
+                          <span className="font-mono-code text-xs uppercase tracking-[0.15em] text-brand mb-2 block">
+                            {act.date}
+                          </span>
+                        )}
+                        <h4 className={cn(
+                          "font-display text-lg font-bold mb-2",
+                          isDark ? "text-white" : "text-ink"
+                        )} style={{ overflowWrap: "break-word", wordBreak: "break-word" }}>
+                          {act.title}
+                        </h4>
+                        {act.description && (
+                          <p className={cn(
+                            "text-sm leading-relaxed",
+                            isDark ? "text-brand-light/70" : "text-muted"
+                          )} style={{ overflowWrap: "break-word", wordBreak: "break-word", whiteSpace: "pre-wrap" }}>
+                            {renderRichText(act.description)}
+                          </p>
+                        )}
+
+                        {/* Archivos y Carpetas */}
+                        {hasFiles && (
+                          <div className="mt-4 space-y-3">
+                            {visibleFolders.map((folder) => (
+                              <FolderItem key={folder.id} folder={folder} isDark={isDark} />
+                            ))}
+                            {visibleFiles.map((f) => (
+                              <FileBadge key={f.id || f.url} name={f.name} url={f.url} viewMode={f.viewMode} />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           )}

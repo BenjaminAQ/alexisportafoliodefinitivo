@@ -143,6 +143,11 @@ export interface ResourceFile {
   url: string;
   viewMode?: string;
 }
+export interface ResourceFolder {
+  id: string;
+  name: string;
+  files: ResourceFile[];
+}
 export interface ResourceItem {
   id: string;
   title: string;
@@ -155,7 +160,8 @@ export interface ResourceItem {
   objectives: string;
   file?: string;
   viewMode?: string;
-  files?: ResourceFile[]; // múltiples archivos (carpeta)
+  files?: ResourceFile[]; // archivos sueltos
+  folders?: ResourceFolder[]; // carpetas con archivos adentro
   coverImage?: string; // imagen de portada
 }
 export interface ResourcesData {
@@ -170,6 +176,11 @@ export interface LibraryFile {
   url: string;
   viewMode?: string;
 }
+export interface LibraryFolder {
+  id: string;
+  name: string;
+  files: LibraryFile[];
+}
 export interface LibraryItem {
   id: string;
   title: string;
@@ -181,8 +192,8 @@ export interface LibraryItem {
   date: string;
   file?: string;
   viewMode?: string;
-  files?: LibraryFile[]; // múltiples archivos (carpeta)
-  folders?: LibraryFolder[];
+  files?: LibraryFile[]; // archivos sueltos
+  folders?: LibraryFolder[]; // carpetas con archivos adentro
   coverImage?: string; // imagen de portada
 }
 export interface LibraryData {
@@ -198,19 +209,25 @@ export interface TeachingItem {
   body: string;
   image: string;
 }
+export interface TeachingFile {
+  id: string;
+  name: string;
+  url: string;
+  viewMode?: string;
+}
+export interface TeachingFolder {
+  id: string;
+  name: string;
+  files: TeachingFile[];
+}
 export interface TeachingActivity {
   id: string;
   title: string;
   date: string;
   description: string;
   image: string;
-  files: TeachingFile[];
-}
-export interface TeachingFile {
-  id: string;
-  name: string;
-  url: string;
-  viewMode?: string;
+  files: TeachingFile[]; // archivos sueltos
+  folders?: TeachingFolder[]; // carpetas con archivos adentro
 }
 export interface TeachingData {
   header: SectionHeader;

@@ -9,6 +9,7 @@ import { useSectionData } from "@/components/admin/use-section-data";
 import { EmptyState } from "@/components/admin/empty-state";
 import { DynamicSectionHeader, SectionSkeleton } from "@/components/admin/dynamic-header";
 import { FileBadge } from "@/components/admin/file-viewer";
+import { FolderItem } from "../portfolio/folder-item";
 import type { ResourcesData, ResourceItem } from "@/lib/content-types";
 import {
   Dialog,
@@ -28,10 +29,13 @@ function typeIcon(type: string) {
 }
 
 function ResourceCard({ item, onOpen }: { item: ResourceItem; onOpen: () => void }) {
-  const visibleFiles = (item.files || []).filter(
+  const visibleLooseFiles = (item.files || []).filter(
     (f) => f.url && f.viewMode && f.viewMode !== "none"
   );
-  const hasContent = visibleFiles.length > 0;
+  const visibleFolderFilesCount = (item.folders || []).reduce((acc, f) => {
+    return acc + (f.files || []).filter((ff) => ff.url && ff.viewMode && ff.viewMode !== "none").length;
+  }, 0);
+  const totalFilesCount = visibleLooseFiles.length + visibleFolderFilesCount;
 
   return (
     <motion.button
@@ -63,10 +67,10 @@ function ResourceCard({ item, onOpen }: { item: ResourceItem; onOpen: () => void
           )}
           {item.level && <LevelBadge level={item.level as any} />}
         </div>
-        {hasContent && (
-          <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-brand/80 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
+        {totalFilesCount > 0 && (
+          <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-brand/80 px-2.5 py-0.5 text-[10px] font-semibold text-white backdrop-blur-sm">
             <PortfolioIcon name="layers" width={10} height={10} />
-            {visibleFiles.length}
+            {totalFilesCount}
           </div>
         )}
       </div>
@@ -107,9 +111,13 @@ function ResourceDetailDialog({
   onOpenChange: (v: boolean) => void;
 }) {
   if (!item) return null;
-  const visibleFiles = (item.files || []).filter(
+  const visibleLooseFiles = (item.files || []).filter(
     (f) => f.url && f.viewMode && f.viewMode !== "none"
   );
+  const visibleFolders = (item.folders || []).filter((folder) =>
+    (folder.files || []).some((f) => f.url && f.viewMode && f.viewMode !== "none")
+  );
+  const hasFiles = visibleLooseFiles.length > 0 || visibleFolders.length > 0;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -179,15 +187,21 @@ function ResourceDetailDialog({
 
             <div className="h-px bg-ink/10" />
 
-            {/* Archivos */}
-            {visibleFiles.length > 0 ? (
+            {/* Archivos & Carpetas */}
+            {hasFiles ? (
               <div className="rounded-2xl bg-white p-6 ring-1 ring-inset ring-ink/10">
                 <h4 className="font-display text-sm font-bold text-ink uppercase tracking-wider mb-4 flex items-center gap-2">
                   <PortfolioIcon name="layers" width={16} height={16} className="text-brand" />
-                  Files ({visibleFiles.length})
+                  Files and Folders
                 </h4>
                 <div className="space-y-3">
-                  {visibleFiles.map((f) => (
+                  {/* Folders */}
+                  {visibleFolders.map((folder) => (
+                    <FolderItem key={folder.id} folder={folder} />
+                  ))}
+
+                  {/* Loose Files */}
+                  {visibleLooseFiles.map((f) => (
                     <FileBadge key={f.id || f.url} name={f.name} url={f.url} viewMode={f.viewMode} />
                   ))}
                 </div>

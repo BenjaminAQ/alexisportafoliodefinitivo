@@ -127,7 +127,7 @@ export function SectionEditor({ sectionId }: { sectionId: SectionId }) {
             </div>
             <FieldRenderer
               schema={field}
-              value={(data as Record<string, unknown>)[field.key]}
+              value={(data as unknown as Record<string, unknown>)[field.key]}
               onChange={(v) => update(field.key, v)}
               placeholder={field.placeholder}
               uid={uid}
