@@ -4,133 +4,146 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
-   ALEXIS ACADEMIC PORTFOLIO — DESIGN SYSTEM
-   Palette inspired by engineering brochure:
-     Navy background #0A0E27 → #1A1F4E (gradient)
-     Cyan accent    #00B4D8  (primary, tech)
-     Green accent    #2A9D8F  (secondary, emerald)
-     Light gray text #E0E0E0  (body on dark)
-     White text      #FFFFFF  (headers on dark)
-   Fonts: Space Grotesk (display) · Inter (body) · JetBrains Mono (code)
+   ALEXIS ACADEMIC PORTFOLIO — PREMIUM DESIGN SYSTEM v2
+   Palette:
+     Navy deep     #060918  → #0A0E27 (section backgrounds)
+     Ink soft      #131832  (card surfaces dark)
+     Cyan primary  #00C9E8  (electric, neon brand)
+     Cyan glow     #4DD9F0  (lighter brand accent)
+     Purple deep   #6D28D9  (secondary accent)
+     Purple soft   #8B5CF6  (hoverable, gradient)
+     Emerald       #10B981  (success, highlight)
+     Surface light #F0F4FF  (light section background)
+     Muted text    #7A849E
    ============================================================ */
 
 @theme inline {
-  /* Brand palette as Tailwind color tokens */
-  --color-brand: #00b4d8;
-  --color-brand-light: #4dc9e8;
-  --color-accent-green: #2a9d8f;
-  --color-accent-green-light: #4cb8ab;
-  --color-ink: #0a0e27;
-  --color-ink-deep: #060a1d;
-  --color-ink-soft: #1a1f4e;
-  --color-surface: #f4f6fb;
-  --color-muted: #8b94a8;
-  --color-text-light: #e0e0e0;
+  /* ── Brand palette ── */
+  --color-brand:           #00C9E8;
+  --color-brand-light:     #4DD9F0;
+  --color-brand-dim:       #0098b0;
+  --color-purple:          #6D28D9;
+  --color-purple-light:    #8B5CF6;
+  --color-emerald:         #10B981;
+  --color-emerald-light:   #34D399;
 
-  /* shadcn-compatible tokens (mapped to brand) */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
+  /* ── Ink / dark surfaces ── */
+  --color-ink:             #0A0E27;
+  --color-ink-deep:        #060918;
+  --color-ink-soft:        #131832;
+  --color-ink-mid:         #1C2248;
+
+  /* ── Light surfaces ── */
+  --color-surface:         #F0F4FF;
+  --color-surface-mid:     #E8EEF8;
+  --color-card-light:      #FFFFFF;
+
+  /* ── Text ── */
+  --color-muted:           #7A849E;
+  --color-text-light:      #E2E8F4;
+
+  /* ── shadcn ── */
+  --color-background:      var(--background);
+  --color-foreground:      var(--foreground);
+  --color-card:            var(--card);
   --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
+  --color-popover:         var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
+  --color-primary:         var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
+  --color-secondary:       var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
+  --color-accent:          var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-destructive:     var(--destructive);
+  --color-border:          var(--border);
+  --color-input:           var(--input);
+  --color-ring:            var(--ring);
 
-  /* Fonts */
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  /* ── Fonts ── */
+  --font-sans:    var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --font-mono:    var(--font-mono), ui-monospace, monospace;
 
-  /* Radius */
+  /* ── Radius ── */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
   --radius-xl: 20px;
+  --radius-2xl: 28px;
 
-  /* Chart (kept for shadcn chart component) */
-  --color-chart-1: #00b4d8;
-  --color-chart-2: #2a9d8f;
-  --color-chart-3: #0a0e27;
-  --color-chart-4: #8b94a8;
-  --color-chart-5: #1a1f4e;
+  /* ── Charts ── */
+  --color-chart-1: #00C9E8;
+  --color-chart-2: #8B5CF6;
+  --color-chart-3: #10B981;
+  --color-chart-4: #7A849E;
+  --color-chart-5: #131832;
 
-  /* Sidebar tokens (kept for shadcn) */
-  --color-sidebar: var(--ink);
-  --color-sidebar-foreground: #e0e0e0;
-  --color-sidebar-primary: #00b4d8;
+  /* ── Sidebar ── */
+  --color-sidebar:                    var(--ink);
+  --color-sidebar-foreground:         #e0e0e0;
+  --color-sidebar-primary:            #00C9E8;
   --color-sidebar-primary-foreground: #ffffff;
-  --color-sidebar-accent: #1a1f4e;
-  --color-sidebar-accent-foreground: #e0e0e0;
-  --color-sidebar-border: rgba(0, 180, 216, 0.18);
-  --color-sidebar-ring: #00b4d8;
+  --color-sidebar-accent:             #131832;
+  --color-sidebar-accent-foreground:  #e0e0e0;
+  --color-sidebar-border:             rgba(0,201,232,0.18);
+  --color-sidebar-ring:               #00C9E8;
 }
 
-/* ============================================================
-   THEME — LIGHT (default, light surface background)
-   ============================================================ */
+/* ── LIGHT THEME ── */
 :root {
-  --background: #f4f6fb;
-  --foreground: #0a0e27;
-  --card: #ffffff;
-  --card-foreground: #0a0e27;
-  --popover: #ffffff;
-  --popover-foreground: #0a0e27;
-  --primary: #00b4d8;
+  --background: #F0F4FF;
+  --foreground: #0A0E27;
+  --card:       #FFFFFF;
+  --card-foreground: #0A0E27;
+  --popover:    #FFFFFF;
+  --popover-foreground: #0A0E27;
+  --primary:    #00C9E8;
   --primary-foreground: #ffffff;
-  --secondary: #e3edf7;
-  --secondary-foreground: #0a0e27;
-  --muted: #eef2f8;
-  --muted-foreground: #8b94a8;
-  --accent: #2a9d8f;
+  --secondary:  #E4ECF7;
+  --secondary-foreground: #0A0E27;
+  --muted:      #EEF2FB;
+  --muted-foreground: #7A849E;
+  --accent:     #6D28D9;
   --accent-foreground: #ffffff;
-  --destructive: #c0392b;
-  --border: rgba(10, 14, 39, 0.12);
-  --input: rgba(10, 14, 39, 0.16);
-  --ring: #00b4d8;
+  --destructive: #DC2626;
+  --border:     rgba(10,14,39,0.1);
+  --input:      rgba(10,14,39,0.14);
+  --ring:       #00C9E8;
 }
 
-/* ============================================================
-   THEME — DARK (navy background — the brochure look)
-   ============================================================ */
+/* ── DARK THEME ── */
 .dark {
-  --background: #0a0e27;
-  --foreground: #f0f4f8;
-  --card: #141a3d;
-  --card-foreground: #f0f4f8;
-  --popover: #0a0e27;
-  --popover-foreground: #f0f4f8;
-  --primary: #00b4d8;
+  --background: #0A0E27;
+  --foreground: #E2E8F4;
+  --card:       #131832;
+  --card-foreground: #E2E8F4;
+  --popover:    #0A0E27;
+  --popover-foreground: #E2E8F4;
+  --primary:    #00C9E8;
   --primary-foreground: #ffffff;
-  --secondary: #1f2557;
-  --secondary-foreground: #f0f4f8;
-  --muted: #1a1f4e;
-  --muted-foreground: #a0aec0;
-  --accent: #2a9d8f;
+  --secondary:  #1C2248;
+  --secondary-foreground: #E2E8F4;
+  --muted:      #131832;
+  --muted-foreground: #8A96B0;
+  --accent:     #8B5CF6;
   --accent-foreground: #ffffff;
-  --destructive: #e74c3c;
-  --border: rgba(0, 180, 216, 0.25);
-  --input: rgba(0, 180, 216, 0.25);
-  --ring: #00b4d8;
+  --destructive: #EF4444;
+  --border:     rgba(0,201,232,0.2);
+  --input:      rgba(0,201,232,0.2);
+  --ring:       #00C9E8;
 }
 
+/* ── BASE STYLES ── */
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
+
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px; /* sticky navbar offset */
+    scroll-padding-top: 88px;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
@@ -139,132 +152,275 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
   }
+
   code, pre, kbd {
     font-family: var(--font-mono), ui-monospace, monospace;
   }
+
   ::selection {
-    background: rgba(0, 180, 216, 0.28);
-    color: #0a0e27;
+    background: rgba(0,201,232,0.28);
+    color: #0A0E27;
   }
 }
 
-/* ============================================================
-   UTILITIES
-   ============================================================ */
+/* ── DESIGN UTILITIES ── */
 @layer utilities {
-  .text-balance { text-wrap: balance; }
-  .text-pretty { text-wrap: pretty; }
 
-  .font-display { font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif; }
+  .text-balance  { text-wrap: balance; }
+  .text-pretty   { text-wrap: pretty; }
+  .font-display  { font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif; }
   .font-mono-code { font-family: var(--font-mono), ui-monospace, monospace; }
 
-  /* Brand gradients — inspired by engineering brochure with neon purple/blue/cyan */
+  /* ─── BACKGROUNDS ─── */
+
+  /* Deep dark hero / section gradient */
   .bg-brand-gradient {
     background-image:
-      radial-gradient(ellipse at 20% 0%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 100%, rgba(0, 180, 216, 0.12) 0%, transparent 50%),
-      linear-gradient(135deg, #0a0e27 0%, #1a1f4e 50%, #0f1135 100%);
+      radial-gradient(ellipse 80% 60% at 15% 10%,  rgba(109,40,217,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse 60% 50% at 85% 90%,  rgba(0,201,232,0.16)  0%, transparent 55%),
+      radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(16,185,129,0.06) 0%, transparent 60%),
+      linear-gradient(150deg, #060918 0%, #0A0E27 45%, #0E1335 70%, #060918 100%);
   }
+
+  /* Lighter variant for cards/navbars */
   .bg-brand-gradient-soft {
     background-image:
-      radial-gradient(ellipse at 30% 20%, rgba(0, 180, 216, 0.18) 0%, transparent 60%),
-      linear-gradient(135deg, #0a0e27 0%, #1a1f4e 100%);
+      radial-gradient(ellipse at 30% 20%, rgba(0,201,232,0.14) 0%, transparent 60%),
+      radial-gradient(ellipse at 75% 80%, rgba(109,40,217,0.10) 0%, transparent 60%),
+      linear-gradient(135deg, #0A0E27 0%, #131832 100%);
   }
+
+  /* Light section gradient (white sections) */
+  .bg-section-light {
+    background-image:
+      radial-gradient(ellipse 70% 50% at 90% 10%, rgba(0,201,232,0.06)  0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(109,40,217,0.05) 0%, transparent 60%),
+      linear-gradient(160deg, #F0F4FF 0%, #EEF2FB 50%, #F4F8FF 100%);
+  }
+
+  /* Text gradient */
   .text-brand-gradient {
-    background-image: linear-gradient(120deg, #4dc9e8 0%, #00b4d8 40%, #7c3aed 80%, #2a9d8f 100%);
+    background-image: linear-gradient(110deg, #4DD9F0 0%, #00C9E8 35%, #8B5CF6 70%, #10B981 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-brand-gradient-alt {
+    background-image: linear-gradient(110deg, #00C9E8 0%, #8B5CF6 60%, #4DD9F0 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Card surface (dark) with neon glow */
-  .surface-card-dark {
-    background-image:
-      radial-gradient(ellipse at top right, rgba(124, 58, 237, 0.08) 0%, transparent 40%),
-      radial-gradient(ellipse at bottom left, rgba(0, 180, 216, 0.06) 0%, transparent 40%),
-      linear-gradient(160deg, #1a1f4e 0%, #0a0e27 100%);
+  /* ─── CARDS ─── */
+
+  /* Dark card — glassmorphism */
+  .card-dark {
+    background:
+      radial-gradient(ellipse at top right, rgba(109,40,217,0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(0,201,232,0.07) 0%, transparent 50%),
+      rgba(19,24,50,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,201,232,0.14);
   }
 
-  /* Wire-mesh decorative grid with cyan + purple tint */
+  /* Light card with very subtle tint */
+  .card-light {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(10,14,39,0.08);
+  }
+
+  /* ─── GRIDS ─── */
+
+  /* Wire-mesh decorative grid */
   .wire-mesh {
     background-image:
-      linear-gradient(to right, rgba(0, 180, 216, 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 180, 216, 0.07) 1px, transparent 1px),
-      linear-gradient(to right, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+      linear-gradient(to right,  rgba(0,201,232,0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,201,232,0.07) 1px, transparent 1px),
+      linear-gradient(to right,  rgba(109,40,217,0.04) 1px, transparent 1px);
     background-size: 48px 48px, 48px 48px, 96px 96px;
   }
   .wire-mesh-fine {
     background-image:
-      linear-gradient(to right, rgba(0, 180, 216, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 180, 216, 0.05) 1px, transparent 1px);
+      linear-gradient(to right,  rgba(0,201,232,0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,201,232,0.05) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
-  /* Glow with neon cyan/purple */
-  .glow-brand {
-    box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.2), 0 18px 50px -20px rgba(0, 180, 216, 0.4), 0 0 80px -30px rgba(124, 58, 237, 0.3);
-  }
-  .glow-brand-strong {
-    box-shadow: 0 0 0 1px rgba(0, 180, 216, 0.4), 0 20px 60px -18px rgba(0, 180, 216, 0.6), 0 0 100px -20px rgba(124, 58, 237, 0.4);
+  /* Dot pattern grid */
+  .dot-grid {
+    background-image: radial-gradient(rgba(0,201,232,0.20) 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
-  /* Subtle scrollbar */
+  /* ─── GLOW EFFECTS ─── */
+
+  .glow-brand {
+    box-shadow:
+      0 0 0 1px rgba(0,201,232,0.2),
+      0 16px 48px -18px rgba(0,201,232,0.45),
+      0 0 80px -28px rgba(109,40,217,0.35);
+  }
+  .glow-brand-strong {
+    box-shadow:
+      0 0 0 1px rgba(0,201,232,0.35),
+      0 20px 60px -16px rgba(0,201,232,0.65),
+      0 0 100px -20px rgba(109,40,217,0.5);
+  }
+  .glow-purple {
+    box-shadow:
+      0 0 0 1px rgba(109,40,217,0.25),
+      0 16px 48px -18px rgba(109,40,217,0.5),
+      0 0 70px -24px rgba(0,201,232,0.3);
+  }
+  .glow-emerald {
+    box-shadow:
+      0 0 0 1px rgba(16,185,129,0.25),
+      0 12px 40px -14px rgba(16,185,129,0.45);
+  }
+
+  /* Neon border with glow */
+  .border-neon-cyan {
+    border: 1px solid rgba(0,201,232,0.5);
+    box-shadow: 0 0 12px rgba(0,201,232,0.2), inset 0 0 12px rgba(0,201,232,0.05);
+  }
+  .border-neon-purple {
+    border: 1px solid rgba(109,40,217,0.5);
+    box-shadow: 0 0 12px rgba(109,40,217,0.2), inset 0 0 12px rgba(109,40,217,0.05);
+  }
+
+  /* ─── SCAN LINE EFFECT (subtle tech aesthetic) ─── */
+  .scan-lines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,201,232,0.015) 2px,
+      rgba(0,201,232,0.015) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* ─── SECTION DIVIDERS ─── */
+  .section-divider-dark {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0,201,232,0.35) 30%,
+      rgba(109,40,217,0.35) 70%,
+      transparent 100%
+    );
+  }
+  .section-divider-light {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0,201,232,0.2) 50%,
+      transparent 100%
+    );
+  }
+
+  /* ─── HIGHLIGHT BAR (left accent on cards) ─── */
+  .accent-bar-left {
+    border-left: 2px solid #00C9E8;
+    padding-left: 1rem;
+  }
+  .accent-bar-left-purple {
+    border-left: 2px solid #8B5CF6;
+    padding-left: 1rem;
+  }
+
+  /* ─── SCROLLBAR ─── */
   .scroll-area-soft::-webkit-scrollbar { width: 8px; height: 8px; }
   .scroll-area-soft::-webkit-scrollbar-track { background: transparent; }
   .scroll-area-soft::-webkit-scrollbar-thumb {
-    background: rgba(0, 187, 212, 0.35);
+    background: rgba(0,201,232,0.3);
     border-radius: 999px;
   }
-  .scroll-area-soft::-webkit-scrollbar-thumb:hover { background: rgba(0, 187, 212, 0.6); }
+  .scroll-area-soft::-webkit-scrollbar-thumb:hover { background: rgba(0,201,232,0.55); }
+
+  /* ─── NUMBER / STAT DISPLAY ─── */
+  .stat-number {
+    font-family: var(--font-display), ui-sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
 }
 
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
+/* ── ANIMATIONS ── */
 @keyframes meshFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-18px) rotate(2deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  33%       { transform: translateY(-14px) rotate(1deg) scale(1.01); }
+  66%       { transform: translateY(-8px) rotate(-1deg) scale(0.99); }
 }
 @keyframes slowSpin {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
 @keyframes pulseDot {
-  0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.15); }
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.18); }
 }
 @keyframes shimmerLine {
-  0% { background-position: -200% 0; }
+  0%   { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(0,201,232,0.2), 0 0 60px rgba(109,40,217,0.1); }
+  50%       { box-shadow: 0 0 40px rgba(0,201,232,0.4), 0 0 80px rgba(109,40,217,0.25); }
+}
+@keyframes borderFlow {
+  0%   { border-color: rgba(0,201,232,0.4); }
+  33%  { border-color: rgba(109,40,217,0.4); }
+  66%  { border-color: rgba(16,185,129,0.4); }
+  100% { border-color: rgba(0,201,232,0.4); }
+}
+@keyframes scanDown {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
-.animate-mesh-float { animation: meshFloat 14s ease-in-out infinite; }
-.animate-slow-spin { animation: slowSpin 60s linear infinite; }
-.animate-pulse-dot { animation: pulseDot 3s ease-in-out infinite; }
-.animate-fade-up { animation: fadeUp 0.6s ease-out both; }
+.animate-mesh-float    { animation: meshFloat 16s ease-in-out infinite; }
+.animate-slow-spin     { animation: slowSpin 70s linear infinite; }
+.animate-pulse-dot     { animation: pulseDot 3s ease-in-out infinite; }
+.animate-fade-up       { animation: fadeUp 0.6s ease-out both; }
+.animate-glow-pulse    { animation: glowPulse 4s ease-in-out infinite; }
+.animate-border-flow   { animation: borderFlow 6s ease-in-out infinite; }
 
 .shimmer-line {
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 187, 212, 0.6) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(0,201,232,0.7) 50%, transparent 100%);
   background-size: 200% 100%;
-  animation: shimmerLine 3s linear infinite;
+  animation: shimmerLine 3.5s linear infinite;
 }
 
-/* Reduced motion */
+/* ── REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration:      0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+    transition-duration:     0.001ms !important;
+    scroll-behavior:         auto !important;
   }
 }

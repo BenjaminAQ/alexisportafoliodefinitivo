@@ -21,7 +21,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Spy on sections to set active link
   React.useEffect(() => {
     const ids = NAV_ITEMS.map((n) => n.id);
     const observer = new IntersectionObserver(
@@ -43,15 +42,12 @@ export function Navbar() {
   const handleNav = (id: string) => {
     setOpen(false);
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // Get label for a nav item (from Firestore if available, else default)
   const getLabel = (id: string): string => {
-    if (navLabels && (navLabels as Record<string, string>)[id]) {
-      return (navLabels as Record<string, string>)[id];
+    if (navLabels && (navLabels as unknown as Record<string, string>)[id]) {
+      return (navLabels as unknown as Record<string, string>)[id];
     }
     const item = NAV_ITEMS.find((n) => n.id === id);
     return item ? item.label : id;
@@ -61,25 +57,28 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+          "fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled
-            ? "bg-ink/85 backdrop-blur-xl border-b border-brand/20 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.4)]"
-            : "bg-ink/40 backdrop-blur-md border-b border-transparent"
+            ? "bg-ink-deep/92 backdrop-blur-2xl border-b border-brand/15 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5),0_0_0_1px_rgba(0,201,232,0.06)]"
+            : "bg-transparent border-b border-transparent"
         )}
       >
+        {/* Top shimmer line when scrolled */}
+        {scrolled && (
+          <div className="absolute top-0 inset-x-0 h-px shimmer-line opacity-60" />
+        )}
+
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link
             href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              handleNav("home");
-            }}
-            className="group flex items-center gap-2.5"
+            onClick={(e) => { e.preventDefault(); handleNav("home"); }}
+            className="group flex items-center gap-3"
           >
-            <span className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-brand-gradient-soft text-white shadow-[0_0_0_1px_rgba(0,187,212,0.4)]">
-              <span className="font-display text-lg font-bold">A</span>
-              <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-brand-light animate-pulse-dot" />
+            {/* Logo mark */}
+            <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-brand-gradient-soft shadow-[0_0_0_1px_rgba(0,201,232,0.35),0_0_20px_rgba(0,201,232,0.2)] transition-all group-hover:shadow-[0_0_0_1px_rgba(0,201,232,0.6),0_0_28px_rgba(0,201,232,0.4)]">
+              <span className="font-display text-lg font-black text-white tracking-tight">A</span>
+              <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-brand animate-pulse-dot shadow-[0_0_8px_rgba(0,201,232,0.8)]" />
             </span>
             <span className="font-display text-lg font-bold tracking-tight text-white">
               Alexis<span className="text-brand">.</span>
@@ -87,24 +86,26 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
+          <nav className="hidden lg:flex items-center gap-0.5" aria-label="Primary">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNav(item.id)}
                 aria-current={active === item.id ? "true" : undefined}
                 className={cn(
-                  "relative rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200",
                   active === item.id
                     ? "text-white"
-                    : "text-brand-light/70 hover:text-white"
+                    : "text-brand-light/60 hover:text-white hover:bg-white/5"
                 )}
               >
                 {getLabel(item.id)}
+                {/* Active indicator */}
                 <span
                   className={cn(
-                    "absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-brand transition-transform duration-300",
-                    active === item.id ? "scale-x-100" : "scale-x-0"
+                    "absolute inset-x-3 -bottom-px h-[2px] rounded-full bg-brand transition-all duration-300",
+                    "shadow-[0_0_8px_rgba(0,201,232,0.6)]",
+                    active === item.id ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
                   )}
                 />
               </button>
@@ -116,7 +117,7 @@ export function Navbar() {
             <button
               onClick={() => setOpen(true)}
               aria-label="Open menu"
-              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-md text-white hover:bg-white/10"
+              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors"
             >
               <PortfolioIcon name="menu" width={20} height={20} />
             </button>
@@ -127,46 +128,60 @@ export function Navbar() {
       {/* Mobile drawer */}
       <div
         className={cn(
-          "fixed inset-0 z-[60] lg:hidden transition-opacity duration-300",
+          "fixed inset-0 z-[60] lg:hidden transition-all duration-300",
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
       >
+        {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-ink-deep/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-ink-deep/85 backdrop-blur-md"
           onClick={() => setOpen(false)}
         />
+        {/* Drawer panel */}
         <div
           className={cn(
-            "absolute right-0 top-0 h-full w-[88%] max-w-sm bg-brand-gradient shadow-2xl transition-transform duration-300",
+            "absolute right-0 top-0 h-full w-[88%] max-w-sm transition-transform duration-300 ease-out",
+            "bg-brand-gradient-soft shadow-[-24px_0_80px_rgba(0,0,0,0.5)]",
+            "border-l border-brand/15",
             open ? "translate-x-0" : "translate-x-full"
           )}
         >
-          <div className="flex items-center justify-between border-b border-brand/20 px-5 py-4">
+          {/* Drawer decoration */}
+          <div className="absolute inset-0 wire-mesh opacity-20 pointer-events-none" />
+          <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-brand/15 blur-3xl pointer-events-none" />
+
+          {/* Header */}
+          <div className="relative flex items-center justify-between border-b border-brand/15 px-5 py-4">
             <span className="font-display text-lg font-bold text-white">
               Alexis<span className="text-brand">.</span>
             </span>
             <button
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-white hover:bg-white/10"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors"
             >
               <PortfolioIcon name="close" width={20} height={20} />
             </button>
           </div>
-          <nav className="flex flex-col gap-0.5 overflow-y-auto p-3" aria-label="Mobile">
+
+          {/* Nav links */}
+          <nav className="relative flex flex-col gap-1 overflow-y-auto p-4" aria-label="Mobile">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleNav(item.id)}
                 className={cn(
-                  "flex items-center justify-between rounded-lg px-4 py-3 text-left text-sm font-medium transition-colors",
+                  "flex items-center justify-between rounded-xl px-4 py-3 text-left text-sm font-semibold transition-all duration-200",
                   active === item.id
-                    ? "bg-brand text-white"
-                    : "text-brand-light/80 hover:bg-white/5 hover:text-white"
+                    ? "bg-brand/20 text-white ring-1 ring-inset ring-brand/40 shadow-[0_0_12px_rgba(0,201,232,0.15)]"
+                    : "text-brand-light/75 hover:bg-white/5 hover:text-white"
                 )}
               >
                 {getLabel(item.id)}
-                <PortfolioIcon name="arrow" width={14} height={14} className="opacity-50" />
+                <span className={cn(
+                  "h-1.5 w-1.5 rounded-full transition-colors",
+                  active === item.id ? "bg-brand shadow-[0_0_6px_rgba(0,201,232,0.8)]" : "bg-white/20"
+                )} />
               </button>
             ))}
           </nav>
