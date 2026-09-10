@@ -103,7 +103,7 @@ export function FileBadge({
         </div>
       </div>
 
-      {/* ====== MODAL DE PREVISUALIZACIÓN AMPLIO CON ZOOM ====== */}
+      {/* ====== MODAL DE PREVISUALIZACIÓN ====== */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           className="p-0 gap-0 overflow-hidden bg-background flex flex-col"
@@ -111,7 +111,7 @@ export function FileBadge({
         >
           <DialogTitle className="sr-only">{displayName}</DialogTitle>
 
-          {/* Barra superior con nombre + controles de zoom + descargar */}
+          {/* Barra superior con nombre + controles de zoom + descargar (si permitido) */}
           <div className="flex items-center justify-between border-b border-border pl-5 pr-16 py-3 shrink-0 bg-ink text-white">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <PortfolioIcon
@@ -121,12 +121,17 @@ export function FileBadge({
                 className="text-brand-light shrink-0"
               />
               <span className="text-sm font-semibold truncate">{displayName}</span>
+              {!canDownload && (
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-brand/15 px-2.5 py-0.5 text-[10px] font-semibold text-brand-light border border-brand/30 ml-2">
+                  Solo lectura
+                </span>
+              )}
             </div>
 
             {/* Controles de zoom (solo para imágenes) */}
             {isImg && <ZoomControls />}
 
-            {/* Botón descargar */}
+            {/* Botón descargar: SOLO visible si el admin configuró 'download' */}
             {canDownload && (
               <a
                 href={url}
@@ -141,9 +146,9 @@ export function FileBadge({
             )}
           </div>
 
-          {/* Contenido del archivo — amplio y con zoom */}
+          {/* Contenido del archivo */}
           <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
-            <FilePreview url={url} name={displayName} />
+            <FilePreview url={url} name={displayName} canDownload={canDownload} />
           </div>
         </DialogContent>
       </Dialog>
@@ -156,7 +161,6 @@ export function FileBadge({
 // ============================================================
 function ZoomControls() {
   const [zoom, setZoom] = React.useState(100);
-  // Usar un evento personalizado para comunicar el zoom al FilePreview
   React.useEffect(() => {
     window.dispatchEvent(new CustomEvent("file-zoom", { detail: zoom }));
   }, [zoom]);
@@ -193,10 +197,17 @@ function ZoomControls() {
 }
 
 // ============================================================
-// FILE PREVIEW — renderiza el archivo según su tipo
-// Para imágenes: permite zoom y scroll. Para PDFs/Office: Google Docs Viewer amplio.
+// FILE PREVIEW — renderiza el archivo según su tipo y permisos
 // ============================================================
-function FilePreview({ url, name }: { url: string; name: string }) {
+function FilePreview({
+  url,
+  name,
+  canDownload = true,
+}: {
+  url: string;
+  name: string;
+  canDownload?: boolean;
+}) {
   const [zoom, setZoom] = React.useState(100);
 
   React.useEffect(() => {
@@ -217,7 +228,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
         <img
           src={url}
           alt={name}
-          className="rounded-lg shadow-2xl transition-transform duration-200"
+          className="rounded-lg shadow-2xl transition-transform duration-200 select-none"
           style={{
             transform: `scale(${zoom / 100})`,
             transformOrigin: "center center",
@@ -229,21 +240,50 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 2. Videos
+  // 2. Videos — bloquea descarga si canDownload es false
   if (isVideoUrl(url)) {
     return (
       <div className="flex h-full w-full items-center justify-center p-6">
-        <video src={url} controls className="max-h-full max-w-full rounded-lg shadow-2xl">
+        <video
+          src={url}
+          controls
+          controlsList={!canDownload ? "nodownload" : undefined}
+          className="max-h-full max-w-full rounded-lg shadow-2xl"
+        >
           Your browser does not support video playback.
         </video>
       </div>
     );
   }
 
-  // 3. PDFs y Office — Google Docs Viewer amplio
-  if ((isPdf || isOfficeDoc) && !url.startsWith("data:")) {
+  // 3. PDFs — Visor nativo integrado sin Google Drive popout ([↗])
+  if (isPdf && !url.startsWith("data:")) {
+    const toolbarParam = canDownload ? "1" : "0";
+    const pdfSrc = `${url}#toolbar=${toolbarParam}&navpanes=0&scrollbar=1`;
+
     return (
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full bg-slate-900">
+        <object
+          data={pdfSrc}
+          type="application/pdf"
+          className="h-full w-full border-0 bg-white"
+          title={name}
+        >
+          <iframe
+            src={pdfSrc}
+            title={name}
+            className="h-full w-full border-0 bg-white"
+            allow="fullscreen"
+          />
+        </object>
+      </div>
+    );
+  }
+
+  // 4. Documentos de Office — Visor limpio sin div bloqueador obsoleto
+  if (isOfficeDoc && !url.startsWith("data:")) {
+    return (
+      <div className="relative h-full w-full bg-slate-900">
         <iframe
           src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
           title={name}
@@ -251,18 +291,11 @@ function FilePreview({ url, name }: { url: string; name: string }) {
           allow="fullscreen"
           sandbox="allow-scripts allow-same-origin allow-popups"
         />
-        {/* Div invisible que bloquea el botón "ventana externa" */}
-        <div
-          className="absolute top-0 right-0 z-10"
-          style={{ width: "120px", height: "60px", background: "transparent" }}
-          aria-hidden="true"
-          onClick={(e) => e.preventDefault()}
-        />
       </div>
     );
   }
 
-  // 4. Data URL PDFs
+  // 5. Data URL PDFs
   if (isPdf && url.startsWith("data:")) {
     return (
       <object data={url} type="application/pdf" className="h-full w-full bg-white" title={name}>
@@ -276,7 +309,7 @@ function FilePreview({ url, name }: { url: string; name: string }) {
     );
   }
 
-  // 5. Fallback
+  // 6. Fallback
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 text-center p-8">
       <PortfolioIcon name="pdf" width={48} height={48} className="text-brand" />
@@ -297,6 +330,11 @@ export function FilePreviewModal({
   preview: { url: string; name: string; downloadable?: boolean } | null;
   onClose: () => void;
 }) {
+  const isImg = preview ? isImageUrl(preview.url) : false;
+  const isVid = preview ? isVideoUrl(preview.url) : false;
+  const isPdf = preview ? isPdfUrl(preview.url) : false;
+  const canDownload = preview?.downloadable !== false;
+
   return (
     <Dialog open={!!preview} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
@@ -307,14 +345,19 @@ export function FilePreviewModal({
         <div className="flex items-center justify-between border-b border-border pl-5 pr-16 py-3 shrink-0 bg-ink text-white">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <PortfolioIcon
-              name={preview && isImageUrl(preview.url) ? "book" : "pdf"}
+              name={isImg ? "book" : isVid ? "video" : isPdf ? "pdf" : "code"}
               width={18}
               height={18}
               className="text-brand-light shrink-0"
             />
             <span className="text-sm font-semibold truncate">{preview?.name}</span>
+            {!canDownload && (
+              <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-brand/15 px-2.5 py-0.5 text-[10px] font-semibold text-brand-light border border-brand/30 ml-2">
+                Solo lectura
+              </span>
+            )}
           </div>
-          {preview?.downloadable !== false && preview && (
+          {canDownload && preview && (
             <a
               href={preview.url}
               download={preview.name}
@@ -328,7 +371,7 @@ export function FilePreviewModal({
           )}
         </div>
         <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
-          {preview && <FilePreview url={preview.url} name={preview.name} />}
+          {preview && <FilePreview url={preview.url} name={preview.name} canDownload={canDownload} />}
         </div>
       </DialogContent>
     </Dialog>

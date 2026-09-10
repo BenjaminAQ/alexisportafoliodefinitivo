@@ -46,7 +46,7 @@ export function CvSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                       <div key={dl.id} className="flex items-center gap-2">
                         {mode === "view" && (
                           <button
-                            onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document" })}
+                            onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document", downloadable: false })}
                             className={cn(
                               "inline-flex items-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all",
                               isDark
@@ -61,7 +61,7 @@ export function CvSection({ tone = "light" }: { tone?: "light" | "dark" }) {
                         {mode === "download" && (
                           <>
                             <button
-                              onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document" })}
+                              onClick={() => setPreview({ url: dl.file!, name: dl.label || "Document", downloadable: true })}
                               className={cn(
                                 "inline-flex items-center gap-2.5 rounded-xl px-5 py-3 text-sm font-semibold transition-all",
                                 isDark
