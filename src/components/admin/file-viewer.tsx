@@ -112,7 +112,7 @@ export function FileBadge({
           <DialogTitle className="sr-only">{displayName}</DialogTitle>
 
           {/* Barra superior con nombre + controles de zoom + descargar */}
-          <div className="flex items-center justify-between border-b border-border px-5 py-3 shrink-0 bg-ink text-white">
+          <div className="flex items-center justify-between border-b border-border pl-5 pr-16 py-3 shrink-0 bg-ink text-white">
             <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <PortfolioIcon
                 name={isImg ? "book" : isVid ? "video" : isPdf ? "pdf" : "code"}
@@ -304,7 +304,7 @@ export function FilePreviewModal({
         style={{ maxWidth: "96vw", width: "96vw", maxHeight: "96vh", height: "96vh", borderRadius: "12px" }}
       >
         <DialogTitle className="sr-only">{preview?.name ?? "File"}</DialogTitle>
-        <div className="flex items-center justify-between border-b border-border px-5 py-3 shrink-0 bg-ink text-white">
+        <div className="flex items-center justify-between border-b border-border pl-5 pr-16 py-3 shrink-0 bg-ink text-white">
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <PortfolioIcon
               name={preview && isImageUrl(preview.url) ? "book" : "pdf"}

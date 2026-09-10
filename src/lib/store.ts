@@ -1,7 +1,8 @@
 // Data store abstraction.
 // - If Firebase Firestore is configured AND reachable, uses Firestore.
+// - Caches reads to localStorage so subsequent loads are instant and reliable.
 // - If Firestore throws (permissions, network, missing rules), falls back
-//   gracefully to localStorage so the page always renders.
+//   gracefully to cached localStorage so the page always renders without missing content.
 // - Each section is stored as a single document keyed by section id.
 
 import { getDb, getDbAsync } from "./firebase";
@@ -12,7 +13,7 @@ const COLLECTION = "sections";
 const LS_PREFIX = "alexis_content_";
 
 // ---------- localStorage store ----------
-function lsGet<T>(id: string): T | null {
+export function lsGet<T>(id: string): T | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(LS_PREFIX + id);
@@ -21,8 +22,9 @@ function lsGet<T>(id: string): T | null {
     return null;
   }
 }
-function lsSet<T>(id: string, data: T): void {
-  if (typeof window === "undefined") return;
+
+export function lsSet<T>(id: string, data: T): void {
+  if (typeof window === "undefined" || !data) return;
   try {
     window.localStorage.setItem(LS_PREFIX + id, JSON.stringify(data));
     window.dispatchEvent(new CustomEvent("content-changed", { detail: { id } }));
@@ -31,18 +33,24 @@ function lsSet<T>(id: string, data: T): void {
   }
 }
 
-// ---------- Firestore store (with error handling) ----------
+// ---------- Firestore store (with error handling & automatic caching) ----------
 async function fsGet<T>(id: string, db: NonNullable<ReturnType<typeof getDb>>): Promise<T | null> {
   try {
     const { doc, getDoc } = await import("firebase/firestore");
     const ref = doc(db, COLLECTION, id);
     const snap = await getDoc(ref);
-    return snap.exists() ? (snap.data() as T) : null;
+    if (snap.exists()) {
+      const data = snap.data() as T;
+      lsSet(id, data);
+      return data;
+    }
+    return lsGet<T>(id);
   } catch (err) {
     if (process.env.NODE_ENV !== "production") console.warn(`[store] Firestore getSection("${id}") failed, using fallback:`, err);
     return lsGet<T>(id);
   }
 }
+
 async function fsSet<T>(id: string, data: T, db: NonNullable<ReturnType<typeof getDb>>): Promise<void> {
   try {
     const { doc, setDoc } = await import("firebase/firestore");
@@ -58,14 +66,15 @@ async function fsSet<T>(id: string, data: T, db: NonNullable<ReturnType<typeof g
 
 // ---------- Public API ----------
 export async function getSection<T extends SectionData>(id: SectionId): Promise<T> {
+  const cached = lsGet<T>(id);
   const db = await getDbAsync();
   let data: T | null = null;
   if (db) {
     data = await fsGet<T>(id, db);
   } else {
-    data = lsGet<T>(id);
+    data = cached;
   }
-  return data ?? (emptySectionData(id) as T);
+  return data ?? cached ?? (emptySectionData(id) as T);
 }
 
 export async function setSection<T extends SectionData>(id: SectionId, data: T): Promise<void> {
@@ -77,7 +86,7 @@ export async function setSection<T extends SectionData>(id: SectionId, data: T):
   }
 }
 
-// Client-side subscribe (for live updates in admin / preview)
+// Client-side subscribe (for live updates in admin / preview / public portfolio)
 export function subscribeToSection<T extends SectionData>(
   id: SectionId,
   cb: (data: T) => void
@@ -106,14 +115,25 @@ export function subscribeToSection<T extends SectionData>(
       return;
     }
 
-    // Firestore: use onSnapshot (with error fallback to localStorage)
+    // Firestore: use onSnapshot (with automatic localStorage caching)
     try {
       const { doc, onSnapshot } = await import("firebase/firestore");
       const ref = doc(db, COLLECTION, id);
       unsub = onSnapshot(
         ref,
         (snap) => {
-          cb(snap.exists() ? (snap.data() as T) : (emptySectionData(id) as T));
+          if (snap.exists()) {
+            const data = snap.data() as T;
+            lsSet(id, data);
+            cb(data);
+          } else {
+            const fallback = lsGet<T>(id);
+            if (fallback) {
+              cb(fallback);
+            } else {
+              cb(emptySectionData(id) as T);
+            }
+          }
         },
         (err) => {
           if (process.env.NODE_ENV !== "production") console.warn(`[store] Firestore onSnapshot("${id}") error, using localStorage:`, err);

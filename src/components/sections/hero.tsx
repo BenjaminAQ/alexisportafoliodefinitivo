@@ -58,7 +58,7 @@ export function HeroSection() {
   ];
 
   return (
-    <section id="home" className="relative isolate overflow-hidden text-white scroll-mt-20 min-h-screen flex items-center">
+    <section id="home" className="relative isolate overflow-hidden text-white scroll-mt-20 min-h-[100dvh] flex items-center">
 
       {/* ── Deep space background ── */}
       <div aria-hidden className="absolute inset-0 bg-brand-gradient" />
@@ -112,7 +112,7 @@ export function HeroSection() {
       </div>
 
       {/* ── Content ── */}
-      <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 pt-28 pb-20 sm:pt-36 sm:pb-28 lg:pt-44 lg:pb-32">
+      <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 pt-28 pb-28 sm:pt-36 sm:pb-32 lg:pt-44 lg:pb-36">
         <div className="grid items-center gap-12 lg:grid-cols-12">
 
           {/* Text column */}

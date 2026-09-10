@@ -158,9 +158,9 @@ export function Navbar() {
             <button
               onClick={() => setOpen(false)}
               aria-label="Close menu"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-ink-deep/90 text-brand-light border border-brand/50 shadow-[0_0_12px_rgba(0,201,232,0.3)] hover:scale-110 hover:bg-brand hover:text-ink-deep hover:border-brand hover:shadow-[0_0_20px_rgba(0,201,232,0.8)] transition-all cursor-pointer"
             >
-              <PortfolioIcon name="close" width={20} height={20} />
+              <PortfolioIcon name="close" width={18} height={18} />
             </button>
           </div>
 

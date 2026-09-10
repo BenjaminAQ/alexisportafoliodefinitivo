@@ -72,8 +72,11 @@ function SheetContent({
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-secondary absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none">
-          <XIcon className="size-4" />
+        <SheetPrimitive.Close
+          aria-label="Cerrar panel"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 z-50 flex h-9 w-9 items-center justify-center rounded-full bg-ink-deep/90 text-brand-light border border-brand/50 shadow-[0_4px_16px_rgba(0,0,0,0.7),0_0_12px_rgba(0,201,232,0.35)] backdrop-blur-md transition-all duration-200 hover:scale-110 hover:bg-brand hover:text-ink-deep hover:border-brand hover:shadow-[0_0_20px_rgba(0,201,232,0.8)] focus:outline-hidden focus:ring-2 focus:ring-brand focus:ring-offset-2 focus:ring-offset-ink cursor-pointer group"
+        >
+          <XIcon className="h-5 w-5 stroke-[2.5] text-brand-light group-hover:text-ink-deep transition-colors" />
           <span className="sr-only">Close</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>

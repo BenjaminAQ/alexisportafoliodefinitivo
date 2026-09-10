@@ -1,73 +1,69 @@
 "use client";
 
 import * as React from "react";
-import { getSection, subscribeToSection } from "@/lib/store";
+import { getSection, subscribeToSection, lsGet } from "@/lib/store";
 import type { SectionData, SectionId } from "@/lib/content-types";
 
-// Timeout for the initial load. If Firestore doesn't respond in 8s (e.g.
-// network blocked, rules misconfigured), we fall back to empty data so the
-// page always renders instead of showing a skeleton forever.
-const LOAD_TIMEOUT_MS = 8000;
+// Timeout for the initial load. If Firestore doesn't respond in 10s (e.g.
+// offline or network failure), we fall back gracefully.
+const LOAD_TIMEOUT_MS = 10000;
 
 export function useSectionData<T extends SectionData>(id: SectionId) {
-  const [data, setData] = React.useState<T | null>(null);
-  const [loading, setLoading] = React.useState(true);
+  // Initialize synchronously with cached data if available for instant render without flash
+  const [data, setData] = React.useState<T | null>(() => lsGet<T>(id));
+  const [loading, setLoading] = React.useState<boolean>(() => !lsGet<T>(id));
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     let active = true;
-    let timedOut = false;
 
-    setLoading(true);
+    // Only show loading if we don't already have cached data
+    if (!data) {
+      setLoading(true);
+    }
     setError(null);
 
-    // Race the Firestore fetch against a timeout. Whichever resolves first wins.
-    const loadPromise = getSection<T>(id).then((d) => d);
+    // Initial load from Firestore / cache
+    const loadPromise = getSection<T>(id);
 
-    const timeoutPromise = new Promise<T>((resolve) => {
-      setTimeout(() => {
-        timedOut = true;
-        // Resolve with empty data so the page renders
-        resolve(null as unknown as T);
-      }, LOAD_TIMEOUT_MS);
+    const timeoutPromise = new Promise<T | null>((resolve) => {
+      setTimeout(() => resolve(null), LOAD_TIMEOUT_MS);
     });
 
     Promise.race([loadPromise, timeoutPromise])
       .then((d) => {
         if (!active) return;
-        if (timedOut && !d) {
-          // Timed out — show empty data but flag a soft error
-          setError("Connection to Firebase timed out. Showing default content.");
-          // Import emptySectionData lazily to avoid cycle
+        if (d) {
+          setData(d);
+          setLoading(false);
+        } else if (!data) {
+          // Timed out and no cache: load empty fallback so page is still usable
           import("@/lib/content-types").then(({ emptySectionData }) => {
-            if (active) {
+            if (active && !data) {
               setData(emptySectionData(id) as T);
               setLoading(false);
             }
           });
-        } else {
-          setData(d);
-          setLoading(false);
         }
       })
       .catch((err) => {
         if (!active) return;
         console.error(`[useSectionData] error loading "${id}":`, err);
         setError(err instanceof Error ? err.message : "Failed to load section data.");
-        // Fall back to empty data so the page renders
-        import("@/lib/content-types").then(({ emptySectionData }) => {
-          if (active) {
-            setData(emptySectionData(id) as T);
-            setLoading(false);
-          }
-        });
+        if (!data) {
+          import("@/lib/content-types").then(({ emptySectionData }) => {
+            if (active && !data) {
+              setData(emptySectionData(id) as T);
+              setLoading(false);
+            }
+          });
+        }
       });
 
     // Subscribe to live updates (Firestore onSnapshot or localStorage events)
-    const unsub = subscribeToSection<T>(id, (d) => {
+    const unsub = subscribeToSection<T>(id, (updated) => {
       if (active) {
-        setData(d);
-        // Only clear loading if we haven't already
+        setData(updated);
         setLoading(false);
       }
     });
