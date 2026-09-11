@@ -19,6 +19,14 @@ function isVideoUrl(url: string): boolean {
   return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url) || url.startsWith("data:video/");
 }
 
+// Detecta si el dispositivo es móvil (Android/iOS no renderizan PDF inline)
+function isMobileDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  ) || window.innerWidth < 768;
+}
+
 // Extrae el nombre legible de una URL
 function fileNameFromUrl(url: string, fallback: string): string {
   if (url.startsWith("data:")) return fallback;
@@ -147,7 +155,7 @@ export function FileBadge({
           </div>
 
           {/* Contenido del archivo */}
-          <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
+          <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0, touchAction: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
             <FilePreview url={url} name={displayName} canDownload={canDownload} />
           </div>
         </DialogContent>
@@ -209,8 +217,12 @@ function FilePreview({
   canDownload?: boolean;
 }) {
   const [zoom, setZoom] = React.useState(100);
+  const [mobile, setMobile] = React.useState(false);
 
   React.useEffect(() => {
+    // Detectar mobile en cliente (evita SSR mismatch)
+    setMobile(isMobileDevice());
+
     const handler = (e: Event) => {
       setZoom((e as CustomEvent).detail as number);
     };
@@ -249,6 +261,7 @@ function FilePreview({
           controls
           controlsList={!canDownload ? "nodownload" : undefined}
           className="max-h-full max-w-full rounded-lg shadow-2xl"
+          playsInline
         >
           Your browser does not support video playback.
         </video>
@@ -256,8 +269,30 @@ function FilePreview({
     );
   }
 
-  // 3. PDFs — Visor nativo integrado sin Google Drive popout ([↗])
+  // 3. PDFs — móvil usa Google Docs Viewer (Android no puede renderizar inline)
+  //          desktop usa visor nativo con toolbar=0 para solo lectura
   if (isPdf && !url.startsWith("data:")) {
+    if (mobile) {
+      // Google Docs Viewer funciona bien en Android/iOS
+      const googleSrc = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+      return (
+        <div
+          className="relative h-full w-full bg-slate-900"
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "auto" } as React.CSSProperties}
+        >
+          <iframe
+            src={googleSrc}
+            title={name}
+            className="h-full w-full border-0 bg-white"
+            allow="fullscreen"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            style={{ touchAction: "auto" }}
+          />
+        </div>
+      );
+    }
+
+    // Desktop: visor nativo con parámetros de toolbar
     const toolbarParam = canDownload ? "1" : "0";
     const pdfSrc = `${url}#toolbar=${toolbarParam}&navpanes=0&scrollbar=1`;
 
@@ -283,13 +318,17 @@ function FilePreview({
   // 4. Documentos de Office — Visor limpio sin div bloqueador obsoleto
   if (isOfficeDoc && !url.startsWith("data:")) {
     return (
-      <div className="relative h-full w-full bg-slate-900">
+      <div
+        className="relative h-full w-full bg-slate-900"
+        style={{ WebkitOverflowScrolling: "touch", touchAction: "auto" } as React.CSSProperties}
+      >
         <iframe
           src={`https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`}
           title={name}
           className="h-full w-full border-0 bg-white"
           allow="fullscreen"
           sandbox="allow-scripts allow-same-origin allow-popups"
+          style={{ touchAction: "auto" }}
         />
       </div>
     );
@@ -370,7 +409,7 @@ export function FilePreviewModal({
             </a>
           )}
         </div>
-        <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0 }}>
+        <div className="flex-1 bg-ink-deep overflow-hidden" style={{ minHeight: 0, touchAction: "auto", WebkitOverflowScrolling: "touch" } as React.CSSProperties}>
           {preview && <FilePreview url={preview.url} name={preview.name} canDownload={canDownload} />}
         </div>
       </DialogContent>

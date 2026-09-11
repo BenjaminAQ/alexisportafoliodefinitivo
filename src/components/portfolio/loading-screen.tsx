@@ -12,7 +12,7 @@ export function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const subtitle = data?.subtitle || "Structural Engineering";
 
   React.useEffect(() => {
-    const duration = 3000;
+    const duration = 5000;
     const interval = 30;
     const increment = 100 / (duration / interval);
 
