@@ -288,6 +288,23 @@ function FilePreview({
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
             style={{ touchAction: "auto" }}
           />
+          {/* Div invisible que tapa el botón [↗] de Google Docs Viewer en móvil.
+              Captura los taps en esa esquina sin bloquear el scroll del resto del documento. */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "80px",
+              height: "80px",
+              zIndex: 10,
+              background: "transparent",
+              touchAction: "none",  // bloquea gesto en ese pequeño rincón
+              pointerEvents: "auto", // captura taps, impide que lleguen al iframe
+              cursor: "default",
+            }}
+          />
         </div>
       );
     }
